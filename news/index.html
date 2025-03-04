@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.6.223</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,6 +50,15 @@
       <small>Source: <a href="https://github.com/NMautoverse/NMsim/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.6" id="since-nmsim-016">Since NMsim 0.1.6<a class="anchor" aria-label="anchor" href="#since-nmsim-016"></a></h2><p class="text-muted">CRAN release: 2025-02-05</p>
+<p>New handling of data files has been implemented</p>
+<div class="section level3">
+<h3 id="other-changes-0-1-6">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-0-1-6"></a></h3>
+<ul><li><p><code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> requires AMT to be provided.</p></li>
+<li><p><code><a href="../reference/addEVID2.html">addEVID2()</a></code> only requires <code>CMT</code> argument when the column of the same name is present in <code>data</code>. Not all models require <code>CMT</code> and this change allows for building such data sets with <code><a href="../reference/NMcreateDoses.html">NMcreateDoses()</a></code> and <code><a href="../reference/addEVID2.html">addEVID2()</a></code>.</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.6" id="nmsim-016">NMsim 0.1.6<a class="anchor" aria-label="anchor" href="#nmsim-016"></a></h2><p class="text-muted">CRAN release: 2025-02-05</p>
 <ul><li><p>A major improvement is implemented on <code>NMSim_NWPRI()</code>, the simulation method that leverages the Nonmem <code>NWPRI</code> subroutine to simulate models with parameter uncertainty. This method was first included in NMsim 0.1.3 but - as was clearly declared in that version - it could only be trusted for simulation of <code>THETA</code>s. After further development in both <code>NMsim</code> and <code>NMdata</code> to support this as well as bugfixes in the new Nonmem 7.6.0, NMsim provides full support for simulation with parameter uncertainty using the inverse Wishart distribution through this simple interface.</p></li>
@@ -249,7 +258,7 @@
 <li><p>In some cases <code>NMsim</code> would fail on models with multiple output tables when the <code>table.vars</code> argument was not used. Fixed.</p></li>
 <li><p><code>NMsim</code>’s <code>sim.dir.from.scratch</code> argument was not respected due to a simple bug, leading to <code>dir.sims</code> growing each time a simulation was rerun.</p></li>
 <li><p>In case simulation data is a list of data sets <code>NMsim</code> would not order columns when <code>order.columns</code> was <code>TRUE</code>. Now fixed.</p></li>
-<li><p>In case of lists of data sets, and the list element (data set) names included spaces, <code><a href="../reference/NMsim.html">NMsim()</a></code> would throw and error. Spaces in data set names are now replaced with under scores (“_“) to avoid that. It will often happen when data sets are split into lists using <code><a href="https://rdrr.io/pkg/data.table/man/split.html" class="external-link">data.table::split.data.table()</a></code> - which is an excellent way to do this, by the way.</p></li>
+<li><p>In case of lists of data sets, and the list element (data set) names included spaces, <code><a href="../reference/NMsim.html">NMsim()</a></code> would throw and error. Spaces in data set names are now replaced with under scores (“_“) to avoid that. It will often happen when data sets are split into lists using <code><a href="https://rdatatable.gitlab.io/data.table/reference/split.html" class="external-link">data.table::split.data.table()</a></code> - which is an excellent way to do this, by the way.</p></li>
 <li><p>Function <code><a href="../reference/simPopEtas.html">simPopEtas()</a></code> was not exported, so only available as <code>NMsim:::simPopEtas()</code>. Fixed.</p></li>
 </ul></div>
 </div>
