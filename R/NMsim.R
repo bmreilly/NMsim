@@ -309,10 +309,6 @@
 ##'     and use less disk space but factor levels may be lost from
 ##'     input data to output data. `csv` will also lead to loss of
 ##'     additional information such as factor levels.
-##' @param ... Additional arguments passed to \code{method.sim}.
-##' @param modify.model Deprecated. Use modify instead.
-##' @param list.sections Deprecated. Use modify instead.
-##' 
 ##' @param auto.dv Add a column called `DV` to input data sets if a
 ##'     column of that name is not found? Nonmem is generally
 ##'     dependent on a `DV` column in input data but this is typically

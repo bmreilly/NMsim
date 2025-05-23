@@ -29,7 +29,6 @@ knitr::opts_hooks$set(function(options) {
 })
 ```
 
-<img src='../man/figures/NMsimlogo240.png' align="right" height="120" alt="NMsim" />
 
 # Introduction
 The forest plot is an effective and widely recognized way to

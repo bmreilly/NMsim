@@ -27,9 +27,6 @@ knitr::opts_hooks$set(function(options) {
 ```
 
 
-<img src='../man/figures/NMsimlogo240.png' align="right" height="120" />
-
-
 
 [**NMsim - Seamless NONMEM Simulation Platform in R**](NMsim-intro.html)  
 Authors: **Philip Delff**  

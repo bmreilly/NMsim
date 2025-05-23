@@ -10,8 +10,8 @@
 ##'     extention on `file.mod` with `.ext`. This is only used if
 ##'     `update=TRUE`.
 ##' @param values A list of lists. Each list specifies a parameter
-##'     with named elements. Must be named by the parameter name. ll,
-##'     ul and fix can be supplied to modify the parameter. See
+##'     with named elements. Must be named by the parameter name. lower,
+##'     upper and fix can be supplied to modify the parameter. See
 ##'     examples. Notice, you can use `...` instead. `values` may be easier for programming but other than that, most users will find `...` more intuitive.
 ##' @param newfile If provided, the results are written to this file
 ##'     as a new input control stream.
@@ -26,16 +26,11 @@
 ##'              "THETA(3)"=list(FIX=1),
 ##'              "omega(2,2)"=list(init=0.1))
 ##' )
-##' NMwriteInits(file.mod,
-##'   "theta(2)"=list(init=1.4),
-##'   "THETA(3)"=list(FIX=1),
-##'   "omega(2,2)"=list(init=0.1)
-##' )
 ##' }
 ##' @import NMdata
 ##' @import data.table
 ##' @keywords internal
-
+NMwriteInits(file.mod,values=list("theta"=list(symbol="CL",init=3)))
 #### Limitation: lower, init, and upper must be on same line
 
 #### Limitation: If using something like CL=(.1,4,15), two of those cannot be on the same line
@@ -99,6 +94,8 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,values,newfile,.
     
     inits.orig <- NMreadInits(file=file.mod,return="all",as.fun="data.table")
     pars.l <- inits.orig$elements
+### If needed, merge in NMreadParsText() results?
+
     
     if(is.null(file.ext)) file.ext <- file.mod
 
@@ -175,11 +172,13 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,values,newfile,.
         name <- gsub(" +","",name)
         par.type <- sub("^([A-Z]+)\\(.*","\\1",name)
 
+        ### Identifying i,j. Could be done based on other variables
+        ### too, looking at NMreadInits() merged with
+        ### NMreadParsText().
         if(par.type=="THETA"){
             i <- as.integer(sub(paste0(par.type,"\\(([0-9]+)\\)"),"\\1",name))
             j <- NA
         }
-
         if(par.type%in%c("OMEGA","SIGMA")){
             i <- as.integer(sub(paste0(par.type,"\\(([0-9]+),([0-9]+)\\)"),"\\1",name))
             j <- as.integer(sub(paste0(par.type,"\\(([0-9]+),([0-9]+)\\)"),"\\2",name))

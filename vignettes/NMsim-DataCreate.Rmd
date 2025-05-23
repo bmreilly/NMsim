@@ -71,7 +71,6 @@ run.simuls <- FALSE
 NMdataConf(as.fun="data.table")
 ```
 
-<img src='../man/figures/NMsimlogo240.png' align="right" height="120" alt="NMsim" />
 
 ## Introduction
 

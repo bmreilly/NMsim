@@ -15,7 +15,6 @@ header-includes:
 ---
 
 
-<img src='../man/figures/NMsimlogo240.png' align="right" height="120" />
 
 
 ## ACOP 2024

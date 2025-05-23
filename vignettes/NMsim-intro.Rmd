@@ -189,7 +189,6 @@ reuse.results <- TRUE
 knitr::write_bib(c('rmarkdown','data.table','NMdata','NMsim','xgxr'), 'intro-packages.bib')
 ```
 
-<img src="../reference/figures/NMsimlogo240.png" alt="NMsim" style="width:200px; float:right;">
 
 # Objectives
 This introduction to NMsim aims at enabling NONMEM users to 
