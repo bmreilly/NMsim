@@ -448,6 +448,8 @@ The lapply(....,unNMsimRes) does not seem to work. The next call to
 rbind still gets rbind.NMsimRes. Would it be better to run unNMsimRes
 in a loop?
 ** NMwriteInits
+*** TODO [#B] Support using NMreadParsText() variables
+NMwriteInits(file.mod,values=list("theta"=list(symbol="CL",init=3)))
 *** TODO [#B] Support ext format
 trying to update from an ext object. But below, the handling of
 `inits` may wipe lower, upper, and fix - not sure. So I think it would

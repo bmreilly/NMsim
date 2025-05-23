@@ -30,7 +30,7 @@
 ##' @import NMdata
 ##' @import data.table
 ##' @keywords internal
-NMwriteInits(file.mod,values=list("theta"=list(symbol="CL",init=3)))
+
 #### Limitation: lower, init, and upper must be on same line
 
 #### Limitation: If using something like CL=(.1,4,15), two of those cannot be on the same line
