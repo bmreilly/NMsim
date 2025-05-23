@@ -162,53 +162,63 @@ knitr::write_bib(c('rmarkdown','data.table','NMdata','NMsim','xgxr'), 'intro-pac
 
 <!-- <img src="../reference/figures/NMsimlogo.png" alt="Logo" style="width:200px; float:right;"> -->
 
+# Introduction
+
+This vignette introduce the `NMsim` feature that allows users to specify modifications to a `NONMEM` model. The NONMEM control stream can be edited directly from within the `NMsim` function call in the `R` script via the flexible interface provided by the argument `modify.model`. The edits can be applied to any section of the control stream, and most commonly they will affect the `$PK` or `$PRED` sections, or even the `$DES` or `$MODEL` sections when needed. Note that, since the data related sections (`$INPUT`,`$DATA`,`$TABLE`) are automatically handled by NMsim, it will be rarely necessary that they are edited via the `modify.model` argument. Additionally the `NMsim` function has specific arguments regarding the `$TABLE` sections, namely `table.vars` and `table.options`.
+
+Notice, until NMsim 0.1.0, the `modify.model` argument was called `list.sections`, and it was characterized by a different formatting and level of flexibility. The helper functions `add` and `overwrite` were introduced with NMsim 0.1.3, to add and overwrite control stream lines, respectively. Until then, custom modification functions had to be provided like described in the section "Edit control stream using customized functions'.
+
+This vignette illustrates some examples and applications of the use of the `modify.model` argument.
+
+An initial configuration, described in the Introductory NMsim vignette **add_link**, might be necessary for the correct functioning of the NMsim library.
+
 # Objectives
 
-<!-- Philip comments:
+<!-- DONE --- Philip comments:
 The introduction can be clearer. I would say we can assume the reader is familiar with basic use of NMsim at this point. A prerequisite section can even lay that out, and that can be the NMsim-intro vignette.
-This vignette rather allows NMsim user to specify modifications to nonmem models to be simulated. The current wording "run a model" is technically correct but for now, I think we should just focus on simulation, so I would use that verb rather than "run".
+This vignette rather allows NMsim user to specify modifications to nonmem models to be simulated. The current wording "run a model" is technically correct but for now, I think we should just focus on simulation, so I would use that verb rather than "run". 
 "This option" is not clear. The modfify.model argument  should probably be very briefly introduced, maybe in an "Introduction" section before this. It is a flexible interface to edit the control stream before simulation. -->
-This NMsim vignette aims at enabling NONMEM users to modify and run a model directly from within R. This option allows the users to run simulations with parameters modified from theestimated values. The examples described below will address the following pharmacometric questions:
 
-<!-- Philip comments :
+The examples described below use the `modify.model` argument to modify the NONMEM control stream and to address the following pharmacometric questions:
+
+<!-- DONE --- Philip comments :
 The examples are great. This is the "Objectives" section. So maybe before each question, say what is done, like: 
 Modify KA: How is the conc-time profile.....? -->
-* How is the concentration-time profile affected if switching formulation (reducing absorption rate) by a range of fold-values?
-* What is the expected concentration-time profile in patients with a certain Drug-Drug Interaction effect on clearance and bioavailability?
-* How will a dose delay of different amounts of time affect the predicted exposure?
-* How can AUC computation over a coarse time grid be integrated in the simulation via `NMsim`?
+* Modify `KA`: How is the concentration-time profile affected if switching formulation (reducing absorption rate) by a range of fold-values?
+* Modify `F1` and `CL`: What is the expected concentration-time profile in patients with a certain Drug-Drug Interaction effect on clearance and bioavailability?
+* Add `ALAG`: How will a dose delay of different amounts of time affect the predicted exposure?
+* Add AUC computation in control stream: How can we use NONMEM to integrate AUC during model simulation leveraging the benefits of using a sparse grid via `NMsim`?
 
-<!-- Philip comment: This wording can be clearer. Use nonmem to integrate AUC, with benefit that a sparse simulation grid can be used? -->
+<!-- DONE --- Philip comment: This wording can be clearer. Use nonmem to integrate AUC, with benefit that a sparse simulation grid can be used? -->
 
-# Variable Parameters
+<!-- REMOVED # Variable Parameters -->
 
-<!-- Philip comment:
-The first part of this section could be elaborated a little and be called "Introduction" and put before the "objectives". list.sections is not formatted the same way as modify.model. 
-modify.model is a flexible interface that allows for modification of control stream sections before a simulation is performed. modify.model can be used to edit any section in a control stream but most commonly, this would be the $PK or $PRED section, or it could be $DES and $MODEL if needed.
-Remember that data related sections like $INPUT, $DATA, and $TABLE are automatically handled by NMsim, and it should not be necessary to consider those. For the $TABLE section specifically, look at the `table.vars` and `table.options` arguments instead. -->
+<!-- DONE Philip comment:
+The first part of this section could be elaborated a little and be called "Introduction" and put before the "objectives". list.sections is not formatted the same way as modify.model.  -->
+<!-- modify.model is a flexible interface that allows for modification of control stream sections before a simulation is performed. modify.model can be used to edit any section in a control stream but most commonly, this would be the $PK or $PRED section, or it could be $DES and $MODEL if needed. -->
+<!-- Remember that data related sections like $INPUT, $DATA, and $TABLE are automatically handled by NMsim, and it should not be necessary to consider those. For the $TABLE section specifically, look at the `table.vars` and `table.options` arguments instead. -->
 
-Sometimes we want to simulate with some modification to the estimated model. NMsim canmake such user-specified modifications to the model before simulating through the `modify.model` argument.
+<!-- MOVED TO INMTRODUCTION :Sometimes we want to simulate with some modification to the estimated model. NMsim canmake such user-specified modifications to the model before simulating through the `modify.model` argument.
+Notice, until NMsim 0.1.0, the `modify.model` argument was called `list.sections`. The helper functions `add` and `overwrite` were introduced with NMsim 0.1.3. Until then, custom modification functions had to be provided like described in the section "Edit control stream using customized functions." -->
 
-Notice, until NMsim 0.1.0, the `modify.model` argument was called `list.sections`. The helper functions `add` and `overwrite` were introduced with NMsim 0.1.3. Until then, custom modification functions had to be provided like described in the section "Edit control stream using customized functions."
+<!-- # Configuration -->
 
-# Configuration
-
-<!-- Philip comment:
+<!-- DONE : Philip comment:
 None of these configurations are specific to using the modify.model argument. In a prerequisites section, you can mention that the user may need to config a little (as described in te intro vignette) and then you can omit this section. -->
 
-NMsim must be configured with the path to the NONMEM executable. This can be done for each `NMsim()` call using the `path.nonmem` argument, but more easily it can be configured globally the following way. Also including where NMsim will run NONMEM and store intermediate files (`dir.sims`) and where to store final results (`dir.res`).
+<!-- REFERENCED in INTRO and removed from here --- NMsim must be configured with the path to the NONMEM executable. This can be done for each `NMsim()` call using the `path.nonmem` argument, but more easily it can be configured globally the following way. Also including where NMsim will run NONMEM and store intermediate files (`dir.sims`) and where to store final results (`dir.res`). -->
 
-```{r,echo=TRUE,eval=FALSE}
-library(NMdata)
-library(NMsim)
-## Point NMsim to your NONMEM exectuable - looks like this on linux/osx
-NMdataConf(path.nonmem = "/opt/NONMEM/nm75/run/nmfe75")
-## or on Windows, it could be
-NMdataConf(path.nonmem = "c:/nm75g64/run/nmfe75.bat")
-NMdataConf(dir.sims="simtmp-modify", ## location of sim tmp files
-           dir.res="simres-modify",
-           as.fun="data.table")  ## location of sim results
-```
+<!-- ```{r,echo=TRUE,eval=FALSE} -->
+<!-- library(NMdata) -->
+<!-- library(NMsim) -->
+<!-- ## Point NMsim to your NONMEM exectuable - looks like this on linux/osx -->
+<!-- NMdataConf(path.nonmem = "/opt/NONMEM/nm75/run/nmfe75") -->
+<!-- ## or on Windows, it could be -->
+<!-- NMdataConf(path.nonmem = "c:/nm75g64/run/nmfe75.bat") -->
+<!-- NMdataConf(dir.sims="simtmp-modify", ## location of sim tmp files -->
+<!--            dir.res="simres-modify", -->
+<!--            as.fun="data.table")  ## location of sim results -->
+<!-- ``` -->
 
 # Change in formulation Example.
 
@@ -496,11 +506,11 @@ sim.dupli.24h=sim.auc[TIME%%24==0 & TIME>0,.(ID
 sim.auc.final <- rbind(sim.auc
                        ,sim.dupli.24h) |> setorder(ID,DAY,TIME,time.step)
 
-sim.auc.trapez<-sim.auc.final[DAY<8,.(AUC=pracma::trapez(TIME,PRED))
+sim.auc.trapez<-sim.auc.final[DAY<8,.(AUC=NMcalc::trapez(TIME,PRED))
                              ,by=.(ID,DAY,time.step)]
 # stmp=sres1[EVID==2,.(ID,TIME,PRED)]
 # stmp[,DAY:=(TIME%/%24)+1]
-# sAUC<-stmp[,.(AUC=pracma::trapez(TIME,PRED)),by=.(ID,DAY)]
+# sAUC<-stmp[,.(AUC=NMcalc::trapez(TIME,PRED)),by=.(ID,DAY)]
 ```
 
 * at run time, with an `NMsim` modified script, on a course grid with evenly spaced time steps of `24` hours, labelled __AUC $DES__. Of note, this task requires additions to the control stream in multiple sections.
