@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2.901</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3.902</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +36,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../index.html"><span class="fa fas fa-home fa-lg"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="../index.html" title="Simulation of Nonmem models from R"><span class="fa fas fa-home fa-lg"></span></a></li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-vignettes" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Vignettes</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-vignettes">
@@ -46,7 +46,7 @@
     <li><a class="dropdown-item" href="../articles/NMsim-known.html">Simulate Known Subjects</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-ParamUncertain.html">Simulations with Parameter Uncertainty</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-forest.html">Simulation-based forest plots with NMsim</a></li>
-    <li><a class="dropdown-item" href="../articles/NMsim-DataCreate.html">Creation of Simulation Data Sets</a></li>
+    <li><a class="dropdown-item" href="../articles/NMsim-DataCreate.html">Data Set Creation with NMsim</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-ResidVar.html">Simulation with Residual Variability</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-varyPars.html">Simulate Models with Modifications</a></li>
     <li><a class="dropdown-item" href="../articles/NMsim-ReuseSimSubjects.html">Reuse Simulated Subjects</a></li>
@@ -71,15 +71,14 @@
 </nav><div class="container template-article">
 
 
-
-
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-
-      <h1>Simulate Known Subjects Using Emperical Bayes Estimates (Etas/Phis)</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Simulate Known Subjects Using Emperical Bayes Estimates (Etas/Phis)</h1>
                         <h4 data-toc-skip class="author">Philip
 Delff</h4>
                         
+            <h4 data-toc-skip class="date">May 27, 2025 using NMsim
+0.2.3.902</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/NMautoverse/NMsim/blob/main/vignettes/NMsim-known.Rmd" class="external-link"><code>vignettes/NMsim-known.Rmd</code></a></small>
       <div class="d-none name"><code>NMsim-known.Rmd</code></div>
@@ -87,7 +86,6 @@ Delff</h4>
 
     
     
-<p>Built 2025-05-13 using NMsim 0.2.2.901.</p>
 <div class="section level2">
 <h2 id="objectives">Objectives<a class="anchor" aria-label="anchor" href="#objectives"></a>
 </h2>
@@ -108,11 +106,13 @@ path to the Nonmem executable.</p>
 <p>More information on configuration and test of configuration at <a href="https://nmautoverse.github.io/NMsim/articles/NMsim-config.html" class="external-link"><code>NMsim-config.html</code></a>.</p>
 <p>You should be familiar with basic <code>NMsim</code> arguments as
 described in <a href="https://nmautoverse.github.io/NMsim/articles/NMsim-intro.html" class="external-link"><code>NMsim-intro.html</code></a>.
-In that vignette you should have learned to use the default simulation
-method. While the default simulation method samples new subjects (using
-the <code>$OMEGA</code> metrix). This vignette provides various examples
-on how the <code>NMsim_EBE</code> simulation method can be used to
-simulate known subjects.</p>
+That vignette mostly talks about the default simulation method (new
+subjects). This vignette provides various examples on how the
+<code>NMsim_EBE</code> simulation method can be used to simulate “known”
+subjects. We shall explain in more detail what is meant by a “known
+subject”. Briefly it means their ETAs are known. The most common example
+of this is resimulation of subjects that were in the estimation data
+set.</p>
 </div>
 <div class="section level2">
 <h2 id="simulation-of-known-subjects">Simulation of known subjects<a class="anchor" aria-label="anchor" href="#simulation-of-known-subjects"></a>
@@ -129,14 +129,14 @@ simulation data set must be identical to <code>ID</code> values used in
 the estimation. For models estimated with FOCEI, the ETAs are stored in
 the <code>.phi</code> file produced by Nonmem. This file must be
 available, and NMsim will automatically use it if applicable.</p>
-<p>For SAEM/IMP-based estimation NMsim cannot use the <code>.phi</code>
-file, and the user must have stored the ETAs in output table files for
-the method to work. It does not matter where in the table files they
-are, they just all need to be there. You can write all of them like it
-is done in the example model provided with <code>NMsim</code> called
-<code>xgxr032.mod</code>.</p>
-<p>If using SAEM/IMP, remember to explicitly write ETAs to an output
-table in the Nonmem control stream:</p>
+<p>For EM-based estimation methods such as SAEM or IMP, NMsim cannot use
+the <code>.phi</code> file, and the user must have stored the ETAs in
+output table files for the method to work. It does not matter where in
+the table files they are, they just all need to be there. You can write
+all of them like it is done in the example model provided with
+<code>NMsim</code> called <code>xgxr032.mod</code>.</p>
+<p>If using EM algorithms such as SAEM or IMP, remember to explicitly
+write ETAs to an output table in the Nonmem control stream:</p>
 <pre><code>$TABLE ETAS(1:LAST) NOAPPEND NOPRINT FILE=xgxr032_etas.txt</code></pre>
 <p>So a “subject” essentially means a set of ETAs. Covariates must still
 be provided in the input data set and can be modified if wanted. Notice,
@@ -160,7 +160,7 @@ followed by 6 doses (150 mg) every 24 hours. For smoothness plotted
 curves we use hourly sampling.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">doses</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMcreateDoses.html">NMcreateDoses</a></span><span class="op">(</span>TIME<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">24</span><span class="op">)</span>,AMT<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">300</span>,<span class="fl">150</span><span class="op">)</span>,ADDL<span class="op">=</span><span class="fl">5</span>,II<span class="op">=</span><span class="fl">24</span>,CMT<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="co">## Now we add the sample records using `addEVID2()`. </span></span>
+<span><span class="co">## Now we add the sample records using `NMaddSamples()`. </span></span>
 <span><span class="va">dat.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMaddSamples.html">NMaddSamples</a></span><span class="op">(</span><span class="va">doses</span>,TIME<span class="op">=</span><span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="fl">24</span><span class="op">*</span><span class="fl">7</span><span class="op">)</span>,CMT<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## read model results just to extract the observed ID's. Notice, if</span></span>
@@ -191,7 +191,7 @@ curves we use hourly sampling.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">simres.known</span>,<span class="va">EVID</span><span class="op">==</span><span class="fl">2</span><span class="op">)</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">TIME</span>,<span class="va">IPRED</span>,colour<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ID</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="NMsim-known_files/figure-html/unnamed-chunk-6-1.png" width="672"></p>
+<p><img src="NMsim-known_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
 <!-- Show a plot of the individual parameters in estimate and in sim -->
 </div>
 <div class="section level2">
@@ -285,7 +285,7 @@ predictions and PD predictions.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">simres.pksim</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">LIDV</span><span class="op">)</span><span class="op">&amp;</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">PKIPRED</span><span class="op">)</span><span class="op">]</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">PKIPRED</span>,<span class="va">LIDV</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"Individual PK prediction"</span>,y<span class="op">=</span><span class="st">"Observed PD value"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="NMsim-known_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
+<p><img src="NMsim-known_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -299,7 +299,7 @@ predictions and PD predictions.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>
