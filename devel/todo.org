@@ -42,9 +42,8 @@ Path to nonmem, psn, other ways to exec.
 
 **** Writing new methods
 
-*** TODO [#A] Include path to where Nonmem is executed in model table
-This doesn't seem to be saved at all. Issue is we can't find PRDERR or
-other debug info.
+*** DONE path.mod.exec Include path to where Nonmem is executed in model table 
+can be used to find PRDERR or other debug info.
 ** TODO New function to apply time-varying covariates
 
 ** expandCovs
@@ -187,7 +186,21 @@ If found, we can look for ** or ^ in control stream
 
 If individuals and data points are mentioned, we could look those up in data:
 0INDIVIDUAL NO.       1   ID= 1.80000000000000E+01   (WITHIN-INDIVIDUAL) DATA REC NO.   2
- 
+**** attempt1
+
+file.prderr <- attributes(simres)$NMsimModTab[,file.path(dirname(path.mod.exec),"PRDERR")]
+if(file.exists(file.prderr)){
+    cat(
+        paste(paste(readLines(file.prderr),collapse="\n"),"\n\n")
+    )
+}
+**** next step
+mod.exec <- readLines(path.mod.exec,warn=FALSE)
+mod.exec[grepl("\\*\\*",mod.exec)]
+mod.exec[grepl("V2",mod.exec)]
+dims(simres,dt.sim)
+
+
 *** DONE When adding seed and SUBPROBLEMS, only add once
 If $SIMULATION spans more than one line, this is currently pasted repeatedly
 *** DONE Drop NMsim from file names
