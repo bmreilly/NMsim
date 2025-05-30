@@ -94,7 +94,8 @@ Reusing eta's is recurring, so
 Also, see Publications.
 
 :::example
-# [Simulation-Based Forest Plots with NMsim](NMsim-intro.html) {.subheading .tabset}
+
+[**Simulation-Based Forest Plots with NMsim**](NMsim-intro.html) {.subheading .tabset}
 
 #### Authors: Philip Delff {.authors}  
  - Configuration  
@@ -114,7 +115,7 @@ Authors: **Philip Delff**
 
 :::example
 
-# [Simulation-Based Forest Plots with NMsim](NMsim-forest.html) {.subheading .tabset}
+[**Simulation-Based Forest Plots with NMsim**](NMsim-forest.html) {.subheading .tabset}
 
 #### Authors: Philip Delff, Boris Grinshpun {.authors}
 

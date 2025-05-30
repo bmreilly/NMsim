@@ -2,7 +2,7 @@ url: https://NMautoverse.github.io/NMsim/
 template:
   bootstrap: 5
   params:
-    google_site_verification: -8n-8OfzJii_lVruWfxXOhzUATKSgMdiSxMhOQoscu4
+    google_site_verification: 1z2VLiQgr7hTGMX0G9VbQ3MzwU_Q9WWRLpdXynhsg30
   includes:
     after_body: |-
       <script data-goatcounter="https://nmsim.goatcounter.com/count"
