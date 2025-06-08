@@ -1,5 +1,5 @@
 ---
-title: "NMsim - Seamless NONMEM Simulation Platform in R"
+title: "Simulation with Modifications to Parameters and Model Code"
 author: 
   - name: "Philip Delff"
   - name: "Simone Cassani"
@@ -164,7 +164,7 @@ knitr::write_bib(c('rmarkdown','data.table','NMdata','NMsim','xgxr'), 'intro-pac
 
 # Introduction
 
-This vignette introduce the `NMsim` feature that allows users to specify modifications to a `NONMEM` model. The NONMEM control stream can be edited directly from within the `NMsim` function call in the `R` script via the flexible interface provided by the argument `modify.model`. The edits can be applied to any section of the control stream, and most commonly they will affect the `$PK` or `$PRED` sections, or even the `$DES` or `$MODEL` sections when needed. Note that, since the data related sections (`$INPUT`,`$DATA`,`$TABLE`) are automatically handled by NMsim, it will be rarely necessary that they are edited via the `modify.model` argument. Additionally the `NMsim` function has specific arguments regarding the `$TABLE` sections, namely `table.vars` and `table.options`.
+This vignette introduce `NMsim` features that allows users to specify modifications to a `NONMEM` model. The NONMEM control stream can be edited directly from within the `NMsim` function call in the `R` script via the flexible interface provided by the argument `modify.model`. The edits can be applied to any section of the control stream, and most commonly they will affect the `$PK` or `$PRED` sections, or even the `$DES` or `$MODEL` sections when needed. Note that, since the data related sections (`$INPUT`,`$DATA`,`$TABLE`) are automatically handled by NMsim, it will be rarely necessary that they are edited via the `modify.model` argument. Additionally the `NMsim` function has specific arguments regarding the `$TABLE` sections, namely `table.vars` and `table.options`.
 
 Notice, until NMsim 0.1.0, the `modify.model` argument was called `list.sections`, and it was characterized by a different formatting and level of flexibility. The helper functions `add` and `overwrite` were introduced with NMsim 0.1.3, to add and overwrite control stream lines, respectively. Until then, custom modification functions had to be provided like described in the section "Edit control stream using customized functions'.
 
@@ -220,7 +220,7 @@ None of these configurations are specific to using the modify.model argument. In
 <!--            as.fun="data.table")  ## location of sim results -->
 <!-- ``` -->
 
-# Change in formulation Example.
+# Example: Change in formulation
 
 <!-- Philip comment:
 I wrote the following as I was going through the doc. After having read the DDI example too, I actually really like this. But maybe in the intro and/or the first line of the examples, we should add what this illustrates in terms of NMsim features. 

@@ -1,5 +1,5 @@
 ---
-title: "Simulation of New Subjects"
+title: "Simulation of New Subjects (Deprecated)"
 output:
 rmarkdown::html_vignette:
     toc: true
@@ -73,6 +73,6 @@ NMdataConf(dir.sims="~/NMsim_vignette",
 Built `r Sys.Date()` using NMsim `r packageVersion("NMsim")`.
 
 ## No Longer Maintained
-This document has been replaced by [`NMsim-intro.html`](https://NMautoverse.github.io/NMsim/articles/NMsim-intro.html). Please read that instead.
+This document has been replaced by [`NMsim-intro.html`](https://NMautoverse.github.io/NMsim/articles/NMsim-intro.html). 
 
 
