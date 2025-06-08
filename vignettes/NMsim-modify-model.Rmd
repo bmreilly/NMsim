@@ -4,7 +4,7 @@ author:
   - name: "Philip Delff"
   - name: "Simone Cassani"
     affil: 1
-date: '`r format(Sys.Date(), "%B %d, %Y")`'
+date: '`r format(Sys.Date(), "%B %d, %Y")` using NMsim `r packageVersion("NMsim")`'
 toctitle: "Contents"
 output:
     html_document:

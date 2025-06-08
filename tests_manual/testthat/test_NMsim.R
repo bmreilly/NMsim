@@ -300,6 +300,8 @@ test_that("basic - known",{
         simres
         compareCols(attributes(simres)$NMsimModTab,
                     attributes(ref)$NMsimModTab)
+
+        attributes(simres)$NMsimModTab$path.sim
     }
 
     
