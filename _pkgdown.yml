@@ -14,38 +14,16 @@ template:
 mode: release
 navbar:
   structure:
-    left: [home, articles, reference, news, pub, github]
+    left: [home, examples, reference, news, pub, github]
   components:
    home:
     title: Simulation of Nonmem models from R
     desc: A seamless Nonmem simulation platform
     icon: fas fa-home fa-lg
     href: index.html
-   articles:
-      text: Vignettes
-      menu:
-      - text: NMsim Introduction
-        href: articles/NMsim-intro.html
-      - text: Simulations for VPCs 
-        href: articles/NMsim-VPC.html
-      - text: Requirements and Configuration
-        href: articles/NMsim-config.html
-      - text: Simulate Known Subjects
-        href: articles/NMsim-known.html
-      - text: Simulations with Parameter Uncertainty
-        href: articles/NMsim-ParamUncertain.html
-      - text: Simulation-based forest plots with NMsim
-        href: articles/NMsim-forest.html
-      - text: Data Set Creation with NMsim
-        href: articles/NMsim-DataCreate.html
-      - text: Simulation with Residual Variability
-        href: articles/NMsim-ResidVar.html
-      - text: Simulate Models with Modifications
-        href: articles/NMsim-varyPars.html
-      - text: Reuse Simulated Subjects
-        href: articles/NMsim-ReuseSimSubjects.html
-      - text: Debugging, Speed, and Disk Space
-        href: articles/NMsim-speed.html
+   examples:
+      text: "Examples"
+      href: articles/NMsim-examples.html
    pub:
       text: "Publications"
       href: articles/NMsim-publications.html

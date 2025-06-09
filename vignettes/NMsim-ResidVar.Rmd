@@ -1,5 +1,5 @@
 ---
-title: "NMsim - Simulation of residual variability"
+title: "Simulation of residual variability"
 output:
 rmarkdown::html_vignette:
     toc: true
