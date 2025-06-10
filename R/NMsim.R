@@ -1184,24 +1184,9 @@ NMsim <- function(file.mod,data,
                        ,quiet=TRUE)
         )})
         
-##         dt.data.tmp[,{NMwriteData(data$data[[DATAROW]]
-##                                  ,file=path.data
-##                                  ,genText=T
-##                                  ,formats.write=c("csv",format.data.complete)
-##                                   ## if NMsim is not controlling $DATA, we don't know what can be dropped.
 
-##                                  ##,csv.trunc.as.nm=TRUE
-##                                  ,script=script
-##                                  ,quiet=TRUE)
-## ### returning a sctring because NMwriteData wit genText may return incompatible results
-##                                  ##"OK"
-##         },
-##         by=tmprow]
     }
     
-    
-
-
 
 
     if(is.null(data)){
@@ -1236,9 +1221,6 @@ NMsim <- function(file.mod,data,
             
             
 ### save data and replace $input and $data
-#### multiple todo: save only for each unique path.data
-            
-            ## format.data.complete <- "fst"
             
             nmtext <- NMwriteData(data.this,file=unique(dt$path.data),
                                   args.NMgenText=list(dir.data=".",col.flagn=col.flagn)
@@ -1274,7 +1256,21 @@ NMsim <- function(file.mod,data,
             
         },by=.(ROWMODEL)]
     }    
+
+
     
+    ## dt.models[,{### update .msf
+    ##           newlines <- NMupdateFn(x=path.sim,
+    ##                      section="EST",
+    ##                      model=basename(fn.sim),
+    ##                      fnext=".msf",
+    ##                      add.section.text=NULL,
+    ##                      par.file="MSFO",
+    ##                      text.section=NULL,
+    ##                      quiet=TRUE)
+    ##           writeTextFile(newlines,file=path.sim)
+    ##           }
+    ## ]
 
 #### Section start: Output tables ####
     
