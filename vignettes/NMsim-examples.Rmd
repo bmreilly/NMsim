@@ -1,0 +1,181 @@
+---
+title: "NMsim Examples"
+date: '`r format(Sys.Date(), "%B %d, %Y")` using NMsim `r packageVersion("NMsim")`'
+output:
+rmarkdown::html_document:
+    toc: true
+    code_folding: show
+Suggests: markdown
+VignetteBuilder: knitr
+vignette: >
+  %\VignetteIndexEntry{Typical}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+header-includes:
+- \usepackage{ae}
+---
+
+
+```{css echo=FALSE}
+
+h1.title { /* title style */
+  margin-top:2em;
+  margin-bottom:1em;
+  font-size:40px;
+}
+
+body{ /* body style */
+      font-size: 18px;
+}
+
+.subheading h1 {  /* subheading style */
+  font-weight:bold;
+  font-size:40px;
+}
+
+.authors h4 {  /* author style */
+  font-weight:bold;
+  font-style:italic;
+  margin-top: 0em;
+  margin-bottom: 0.5em;
+}
+
+.date h4 {  /* date style */
+  font-weight:bold;
+  margin-top: 0em;
+  margin-bottom: 5em;
+}
+
+.date h4 {  /* plotting chunks style */
+  font-weight:bold;
+  margin-top: 0em;
+  margin-bottom: 5em;
+}
+
+
+.myplot{
+  aspect-ratio = 0.5;
+  width: 50%;
+}
+
+/* -----------div tips------------- */
+
+div.example {  /* layout for examples */
+    padding: .1em;
+    margin-bottom: 1em;
+    padding-left: 50px;
+    background-size: 30px;
+    background-repeat: no-repeat;
+    background-position: 10px 10px;
+    min-height: 40px;
+    font-size: 16px;
+    color: #000000;
+    /* border: solid 5px #dfedff; */
+}
+
+  
+``` 
+
+```{r setup, include=FALSE}
+#--- Set up options ---# 
+
+knitr::opts_knit$set(verbose=T)
+knitr::opts_chunk$set(echo = F, warning = F)
+```
+The examples aim at sharing used code to handle simulation-based workflows with NMsim. When building your own code, please also see the manuals of key functions, ?NMsim being an obvious example. 
+
+Guide  
+[Simulation-Based Forest Plots with NMsim](NMsim-intro.html) is the place to start. It contains basic information to get you started and demonstrates the most common types of simulations.
+
+Secondly, you can let your interests guide your next topic. Use [Requirements and Configuration](NMsim-config.html) as needed. If you have not yet run your first successful `NMsim()` calls, it's worth a read, at least half-through.
+
+For simulation with variability on parameters (`$THETA`'s, `$OMEGA`'s, and `$SIGMA`'s), currently most up to date is [NMsim - Simulation-Based Forest Plots with NMsim](NMsim-forest.html)
+
+Also, see recent [Publications](NMsim-publications.html).
+
+:::example
+
+## [**Simulation-Based Forest Plots with NMsim**](NMsim-intro.html)
+
+#### Philip Delff {.authors}
+
+ - Configuration  
+ - Simulation of typical subjects and new subjects  
+ - Creation of Simulation data sets  
+ - Simulate multiple models  
+ - Reuse Emperical Bayes' Estimates (known ETAs)  
+ - Read previously generated simulations  
+
+:::
+
+
+:::example
+## [**Data Set Creation with NMsim**](NMsim-DataCreate.html)
+
+#### Philip Delff {.authors}
+
+:::
+
+:::example
+## [**Simulate Known Subjects Using Emperical Bayes Estimates (Etas)**](NMsim-known.html)
+
+#### Philip Delff {.authors}
+:::
+
+
+:::example
+## [**Simulation-Based Forest Plots with NMsim**](NMsim-forest.html)
+
+#### Philip Delff, Boris Grinshpun {.authors}
+:::
+
+:::example
+## [**Simulation with Parameter Uncertainty**](NMsim-ParamUncertain.html)
+
+#### Philip Delff {.authors}
+:::
+
+
+:::example
+## [**Requirements and Configuration**](NMsim-config.html)
+- Specify the path to the Nonmem executable (`path.nonmem`). 
+- Set default values for `path.nonmem` and output directories. 
+#### Philip Delff {.authors}
+:::
+
+## Examples waiting for updates
+
+
+
+:::example
+## [**Simulation with Modifications to Parameters and Model Code**](NMsim-modify-model.html)
+
+#### Simone Cassani, Philip Delff {.authors}
+:::
+
+:::example
+## [**VPC Simulations**](NMsim-VPC.html)
+
+#### Philip Delff {.authors}
+:::
+	
+
+:::example
+## [**Simulation of residual variability**](NMsim-ResidVar.html)
+
+#### Philip Delff {.authors}
+:::
+
+
+:::example
+## [**Reuse simulated subjects**](NMsim-ReuseSimSubjects.html)
+
+#### Philip Delff {.authors}
+:::
+
+
+:::example
+## [**NMsim and speed**](NMsim-speed.html)
+
+#### Philip Delff {.authors}
+:::
