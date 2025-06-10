@@ -36,7 +36,7 @@
 #### Limitation: If using something like CL=(.1,4,15), two of those cannot be on the same line
 
 NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,values,newfile,...){
-    
+
     . <- NULL
     elemnum <- NULL
     elemnum_lower <- NULL
