@@ -16,6 +16,12 @@ NMupdateFn(
 )
 }
 \arguments{
+\item{x}{a control stream, path or `NMctl` object.}
+
+\item{section}{What section to update}
+
+\item{model}{Model name}
+
 \item{fnext}{The file name extension of the file name to be
 updated (e.g., one of "tab", "csv", "msf").}
 
@@ -26,7 +32,10 @@ $SECTION. It can be additional TABLE variables.}
 $TABLE, this is FILE. In $EST it's probably MSFO.}
 
 \item{text.section}{This is used to overwrite the contents of the section. The section output file name will still handled/updated.}
+
+\item{quiet}{Suppress messages? Default is `FALSE`.}
 }
 \description{
 Update file names in control stream to match model name
 }
+\keyword{internal}
