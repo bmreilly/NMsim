@@ -26,8 +26,8 @@ extention on `file.mod` with `.ext`. This is only used if
 `update=TRUE`.}
 
 \item{values}{A list of lists. Each list specifies a parameter
-with named elements. Must be named by the parameter name. ll,
-ul and fix can be supplied to modify the parameter. See
+with named elements. Must be named by the parameter name. lower,
+upper and fix can be supplied to modify the parameter. See
 examples. Notice, you can use `...` instead. `values` may be easier for programming but other than that, most users will find `...` more intuitive.}
 
 \item{newfile}{If provided, the results are written to this file
@@ -49,11 +49,6 @@ NMwriteInits(file.mod,
 values=list( "theta(2)"=list(init=1.4),
              "THETA(3)"=list(FIX=1),
              "omega(2,2)"=list(init=0.1))
-)
-NMwriteInits(file.mod,
-  "theta(2)"=list(init=1.4),
-  "THETA(3)"=list(FIX=1),
-  "omega(2,2)"=list(init=0.1)
 )
 }
 }
