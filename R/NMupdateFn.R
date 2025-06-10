@@ -1,4 +1,7 @@
 ##' Update file names in control stream to match model name
+##' @param x a control stream, path or `NMctl` object.
+##' @param section What section to update
+##' @param model Model name
 ##' @param fnext The file name extension of the file name to be
 ##'     updated (e.g., one of "tab", "csv", "msf").
 ##' @param add.section.text Addditional text to insert right after
@@ -6,6 +9,8 @@
 ##' @param par.file The Nonmem parameter that specifies the file. In
 ##'     $TABLE, this is FILE. In $EST it's probably MSFO.
 ##' @param text.section This is used to overwrite the contents of the section. The section output file name will still handled/updated.
+##' @param quiet Suppress messages? Default is `FALSE`.
+##' @keywords internal
 
 NMupdateFn <- function(x,section,model,fnext,add.section.text,par.file,text.section,quiet=FALSE){### Arguments to replace: FILE, .tab, text.table
     

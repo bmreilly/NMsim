@@ -1,9 +1,9 @@
 ##' Get NMsim model metadata
 ##'
-##' @param res
+##' @param res NMsim results (class `NMsimRes`).
 ##' @return 
 ##' @details
-##' \begin{itemize}
+##' \itemize{
 ##' \item ROWMODEL (integer): A unique row identifier
 ##' \item file.mod (character): Path to the originally provided input control stream, relative to current working directory.
 ##' \item path.sim (character): Path to the simulation input control stream, relative to current working directory.
@@ -14,6 +14,7 @@
 ##' \item fn.sim (character): Name of the mod file to be simulated. Has .mod extension. It will differ from file mod in being derived from model.sim so it is unique and cleaned.
 ##' \item dir.sim (character): Relative path from point of execution to simulation directory. Cleaned.
 ##' \item path.mod.exec (character): Path to the control stream executed by Nonmem, relative to current working directory.
+##' }
 ##' @export
 
 
