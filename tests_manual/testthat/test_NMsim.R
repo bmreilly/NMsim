@@ -3,9 +3,9 @@ library(data.table)
 library(NMdata)
 
 packageVersion("NMdata")
-## library(NMsim)
-library(devtools)
-load_all(export_all=FALSE)
+library(NMsim)
+## library(devtools)
+## load_all(export_all=FALSE)
 
 NMdataConf(reset=TRUE)
 NMdataConf(dir.psn=NULL)
@@ -300,6 +300,8 @@ test_that("basic - known",{
         simres
         compareCols(attributes(simres)$NMsimModTab,
                     attributes(ref)$NMsimModTab)
+
+        attributes(simres)$NMsimModTab$path.sim
     }
 
     
@@ -1434,3 +1436,24 @@ test_that("commas in data set",{
 
 })
 
+test_that("1 subproblem - test NMREP",{
+    
+    fileRef <- "testReference/NMsim_18.rds"
+
+    file.mod <- "testData/nonmem/xgxr022.mod"
+
+    simres <- NMsim(file.mod,
+                    data=dt.sim,
+                    table.vars=cc(PRED,IPRED),
+                    name.sim="subprob1",
+                    subproblems=1,
+                    path.nonmem=path.nonmem,
+                    method.update.inits="nmsim",
+                    seed.nm=43
+                    )
+    simres
+
+    ## modTab(simres)
+    names(attributes(simres))
+    NMreadSection(attributes(simres)$NMsimModTab$path.sim.lst)[c("ERROR","SIMULATION")]
+})

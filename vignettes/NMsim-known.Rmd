@@ -1,5 +1,5 @@
 ---
-title: "Simulate Known Subjects Using Emperical Bayes Estimates (Etas/Phis)"
+title: "Simulate Known Subjects Using Emperical Bayes Estimates (Etas)"
 author: 
   - name: "Philip Delff"
 date: '`r format(Sys.Date(), "%B %d, %Y")` using NMsim `r packageVersion("NMsim")`'
@@ -22,12 +22,7 @@ pkgdown:
 
 ```{r setup-hide,include = FALSE}
 library(knitr)
-knitr::opts_hooks$set(function(options) {
-  if (is.null(options$fig.alt) && !is.null(options$fig.cap)) {
-    options$fig.alt <- options$fig.cap
-  }
-  options
-})
+
 
 ##knitr::opts_chunk$set(dev = "cairo_pdf")
 knitr::opts_chunk$set(
@@ -36,6 +31,14 @@ knitr::opts_chunk$set(
                      ,fig.width=7
                      ,cache=FALSE
                   )
+
+
+knitr::opts_hooks$set(function(options) {
+  if (is.null(options$fig.alt) && !is.null(options$fig.cap)) {
+    options$fig.alt <- options$fig.cap
+  }
+  options
+})
 
 ## this changes data.table syntax. I think we can do without.
 ## knitr::opts_chunk$set(tidy.opts=list(width.cutoff=60), tidy=TRUE)

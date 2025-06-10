@@ -520,6 +520,7 @@ NMsim <- function(file.mod,data,
                   list.sections,
                   ...
                   ){
+
 #### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
     
     . <- NULL

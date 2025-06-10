@@ -16,6 +16,16 @@ header-includes:
 
 
 
+## PAGE 2025
+
+[**NMsim - Seamless NONMEM Simulation Platform in R**](../reference/figures/NMsim_intro_PAGE2025.html)  
+Authors: **Philip Delff, Sanaya Shroff**  
+
+
+[**Simulation With Parameter Uncertainty Using NMsim**](
+../reference/figures/Simulation_With_Parameter_Uncertainty_Using_NMsim_23MAY2025.pdf)  
+Authors: **Sanaya Shroff, Boris Grinshpun, Philip Delff**
+
 
 ## ACOP 2024
 <!-- For .bib: -->
@@ -23,17 +33,14 @@ header-includes:
 
 [**NMsim - Seamless Nonmem Simulation Platform in R**](../reference/figures/NMsim_intro_web.pdf) (Poster T32)  
 Authors: **Philip Delff**  
-<!-- [pdf](https://github.com/NMautoverse/NMsim/blob/main/publications/ACOP2024/NMsim_general_web.pdf) -->
-<!-- [pdf](../doc/NMsim_general_web.pdf) -->
-<!-- [`Code`](https://github.com/NMautoverse/NMsim/blob/main/publications/ACOP2024/NMsim_general_html.Rmd) -->
-The code is in [NMsim - Seamless NONMEM Simulation Platform in R](NMsim-intro.html)  
-Received the **ISoP PMx DATA PROGRAMMING SIG AWARD**
+Code: [NMsim - Seamless NONMEM Simulation Platform in R](NMsim-intro.html)  
+Received the **ISoP PMx DATA PROGRAMMING SIG AWARD**  
 DOI 10.70534/PGJU4426
 
 [**Building Automated Pharmacometrics Analysis Workflows in R with NMsim**](../reference/figures/NMsim_automated_workflows_web.pdf) (Poster T49)  
 Authors: **Boris Grinshpun, Samer Mouksassi, Philip Delff**  
-Code on forest plots is available [Simulation-based forest plots with NMsim](NMsim-forest.html).  
-Code to produce VPC plots, see [VPC simulations](NMsim-VPC.html).
+Code: [Simulation-based forest plots with NMsim](NMsim-forest.html).  
+For code to produce VPC plots, see [VPC simulations](NMsim-VPC.html).
 
 [**Simulation of clinical trial predictions with model uncertainty using NMsim**](../reference/figures/NMsim_param_uncertainty_web.pdf) (Poster T110)  
 Authors: **Sanaya Shroff**, **Philip Delff**  

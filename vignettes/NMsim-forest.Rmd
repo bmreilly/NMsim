@@ -21,12 +21,21 @@ pkgdown:
 
 ```{r,setup-hide,include=FALSE}
 library(knitr)
-knitr::opts_hooks$set(function(options) {
+
+## opts_hooks$set(evaluate = function(options) {
+##   if (is.null(options$fig.alt) && !is.null(options$fig.cap)) {
+##     options$fig.alt <- options$fig.cap
+##   }
+##   options
+## })
+
+knit_hooks$set(plot = function(x, options) {
   if (is.null(options$fig.alt) && !is.null(options$fig.cap)) {
     options$fig.alt <- options$fig.cap
   }
-  options
+  hook_plot_md(x, options)  # for R Markdown (HTML output)
 })
+
 ```
 
 

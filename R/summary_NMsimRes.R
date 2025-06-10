@@ -1,4 +1,25 @@
+##' summary method for NMsim results (NMsimRes objects)
+##' @param object An NMsimRes object (from NMsim).
+##' @param ... Not used
+##' @return A list with summary information on the NMsimRes object.
+##' @export
 summary.NMsimRes <- function(object,...){
+
+#### Section start: Dummy variables, only not to get NOTE's in pacakge checks #### ####
+
+    . <- NULL
+    EVID <- NULL
+    evid <- NULL
+    grp0 <- NULL
+    ID <- NULL
+    model <- NULL
+    model.sim <- NULL
+    NMREP <- NULL
+    RepID <- NULL
+
+### Section end: Dummy variables, only not to get NOTE's in pacakge checks ####
+
+
     
     dots <- list(...)
     defaults <- list(

@@ -1,3 +1,4 @@
+##' Update file names in control stream to match model name
 ##' @param fnext The file name extension of the file name to be
 ##'     updated (e.g., one of "tab", "csv", "msf").
 ##' @param add.section.text Addditional text to insert right after
