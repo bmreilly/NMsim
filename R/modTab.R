@@ -1,7 +1,7 @@
 ##' Get NMsim model metadata
 ##'
 ##' @param res NMsim results (class `NMsimRes`).
-##' @return 
+##' @return A table with model details
 ##' @details
 ##' \itemize{
 ##' \item ROWMODEL (integer): A unique row identifier
