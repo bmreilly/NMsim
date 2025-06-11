@@ -2,12 +2,14 @@
 * NMsim todo
 ** general
 
-*** DONE Export simulation methods
-*** DONE Add @return to all functions
+*** model object structure
 
-*** DONE Clean up code files
+#+begin_src R
+  ### mod
+### ext
+#+end_src
 
-*** DONE Rename method.execute="directory" to method.execute="nmsim"
+
 
 *** CANCELED Warn against method.execute="nmsim" for NMexec directly
 
@@ -15,10 +17,6 @@
 Wrote NMcreateMatLines instead which uses BLOCK structures as
 needed. I was concerned if VarCov is similarly affected
 *** pkgdown
-
-*** DONE goathunter
-*** DONE Setting for paths to executables
-Path to nonmem, psn, other ways to exec.
 
 *** DONE Fork NMwriteSection from NMdata
 
@@ -44,7 +42,7 @@ Path to nonmem, psn, other ways to exec.
 
 *** DONE path.mod.exec Include path to where Nonmem is executed in model table 
 can be used to find PRDERR or other debug info.
-** TODO New function to apply time-varying covariates
+*** TODO New function to apply time-varying covariates
 
 ** expandCovs
 ** NMexec

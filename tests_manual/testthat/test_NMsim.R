@@ -4,9 +4,10 @@ library(NMdata)
 
 packageVersion("NMdata")
 library(NMsim)
-## library(devtools)
-## load_all(export_all=FALSE)
-
+if(F){
+    library(devtools)
+    load_all(export_all=FALSE)
+}
 NMdataConf(reset=TRUE)
 NMdataConf(dir.psn=NULL)
 NMdataConf(as.fun="data.table")
@@ -123,7 +124,7 @@ test_that("basic - default",{
                     name.sim="default_01"
                     )
     
-    
+    modTab(simres)
     simres.nometa <- copy(simres)
     unNMsimRes(simres.nometa)
 
@@ -856,8 +857,8 @@ test_that("transform",{
     if(F){
         ref <- readRDS(fileRef)
         compareCols(simres,ref)
-identical_cols(simres,ref)
-ref
+        identical_cols(simres,ref)
+        ref
         simres
         
         compareCols(attributes(simres)$NMsimModTab,

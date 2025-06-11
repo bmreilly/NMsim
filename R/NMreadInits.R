@@ -1,13 +1,15 @@
 #### This file is a copy from NMdata - except NMreadInits is made
 #### internal. And replaced NMdataDecideOption with NMdata:::NMdataDecideOption. Same for cleanSpaces and getLines. Must be deleted when NMsim requires NMdata 0.1.9.
 
-
-
 ##' Calculate number of elements for matrix specification
 ##' 
 ##' calculate number of elements in the diagonal and lower triangle of
-##' a matrix, based on the length of the diagonal
+##' a squared matrix, based on the length of the diagonal.
 ##'
+##' @param diagSize The length of the diagonal. Same as number of rows
+##'     or columns.
+##' 
+##' @return An integer
 ##' @keywords internal
 ## triagSize(1:5)
 triagSize <- function(diagSize){
