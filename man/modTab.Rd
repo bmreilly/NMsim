@@ -10,7 +10,7 @@ modTab(res)
 \item{res}{NMsim results (class `NMsimRes`).}
 }
 \value{
-
+A table with model details
 }
 \description{
 Get NMsim model metadata

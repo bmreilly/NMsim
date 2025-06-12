@@ -623,8 +623,6 @@ NMsim <- function(file.mod,data,
         if(any(names(args.NMscanData)=="")) stop("All elements in args.NMscanData must be named.")
     }
     args.NMscanData.default <- list(merge.by.row=FALSE,col.model=NULL)
-    ## moving this from NMscanData to be handled by NMreadSim or a sub-function hereof
-    ##,col.model="model.sim")
     
     if(missing(progress)) progress <- NULL
     
