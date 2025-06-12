@@ -1,6 +1,5 @@
 ---
 title: "NMsim Examples"
-date: '`r format(Sys.Date(), "%B %d, %Y")` using NMsim `r packageVersion("NMsim")`'
 output:
 rmarkdown::html_document:
     toc: true
