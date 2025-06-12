@@ -68,6 +68,7 @@ NMsim we default to nc=1.
 *** CANCELED Intro arg return
 Align with NMdata
 ** NMreadSim
+*** TODO [#A] implement skip.missing
 *** TODO [#A] byvars must exist
 when reading tables from inside the meta data table, what meta data
 variables are depends on the NMsim version that created the
