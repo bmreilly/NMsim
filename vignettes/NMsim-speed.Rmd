@@ -70,6 +70,7 @@ The following points show ways to improve calculation speed with `NMsim`. The li
 * Parellilize individual runs  
   - NMsim does support parellilization (performing a Nonmem run using multiple cores). For instance, use 16 cores for each Nonmem run by adding `nc=16` 
   - However, this is rarely worth it for simulations. Most of the time, input/output (reading/writing to disk) is the bottleneck, and splitting the data set into multiple runs will most often reduce run times more.
+  - Issues have been seen combining `nc` greater than 1 with `method.sim=NMsim_EBE` which should be avoided for now.
 
 
 ## Most common reasons for `NMsim` to fail or be slow
@@ -156,3 +157,4 @@ path.multidata <- NMsim(file.mod,
 ### If we want to wait and read the results when they are ready, use wait=TRUE. NMsim will automatically combine them into one data set as if they were from just one Nonmem run.
 simres <- NMreadSim(path.multidata,wait=TRUE)
 ```
+

@@ -85,7 +85,7 @@ The examples aim at sharing used code to handle simulation-based workflows with 
 
 [Simulation-Based Forest Plots with NMsim](NMsim-intro.html) is the place to start. It contains basic information to get you started and demonstrates the most common types of simulations.
 
-Secondly, you can let your interests guide your next topic. Use [Requirements and Configuration](NMsim-config.html) as needed. If you have not yet run your first successful `NMsim()` calls, it's worth a read, at least half-through.
+You can let your interests guide your next topic. Use [Requirements and Configuration](NMsim-config.html) as needed. If you have not yet run your first successful `NMsim()` calls, it's worth a read, at least half-through.
 
 For simulation with variability on parameters (`$THETA`'s, `$OMEGA`'s, and `$SIGMA`'s), currently most up to date is [NMsim - Simulation-Based Forest Plots with NMsim](NMsim-forest.html)
 
