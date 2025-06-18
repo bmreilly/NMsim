@@ -1,3 +1,8 @@
+
+##' Read as class NMctl
+##' @param x object to read.
+##' @param ... Not used.
+##' @return An object of class `NMctl`.
 ##' @export
 readCtl <- function(x,...){
     UseMethod("readCtl",x)
@@ -31,6 +36,10 @@ print.NMctl <- function(x,...) {
     cat(do.call(paste0,res))
 }
 
+##' Convert object to class NMctl
+##' @param x object to convert
+##' @param ... Not used
+##' @return An object of class `NMctl`.
 ##' @export
 as.NMctl <- function(x,...){
     UseMethod("as.NMctl",x)

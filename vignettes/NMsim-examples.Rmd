@@ -1,6 +1,5 @@
 ---
 title: "NMsim Examples"
-date: '`r format(Sys.Date(), "%B %d, %Y")` using NMsim `r packageVersion("NMsim")`'
 output:
 rmarkdown::html_document:
     toc: true
@@ -68,7 +67,7 @@ div.example {  /* layout for examples */
     background-repeat: no-repeat;
     background-position: 10px 10px;
     min-height: 40px;
-    font-size: 16px;
+    font-size: 14px;
     color: #000000;
     /* border: solid 5px #dfedff; */
 }
@@ -82,12 +81,11 @@ div.example {  /* layout for examples */
 knitr::opts_knit$set(verbose=T)
 knitr::opts_chunk$set(echo = F, warning = F)
 ```
-The examples aim at sharing used code to handle simulation-based workflows with NMsim. When building your own code, please also see the manuals of key functions, ?NMsim being an obvious example. 
+The examples aim at sharing used code to handle simulation-based workflows with NMsim. When building your own code, please also see the manuals of key functions, [`?NMsim`](https://nmautoverse.github.io/NMsim/reference/NMsim.html) being an obvious example. 
 
-Guide  
 [Simulation-Based Forest Plots with NMsim](NMsim-intro.html) is the place to start. It contains basic information to get you started and demonstrates the most common types of simulations.
 
-Secondly, you can let your interests guide your next topic. Use [Requirements and Configuration](NMsim-config.html) as needed. If you have not yet run your first successful `NMsim()` calls, it's worth a read, at least half-through.
+You can let your interests guide your next topic. Use [Requirements and Configuration](NMsim-config.html) as needed. If you have not yet run your first successful `NMsim()` calls, it's worth a read, at least half-through.
 
 For simulation with variability on parameters (`$THETA`'s, `$OMEGA`'s, and `$SIGMA`'s), currently most up to date is [NMsim - Simulation-Based Forest Plots with NMsim](NMsim-forest.html)
 
@@ -138,9 +136,12 @@ Also, see recent [Publications](NMsim-publications.html).
 
 :::example
 ## [**Requirements and Configuration**](NMsim-config.html)
-- Specify the path to the Nonmem executable (`path.nonmem`). 
-- Set default values for `path.nonmem` and output directories. 
+
 #### Philip Delff {.authors}
+
+- Specify the path to the Nonmem executable (`path.nonmem`).  
+- Set default values for `path.nonmem` and output directories. 
+
 :::
 
 ## Examples waiting for updates

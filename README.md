@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# NMsim<a href='https://NMautoverse.github.io/NMsim/'><img src='man/figures/NMsimlogo240.png' align="right" height="120" /></a>
+# NMsim - Simulate Nonmem Models from R <a href='https://NMautoverse.github.io/NMsim/'><img src='man/figures/NMsimlogo240.png' align="right" height="120" /></a>
 
 <!-- badges: start -->
 
@@ -47,8 +47,9 @@ simres <- NMsim(file.mod=system.file("examples/nonmem/xgxr021.mod",package="NMsi
 where `dir.sims` may be needed because the model in this case may be in
 a read-only location.
 
-Notice, that could be any working Nonmem model as long as the provided
-simulation data set is sufficient to run it. We are ready to plot:
+Notice, `file.mod` could point to any working Nonmem model as long as
+the provided simulation data set is sufficient to run it. We are ready
+to plot:
 
 ``` r
 library(ggplot2)
