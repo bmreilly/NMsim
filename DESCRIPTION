@@ -36,7 +36,7 @@ Enhances:
   simpar
 Encoding: UTF-8
 Additional_repositories: https://mpn.metworx.com/snapshots/stable/2024-09-23
-BugReports: https://github.com/nmautoverse/NMsim/issues
+BugReports: https://github.com/NMautoverse/NMsim/issues
 Language: en-US
 URL: https://nmautoverse.github.io/NMsim/
 
