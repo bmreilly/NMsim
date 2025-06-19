@@ -1304,7 +1304,7 @@ test_that("basic - nmsim update inits",{
                        table.var="PRED IPRED",
                        dir.sims="testOutput",
                        name.sim="default_18",
-                       inits=list("THETA(2)"=list(init=4,fix=1,upprr=34)),
+                       inits=list("THETA(2)"=list(init=4,fix=1,uppwr=34)),
                        path.nonmem=path.nonmem
                        ))
 

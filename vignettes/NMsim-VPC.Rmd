@@ -1,17 +1,25 @@
 ---
 title: "VPC Simulations"
+author: 
+  - name: "Philip Delff"
+date: '`r format(Sys.Date(), "%B %d, %Y")` using NMsim `r packageVersion("NMsim")`'
+toctitle: "Contents"
 output:
-rmarkdown::html_vignette:
-    toc: true
-Suggests: markdown
-VignetteBuilder: knitr
-vignette: >
-  %\VignetteIndexEntry{02VPC}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
-header-includes:
-- \usepackage{ae}
+    html_document:
+      toc: true
+      toc_depth: 4
+      toc_float: true
+      number_sections: false
+      df_print: kable
+      editor_options:
+        chunk_output_type: inline
+      code_folding: show
+bibliography: [packages.bib]
+pkgdown:
+  as_is: true
+
 ---
+
 
 ```{r,include = FALSE}
 ## library(tidyvpc)
@@ -42,8 +50,11 @@ run.simuls <- FALSE
 ```
 
 ## Simulations for Visual Predictive Checks (VPC)
-This vignette shows how to generate simulations for generation of VPC
-plots. While `NMsim` does not include any functionality for summarizing quantiles or plotting, it provides powerful ways to obtain the simulated data needed. We shall see how the `tidyvpc` package easily creates VPC plots based on the simulation results.
+This shows how to generate simulations for VPC plots. While `NMsim`
+does not include functionality for summarizing quantiles or plotting,
+it provides powerful ways to obtain the simulated results. We shall
+see how the `tidyvpc` package easily creates VPC plots based on the
+simulation results.
 
 ## Default option: reuse estimation data for simulation
 Normally, the two main arguments to NMsim are the path to the input

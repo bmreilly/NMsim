@@ -13,6 +13,7 @@
 ##'     is `FALSE`.
 ##' @return Invisibly, character lines (strings) optionally written to
 ##'     file
+##' @seealso simPopEtas
 ##' @import data.table
 ##' @export
 
