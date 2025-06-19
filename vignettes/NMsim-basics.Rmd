@@ -73,6 +73,6 @@ NMdataConf(dir.sims="~/NMsim_vignette",
 Built `r Sys.Date()` using NMsim `r packageVersion("NMsim")`.
 
 ## No Longer Maintained
-This document has been replaced by [`NMsim-intro.html`](https://NMautoverse.github.io/NMsim/articles/NMsim-intro.html). 
+This document has been replaced by [`NMsim-intro.html`](https://nmautoverse.github.io/NMsim/articles/NMsim-intro.html). 
 
 

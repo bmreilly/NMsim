@@ -1,17 +1,24 @@
 ---
 title: "Reuse simulated subjects"
+author: 
+  - name: "Philip Delff"
+date: '`r format(Sys.Date(), "%B %d, %Y")` using NMsim `r packageVersion("NMsim")`'
+toctitle: "Contents"
 output:
-rmarkdown::html_vignette:
-    toc: true
-Suggests: markdown
-VignetteBuilder: knitr
-vignette: >
-  %\VignetteIndexEntry{ParameterUncertainty}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
-header-includes:
-- \usepackage{ae}
+    html_document:
+      toc: true
+      toc_depth: 4
+      toc_float: true
+      number_sections: false
+      df_print: kable
+      editor_options:
+        chunk_output_type: inline
+        code_folding: show
+bibliography: [packages.bib]
+pkgdown:
+  as_is: true
 ---
+
 
 ```{r,include = FALSE }
 library(tidyvpc)
