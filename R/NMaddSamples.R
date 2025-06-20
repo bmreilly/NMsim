@@ -308,18 +308,22 @@ NMaddSamples <- function(data,TIME,TAPD,CMT,EVID,DV,col.id="ID",args.NMexpandDos
 
     
     dt.obs[
-       ,(col.evid):=..EVID][
-       ,MDV:=1]
+       ,(col.evid):=..EVID]
+
+    if("MDV"%in%colnames(data)){
+        if(!is.null(dt.obs$DV)){
+            dt.obs[,MDV:=0]
+        } else {
+        dt.obs[,MDV:=1]
+        }
+    }
 
     if(!is.null(DV)){
         dt.obs[
-           ,DV:=..DV][
-           ,MDV:=0]
+           ,DV:=..DV]## [
+           ## ,MDV:=0]
     }
 
-    if(!is.null(dt.obs$DV)){
-        dt.obs[,MDV:=0]
-    }
 
 
 ### add CMT

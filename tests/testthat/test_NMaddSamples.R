@@ -316,11 +316,11 @@ test_that("default - common columns are not merged by",{
     TIME <- data.table(TIME=c(1,4,8),
                        TSTRAT=seq(1:length(samp.times)))
 
-if(FALSE){ ## Commented for non-interactive execution
-    dt.dos
-    TIME
-}
-res <- NMaddSamples(dt.dos,TIME)
+    if(FALSE){ ## Commented for non-interactive execution
+        dt.dos
+        TIME
+    }
+    res <- NMaddSamples(dt.dos,TIME)
 ###  TSTRAT does not match, but samples added with own TSTRAT values
     ## res
 
@@ -329,9 +329,9 @@ res <- NMaddSamples(dt.dos,TIME)
     if(F){
         readRDS(fileRef)
     }
- 
-})
     
+})
+
 test_that("by unmatched (covariates)",{
 
     samp.times <- c(1, 4, 8)
@@ -359,7 +359,7 @@ test_that("by unmatched (covariates)",{
         dt.dos
        ,
         res[,colnames(dt.dos),with=FALSE]
-                 )
+    )
     ## expect_equal_to_reference(res,fileRef)
 
     if(F){
@@ -415,3 +415,26 @@ test_that("Unmatched are not covs",{
 ### EVID and CMT are overwritten by respective arguments.
 
 ### IDs in time - not in data - are still used
+
+NMdataConf(reset=T)
+test_that("MDV missing on doses",{
+    fileRef <- "testReference/NMaddSamples_20.rds"
+
+    dt.doses <- NMcreateDoses(TIME=c(0),AMT=10,CMT=2,as.fun="data.table")
+    seq.time <- c(4,12,24)
+    res1 <- NMaddSamples(dt.doses,TIME=seq.time,CMT=2)
+    
+    dt.doses[,MDV:=NULL]
+    res2 <- NMaddSamples(dt.doses,TIME=seq.time,CMT=2)
+    
+    res1
+    res2
+
+    res <- list(res1=res1,res2=res2)
+    expect_equal_to_reference(res,fileRef)
+    if(F){
+        res
+        readRDS(fileRef)
+    }
+    
+})
