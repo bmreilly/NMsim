@@ -120,6 +120,11 @@ Also, see recent [Publications](NMsim-publications.html).
 #### Philip Delff {.authors}
 :::
 
+:::example
+## [**VPC Simulations**](NMsim-VPC.html)
+
+#### Philip Delff {.authors}
+:::
 
 :::example
 ## [**Simulation-Based Forest Plots with NMsim**](NMsim-forest.html)
@@ -154,11 +159,6 @@ Also, see recent [Publications](NMsim-publications.html).
 #### Simone Cassani, Philip Delff {.authors}
 :::
 
-:::example
-## [**VPC Simulations**](NMsim-VPC.html)
-
-#### Philip Delff {.authors}
-:::
 	
 
 :::example
