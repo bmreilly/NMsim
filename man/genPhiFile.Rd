@@ -26,3 +26,6 @@ and their ETAs should be reused in subsequent simulations. Another
 is internally by NMsim when simulating new subjects from models
 estimated with SAEM.
 }
+\seealso{
+simPopEtas
+}
