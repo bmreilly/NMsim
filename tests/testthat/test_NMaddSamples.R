@@ -300,7 +300,7 @@ test_that("Providing DV",{
 
     expect_equal(
         res0[,sort(unique(MDV))]
-       ,c(0,1))
+       ,c(1))
 
     expect_equal(
         res0[,sort(unique(DV))]
