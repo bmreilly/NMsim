@@ -302,7 +302,7 @@ need to specify this unless you want to explicitly use a
 specific installation of PSN on your system.}
 
 \item{args.psn.execute}{A charachter string that will be passed as
-arguments PSN's `execute`.}
+arguments PSN's `execute`. Notice, if `path.nonmem` is provided, the default is not to use PSN.}
 
 \item{args.NMscanData}{If \code{table.options} is used, NMsim
 turns to `NMdata::NMscanData()` for a general method to read
@@ -363,8 +363,8 @@ files to read will be returned. Pass them through
 
 \item{text.sim}{A character string to be pasted into
 $SIMULATION. This must not contain seed or SUBPROBLEM which
-are handled separately. Default is to include "ONLYSIM". You
-cannot avoid that using `text.sim`. Instead, you can use
+is handled separately. Default is to include "ONLYSIM". You
+cannot avoid that using `text.sim`. If needed, you can use
 `onlysim=FALSE` which will be passed to `NMsim_default()`.}
 
 \item{auto.dv}{Add a column called `DV` to input data sets if a
@@ -417,7 +417,7 @@ instead.}
 
 \item{seed}{Deprecated. See \code{seed.R} and \code{seed.nm}.}
 
-\item{file.ext}{Depecated. Use
+\item{file.ext}{Deprecated. Use
 `inits=list(file.ext="path/to/file.ext")` instead. Optionally
 provide a parameter estimate file from Nonmem. This is
 normally not needed since `NMsim` will by default use the ext
@@ -507,8 +507,6 @@ valid for simulation of `$THETA` variability. The method accepts a
 table of parameter values that can be produced with other tools
 than `NMsim`. For simulation with parameter variability based on
 bootstrap results, use \code{NMsim_default}.
-
-\item \code{NMsim_typical} Deprecated. Use \code{typical=TRUE} instead. 
 
 }
 }

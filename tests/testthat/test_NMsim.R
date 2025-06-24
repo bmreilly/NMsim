@@ -294,7 +294,11 @@ test_that("sizes",{
         ## ref <- readRDS(fileRef)
         expect_equal_to_reference(mod,fileRef)
     }
-    
+    if(F){
+        ref <- readRDS(fileRef)
+        ref
+        mod
+        }
 })
 
 

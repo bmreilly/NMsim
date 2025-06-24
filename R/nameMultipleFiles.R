@@ -1,6 +1,8 @@
 ##' Create file names for multiple list elements
 ##' @param fn File name to provide stem for all file names
 ##' @param list.obj List of objects to provide names for
+##' @param simplify If only one file path, skip numbering? Default is
+##'     TRUE.
 ##' @keywords internal
 
 nameMultipleFiles <- function(fn,list.obj,simplify=TRUE){

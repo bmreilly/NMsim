@@ -2,7 +2,8 @@
 ##'
 ##' @param lines the character lines to write
 ##' @param file The file name path to write to
-##' @return NULL
+##' @param simplify Passed to `nameMultipleFiles()`
+##' @return File paths as character strings
 ##' @keywords internal
 
 writeTextFile <- function(lines,file,simplify=TRUE){
