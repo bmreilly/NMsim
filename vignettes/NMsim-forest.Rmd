@@ -74,9 +74,9 @@ We shall focus the main example to be simple and general. Hopefully, the user wi
   * If simulating based on `$COVARIANCE`, the `.cov` file.
   * If simulating based on  bootstrap, either a summary of or all the `.ext` files from the boot strap estimations must be available.
   * If references and/or covariate quantile values are to be calculated by NMsim (easiest option), ideally all output (`$TABLE`) data sets and the input data set used for the estimation are available.
-* Familiarity with [`NMsim-intro.html`](https://NMautoverse.github.io/NMsim/articles/NMsim-intro.html), at least including "A first simulation with `NMsim()`".
+* Familiarity with [`NMsim-intro.html`](https://nmautoverse.github.io/NMsim/articles/NMsim-intro.html), at least including "A first simulation with `NMsim()`".
 * Configuration of NMsim so user can succesfully do simulation using `NMsim()`.
-* Familiarity with methods to simulate with parameter uncertainty can be helpful. Before settling on your final forest plot simulation, it is recommended to understand pros and cons of the different methods provided by NMsim as described in [`NMsim-ParamUncertain.html`](https://NMautoverse.github.io/NMsim/articles/NMsim-ParamUncertain.html).
+* Familiarity with methods to simulate with parameter uncertainty can be helpful. Before settling on your final forest plot simulation, it is recommended to understand pros and cons of the different methods provided by NMsim as described in [`NMsim-ParamUncertain.html`](https://nmautoverse.github.io/NMsim/articles/NMsim-ParamUncertain.html).
 
 ## Background
 
@@ -285,7 +285,7 @@ We need to run the simulations repeatedly, sampling parameters based on uncertai
 In this case we shall use parametric sampling, relying on a Nonmem `$COVARIANCE` step. Since in this case we
 are simulating typical subjects (random effects fixed at zero), we
 only need variability on the fixed effects (THETA's). Multiple methods
-are available in `NMsim` to do this.  We use `NMsim_NWPRI` - which automates simulation using the Nonmem NWPRI subroutine to sample the parameter sets. This simulation method excels in being fast to execute because it simulates all the parameter sets sequentially in one Nonmem run. It is important to run this with `typical=TRUE`. If between-subject variability is desired, please refer to [`NMsim-ParamUncertain.html`](https://NMautoverse.github.io/NMsim/articles/NMsim-ParamUncertain.html).
+are available in `NMsim` to do this.  We use `NMsim_NWPRI` - which automates simulation using the Nonmem NWPRI subroutine to sample the parameter sets. This simulation method excels in being fast to execute because it simulates all the parameter sets sequentially in one Nonmem run. It is important to run this with `typical=TRUE`. If between-subject variability is desired, please refer to [`NMsim-ParamUncertain.html`](https://nmautoverse.github.io/NMsim/articles/NMsim-ParamUncertain.html).
 
 
 ```{r NMsim-nwpri,eval=FALSE}

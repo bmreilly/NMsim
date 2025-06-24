@@ -18,7 +18,6 @@ output:
 bibliography: [packages.bib]
 pkgdown:
   as_is: true
-
 ---
 
 

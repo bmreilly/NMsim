@@ -76,7 +76,7 @@ NMdataConf(as.fun="data.table")
 ```
 
 ## This document is retired
-This work has been integrated into [`NMsim-intro.html`](https://NMautoverse.github.io/NMsim/articles/NMsim-intro.html) and is no longer maintained.
+This work has been integrated into [`NMsim-intro.html`](https://nmautoverse.github.io/NMsim/articles/NMsim-intro.html) and is no longer maintained.
 
 ## Objectives
 This vignettes aims at enabling you to use `NMsim` for the following purposes

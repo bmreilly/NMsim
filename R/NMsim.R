@@ -102,11 +102,11 @@
 ##' @param script The path to the script where this is run. For
 ##'     stamping of dataset so results can be traced back to code.
 ##' @param args.psn.execute A charachter string that will be passed as
-##'     arguments PSN's `execute`.
+##'     arguments PSN's `execute`. Notice, if `path.nonmem` is provided, the default is not to use PSN.
 ##' @param text.sim A character string to be pasted into
 ##'     $SIMULATION. This must not contain seed or SUBPROBLEM which
-##'     are handled separately. Default is to include "ONLYSIM". You
-##'     cannot avoid that using `text.sim`. Instead, you can use
+##'     is handled separately. Default is to include "ONLYSIM". You
+##'     cannot avoid that using `text.sim`. If needed, you can use
 ##'     `onlysim=FALSE` which will be passed to `NMsim_default()`.
 ##' @param method.sim A function (not quoted) that creates the
 ##'     simulation control stream and other necessary files for a
@@ -382,7 +382,7 @@
 ##'     from the estimated model before running the simulation. NMsim
 ##'     can do this with a native function or use PSN to do it - or
 ##'     the step can be skipped to not update the values.
-##' @param file.ext Depecated. Use
+##' @param file.ext Deprecated. Use
 ##'     `inits=list(file.ext="path/to/file.ext")` instead. Optionally
 ##'     provide a parameter estimate file from Nonmem. This is
 ##'     normally not needed since `NMsim` will by default use the ext
@@ -452,8 +452,6 @@
 ##' table of parameter values that can be produced with other tools
 ##' than `NMsim`. For simulation with parameter variability based on
 ##' bootstrap results, use \code{NMsim_default}.
-##'
-##' \item \code{NMsim_typical} Deprecated. Use \code{typical=TRUE} instead. 
 ##'
 ##' }
 ##' @import NMdata
@@ -1139,8 +1137,12 @@ NMsim <- function(file.mod,data,
 
         ## dt.models[,NMwriteInits(file.mod=file.mod,newfile=path.sim,file.ext=file.ext,),by=.(ROWMODEL)]
         dt.models[,{
-            args.inits <- append(list(file.mod=file.mod,newfile=path.sim,file.ext=file.ext),
-                                 inits[setdiff(names(inits),"method")])
+            
+args.inits <- append(
+    list(file.mod=file.mod,newfile=path.sim,file.ext=file.ext)
+                    ,
+    inits[setdiff(names(inits),"method")]
+)
             do.call(NMwriteInits,args.inits)
         },by=.(ROWMODEL)]
     }
@@ -1248,6 +1250,7 @@ NMsim <- function(file.mod,data,
             nmtext <- NMgenText(data.this,file=relative_path(path.data,dirname(path.sim)),
                                 col.flagn=col.flagn,
                                 quiet=TRUE)
+            
             NMdata:::NMwriteSectionOne(file0=path.sim,list.sections = nmtext["INPUT"],
                                        backup=FALSE,quiet=TRUE)
             NMdata:::NMwriteSectionOne(file0=path.sim,list.sections = nmtext["DATA"],
