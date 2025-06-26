@@ -397,7 +397,8 @@ patterns <-
     })
 
     res <- rbindlist(res.list)
-    res <- NMdata:::addParameter(res)
+    ## res <- NMdata:::addParameter(res)
+    res <- addParameter(res)
     
     pars <- initsToExt(res)
     if(return=="pars") return(as.fun(pars))

@@ -51,6 +51,8 @@ addParType <- function(pars,suffix,add.idx){
 ##' @keywords internal
 addParameter <- function(pars){
 
+    cleanSpaces <- NMdata:::cleanSpaces
+    
     par.type <- NULL
     parameter <- NULL
     i <- NULL

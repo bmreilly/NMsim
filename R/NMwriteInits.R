@@ -85,6 +85,7 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
 
     V1 <- NULL
 
+    cleanSpaces <- NMdata:::cleanSpaces
 
     fun.merge.tabs <- function(pars.l,tab.new,name.step){
 
@@ -110,8 +111,9 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
 
 
         ## Target column names (case-insensitive)
-        target_cols <- c("init", "lower", "upper", "FIX")
-
+        pars.init <- c("init", "lower", "upper", "FIX")
+        target_cols <- c(pars.init,"parameter","par.type")
+        
         ## Get all column names in the data
         colnames_data <- names(tab.new)
 
@@ -136,7 +138,20 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
         setnames(tab.new,"fix","FIX",skip_absent = TRUE)
         toConvert[toConvert=="fix"] <- "FIX"
         
-        inits.l <- melt(tab.new,measure.vars=toConvert,variable.name="type.elem",value.name="value.new")
+        if("parameter"%in%colnames(tab.new)){
+            tab.new[,parameter:=toupper(parameter)]
+            tab.new[,parameter:=sub("THETA\\(([0-9]+)\\)","THETA\\1",parameter,ignore.case=TRUE)]
+            tab.new <- addParType(tab.new)
+            tab.new[,par.type:=toupper(par.type)]
+        }
+        
+        inits.l <- melt(tab.new,measure.vars=intersect(pars.init,toConvert),variable.name="type.elem",value.name="value.new")
+
+        ## we allow THETA(1) but the real parameter name is THETA1
+        ## tab.new[,parameter:=sub("THETA\\(([0-9]+)\\)","THETA\\1",parameter,ignore.case=TRUE)]
+        ## tab.new <- addParType(tab.new)
+        
+        
         inits.l[type.elem=="FIX" & value.new=="0",value.new:=""]
         inits.l[type.elem=="FIX" & value.new=="1",value.new:=" FIX"]
         ##inits.l[type.elem=="FIX" & value.new=="1",value.new:=""]
@@ -213,6 +228,9 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
 
     inits.orig <- NMreadInits(file=file.mod,return="all",as.fun="data.table")
     pars.l <- inits.orig$elements
+    ## until NMdata 0.2.1
+    pars.l <- addParameter(pars.l)
+    
     pars.l[,model:=fnExtension(basename(file.mod),"")]
     
     pars.l[type.elem=="FIX"&value.elem=="1",value.elem:=" FIX"]

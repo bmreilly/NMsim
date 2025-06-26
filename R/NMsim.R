@@ -1475,8 +1475,8 @@ args.inits <- append(
     if(missing(sizes)) sizes <- NULL
     if(!is.null(sizes)){
         dt.models[,{
-            args.sizes <- append(list(file.mod=path.sim,newfile=path.sim,write=TRUE,warn=FALSE),sizes)
-            do.call(NMupdateSizes,args.sizes)
+            args.sizes <- append(list(file.mod=path.sim,newfile=path.sim,write=TRUE),sizes)
+            do.call(NMwriteSizes,args.sizes)
         },by=.(ROWMODEL)]
     }
 
