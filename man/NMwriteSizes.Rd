@@ -64,5 +64,4 @@ lines.mod <- NMwriteSizes(file.mod,LTV=50,write=FALSE)
 newmod <- NMwriteSizes(lines=lines.mod,PD=51,write=FALSE)
 head(newmod)
 }
-
 }

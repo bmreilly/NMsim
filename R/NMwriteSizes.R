@@ -41,12 +41,14 @@
 ##' newmod <- NMwriteSizes(lines=lines.mod,PD=51,write=FALSE)
 ##' head(newmod)
 ##' }
-##' 
+##' @import NMdata
 ##' @importFrom utils modifyList
 ##' @export
 
 NMwriteSizes <- function(file.mod=NULL,newfile,lines=NULL,wipe=FALSE,write=!is.null(newfile),...){
     
+    ### change to NMdata:::NMwriteSection when going back to NMdata
+    NMwriteSectionOne <- NMwriteSectionOne
     
     sizes.new <- list(...)
 ### check sizes.new
@@ -74,22 +76,23 @@ NMwriteSizes <- function(file.mod=NULL,newfile,lines=NULL,wipe=FALSE,write=!is.n
     )
     
     ## create lines from file.mod if not passed in as 'lines'
-    if(!is.null(file.mod) && is.null(lines)) {
-        lines <- readLines(file.mod,warn=FALSE)
-    } 
+    lines <- NMdata:::getLines(file=file.mod,lines=lines)
+    ## if(!is.null(file.mod) && is.null(lines)) {
+    ##     lines <- readLines(file.mod,warn=FALSE)
+    ## }
     
     ## if model already has $SIZES and we want to overwrite or append to it.
     if(!is.null(sizes.old)) {
         ## if we want to overwrite it or append to it, sizes.new and lines.new will already be modified for that, so replace
-        textlines = NMdata:::NMwriteSectionOne(lines = lines,section="SIZES",newlines=lines.new,location="replace",quiet=TRUE)
+        textlines = NMwriteSectionOne(lines = lines,section="SIZES",newlines=lines.new,location="replace",quiet=TRUE)
 
         ## else if model does not have $SIZES, create it
     } else if (is.null(NMreadSizes(lines=lines))) {
-        textlines = NMdata:::NMwriteSectionOne(lines=lines,section="SIZES",newlines=lines.new,location="first",quiet=TRUE)
+        textlines = NMwriteSectionOne(lines=lines,section="SIZES",newlines=lines.new,location="first",quiet=TRUE)
         
         ## else if it had $SIZES but we wiped it, and we want to replace/append it:
     } else if (!is.null(NMreadSizes(lines=lines)) && wipe) {
-        textlines = NMdata:::NMwriteSectionOne(lines=lines,section="SIZES",newlines=lines.new,location="replace",quiet=TRUE)
+        textlines = NMwriteSectionOne(lines=lines,section="SIZES",newlines=lines.new,location="replace",quiet=TRUE)
     }
     
     if(write && !is.null(newfile)) {

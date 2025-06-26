@@ -208,7 +208,7 @@ test_that("multiple named lists",{
 
 
 test_that("An ext object",{
-    if(packageVersion("NMdata")>"0.2.0.901"){
+
         fileRef <- "testReference/NMwriteInits_07.rds"
         file.mod <- "testData/nonmem/xgxr033.mod"
         ## readLines(file.mod)
@@ -236,7 +236,7 @@ test_that("An ext object",{
             ref
             res1
         }
-    }
+    
 })
 
 

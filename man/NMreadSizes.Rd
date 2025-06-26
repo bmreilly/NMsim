@@ -17,3 +17,4 @@ A list with SIZES parameter values
 \description{
 Read SIZES info from a control stream
 }
+\keyword{internal}

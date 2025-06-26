@@ -39,10 +39,4 @@ Append a file name like file.mod to file_1.mod or file_pk.mod. If
 it's a number, we can pad some zeros if wanted. The separator
 (default is underscore) can be modified.
 }
-\examples{
-fnAppend("plot.png",1)
-fnAppend("plot.png",1,pad0=2,sep="-")
-fnAppend("plot.png","one")
-fnAppend("plot","one",allow.noext=TRUE)
-}
 \keyword{internal}

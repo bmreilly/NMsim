@@ -88,6 +88,7 @@ model file. Look NMextractText for more general functionality
 suitable for the results part too.
 }
 \examples{
+library(NMdata)
 NMreadSection(system.file("examples/nonmem/xgxr001.lst", package="NMdata"),section="DATA")
 
 }

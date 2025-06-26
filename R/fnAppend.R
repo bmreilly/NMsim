@@ -22,12 +22,6 @@
 ##'     `fn` contains strings without extensions. If `TRUE`, `x` will
 ##'     be appended to fn in these cases.
 ##' @return A character (vector)
-##'
-##' @examples
-##' fnAppend("plot.png",1)
-##' fnAppend("plot.png",1,pad0=2,sep="-")
-##' fnAppend("plot.png","one")
-##' fnAppend("plot","one",allow.noext=TRUE)
 ##' @keywords internal
 
 

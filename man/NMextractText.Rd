@@ -112,6 +112,7 @@ This function is planned to get a more general name and
     then be called by NMreadSection.
 }
 \examples{
+library(NMdata)
 NMreadSection(system.file("examples/nonmem/xgxr001.lst", package = "NMdata"),section="DATA")
 }
 \seealso{

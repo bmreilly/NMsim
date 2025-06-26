@@ -60,6 +60,7 @@
 ##'     then be called by NMreadSection.
 ##' @family Nonmem
 ##' @examples
+##' library(NMdata)
 ##' NMreadSection(system.file("examples/nonmem/xgxr001.lst", package = "NMdata"),section="DATA")
 ##' @keywords internal
 
