@@ -64,6 +64,8 @@ test_that("Update + value",{
 })
 
 
+
+
 test_that("unfix",{
     
     fileRef <- "testReference/NMwriteInits_02.rds"
@@ -254,5 +256,31 @@ THETA(1),3")
     res1 <- expect_warning(
         NMwriteInits(file.mod,update=FALSE,inits.tab=inits.tab)
     )
+
+})
+
+test_that("fix multiple",{
+    
+    fileRef <- "testReference/NMwriteInits_09.rds"
+    file.mod <- "testData/nonmem/xgxr033.mod"
+    NMreadSection(file=file.mod,section="omega")
+    
+    lines1 <- NMwriteInits(file.mod,values=list("THETA(1)"=list(fix=1),
+                                                "THETA(2)"=list(fix=1)
+                                                ),update=F)
+    res1 <- NMreadSection(lines=lines1,section="omega")
+    ## res1
+    ## The number of empty spaces seems to be inconsistent across platforms
+    res1 <- gsub(" +"," ",res1)
+
+    expect_equal_to_reference(res1,fileRef)
+
+
+    if(FALSE){
+        ref <- readRDS(fileRef)
+        NMreadSection(file.mod,section="omega")
+        print.NMctl(ref)
+        print.NMctl(res1)
+    }
 
 })

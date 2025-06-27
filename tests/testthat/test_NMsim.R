@@ -350,6 +350,43 @@ test_that("inits - modify parameter",{
     
 })
 
+
+test_that("inits - fix multiple parameters",{
+
+    fileRef <- "testReference/NMsim_inits_06b.rds"
+    
+    file.mod <- "testData/nonmem/xgxr032.mod"
+
+    sim1 <- NMsim(file.mod=file.mod,
+                  data=dat.sim,
+                  dir.sim="testOutput",
+                  name.sim = "inits_2",
+                  inits=list("THETA(1)"=list(fix=1),
+                             "THETA(2)"=list(fix=1)),
+                  seed.nm=2342,
+                  seed.R=2,
+                  execute=FALSE
+                  )
+
+    mod <- readLines("testOutput/xgxr032_inits_2/xgxr032_inits_2.mod")
+## sometimes an empty line is included, sometimes not. I don't know why.
+    mod <- mod[1:max(which(mod!=""))]
+
+
+    ## ref <- readRDS(fileRef)
+    expect_equal_to_reference(mod,fileRef)
+
+    if(F){
+        ref <- readRDS(fileRef)
+        mod
+        ref
+    }
+
+    
+})
+
+
+
 test_that("No ONLYSIM",{
 
 ###  On windows this gives and error that tmp.dat is not found.
