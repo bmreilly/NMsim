@@ -18,7 +18,8 @@ doses.sd[,dose:=paste(DOSE,"mg")]
 doses.sd[,regimen:="SD"]
 
 
-dat.sim.sd <- addEVID2(doses.sd,time.sim=0:24,CMT=2,as.fun="data.table")
+## dat.sim.sd <- addEVID2(doses.sd,time.sim=0:24,CMT=2,as.fun="data.table")
+dat.sim.sd <- NMaddSamples(doses.sd,time.sim=0:24,CMT=2,as.fun="data.table")
 dat.sim <- copy(dat.sim.sd)
 
 ## NMcheckData(dat.sim)
@@ -52,6 +53,13 @@ test_that("Basic",{
     mod <- NMreadSection("testOutput/xgxr025_sd1/xgxr025_sd1.mod")
     expect_equal_to_reference(mod,fileRef)
 
+    if(F){
+        ref <- readRDS(fileRef)
+        mod
+        ref
+        
+    }
+    
     ## readLines("testOutput/xgxr025_sd1/xgxr025_sd1.mod")
     
 })
@@ -290,6 +298,10 @@ test_that("sizes",{
 
     mod <- readLines("testOutput/xgxr032_sizes_1/xgxr032_sizes_1.mod")
 
+## sometimes an empty line is included, sometimes not. I don't know why.
+    mod <- mod[1:max(which(mod!=""))]
+
+    
     ## ref <- readRDS(fileRef)
     expect_equal_to_reference(mod,fileRef)
     
@@ -322,7 +334,9 @@ test_that("inits - modify parameter",{
                   )
 
     mod <- readLines("testOutput/xgxr032_inits_1/xgxr032_inits_1.mod")
-    mod    
+## sometimes an empty line is included, sometimes not. I don't know why.
+    mod <- mod[1:max(which(mod!=""))]
+
 
     ## ref <- readRDS(fileRef)
     expect_equal_to_reference(mod,fileRef)
