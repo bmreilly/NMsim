@@ -6,6 +6,13 @@ stopifnot(packageVersion("NMdata")>="0.1.6")
 library(data.table)
 data.table::setDTthreads(1)
 
+
+## unloadNamespace("NMsim")
+## unloadNamespace("NMdata")
+## load_all("~/wdirs/NMdata",export_all = FALSE)
+## load_all("~/wdirs/NMsim",export_all = FALSE)
+
+
 NMdataConf(
     path.nonmem="/opt/NONMEM/nm75/run/nmfe75",
     dir.sims="testOutput/simtmp"
@@ -19,7 +26,7 @@ doses.sd[,regimen:="SD"]
 
 
 ## dat.sim.sd <- addEVID2(doses.sd,time.sim=0:24,CMT=2,as.fun="data.table")
-dat.sim.sd <- NMaddSamples(doses.sd,time.sim=0:24,CMT=2,as.fun="data.table")
+dat.sim.sd <- NMaddSamples(doses.sd,TIME=0:24,CMT=2,as.fun="data.table")
 dat.sim <- copy(dat.sim.sd)
 
 ## NMcheckData(dat.sim)
@@ -45,8 +52,8 @@ test_that("Basic",{
                   dir.sim="testOutput",
                   name.sim = "sd1",
                   seed.nm=2342,
-                  execute=FALSE,
-                  ## method.update.inits="nmsim"
+                  execute=FALSE
+                  ## ,method.update.inits="nmsim"
                   )
 
     ## ref <- readRDS(fileRef)

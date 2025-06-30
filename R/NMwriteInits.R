@@ -110,7 +110,7 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
         ## setnames(value.values, old = fix_col, new = "FIX")
 
 
-        ## Target column names (case-insensitive)
+        ## Target column names (case-insensitive). These are the allowed parameters to modify.
         pars.init <- c("init", "lower", "upper", "FIX")
         target_cols <- c(pars.init,"parameter","par.type")
         
@@ -225,7 +225,7 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
 
     if(is.null(file.ext)) file.ext <- file.mod
     lines.old <- readLines(file.mod,warn=FALSE)
-
+    
     inits.orig <- NMreadInits(file=file.mod,return="all",as.fun="data.table")
     pars.l <- inits.orig$elements
     ## until NMdata 0.2.1
@@ -236,7 +236,7 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
     pars.l[type.elem=="FIX"&value.elem=="1",value.elem:=" FIX"]
     pars.l[type.elem=="FIX"&value.elem=="0",value.elem:=""]
 
-
+    
 ############## write  parameter sections
 
     ## reduce lower, init and upper lines to just ll.init.upper lines
@@ -328,8 +328,9 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
     ## pars.l[,j2:=fifelse(is.na(j),max(j[!is.na(j)]),j),by=.(par.type,i)]
     ## pars.l[,linenum:=uniquePresent(linenum),by=.(par.type,i2,j)]
     
-    pars.l[,linenum:=uniquePresent(linenum),by=.(par.type,i,j)]
-
+    pars.l[type.elem%in%c("init","lower","upper","FIX"),
+           linenum:=uniquePresent(linenum),by=.(par.type,i,j)]
+    
     pars.l[,parnum:=uniquePresent(parnum),by=.(par.type,i,j)]
 ### redefining parnumline to be within line
     ## pars.l[,parnumline:=1:.N,by=.(par.type,i,j)]
@@ -341,7 +342,7 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
                        r="type.elem",
                        value.var=c("elemnum","value.elem"),funs.aggregate=min)
 
-### the rest of the code is dependent on all of init, lower, and upper being available.
+### the rest of the code is dependent on all of init, lower, upper, and FIX being available.
     cols.miss <- setdiff(outer(c("value.elem","elemnum"),c("init","lower","upper","FIX"),FUN=paste,sep="_"),colnames(inits.w))
     if(length(cols.miss)){
         inits.w[,(cols.miss):=NA_character_]

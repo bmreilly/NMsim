@@ -124,7 +124,7 @@ test_that("basic - default",{
                     name.sim="default_01"
                     )
     
-    modTab(simres)
+    ##modTab(simres)
     simres.nometa <- copy(simres)
     unNMsimRes(simres.nometa)
 

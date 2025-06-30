@@ -1,12 +1,12 @@
 ##' @keywords internal
 
 NMwriteInitsOne <- function(lines,inits.w,inits.orig,pars.l){
-
     . <- NULL
     elems.found <- NULL
     elemnum <- NULL
-    elemnum_lower <- NULL
+    elemnum_BLOCK <- NULL
     elemnum_init <- NULL
+    elemnum_lower <- NULL
     elemnum_upper <- NULL
     iblock <- NULL
     linenum <- NULL
@@ -19,6 +19,7 @@ NMwriteInitsOne <- function(lines,inits.w,inits.orig,pars.l){
     text.before <- NULL
     type.elem <- NULL
     V1 <- NULL
+    value.elem_BLOCK <- NULL
     value.elem_FIX <- NULL
     value.elem_init <- NULL
     value.elem_lower <- NULL
@@ -27,16 +28,24 @@ NMwriteInitsOne <- function(lines,inits.w,inits.orig,pars.l){
     
 
     ## need to write line by line. All elements in a line written one at a time
-    paste.ll.init.ul <- function(lower,init,upper,FIX){
-        
+    paste.ll.init.ul <- function(lower,init,upper,FIX,BLOCK){
+### some code in paste.ll.init.ul suggests that more than one row is
+### handled at a time (like row:=.I). But it is never used that way,
+### and I don't think it would be easy to make it work with that. Also
+### I don't see why it should.
         res <- NULL
         
-        if(any(is.na(init))) stop("An initial value must be provided")
+        ## if(any(is.na(init))) stop("An initial value must be provided")
+        if(!is.na(lower) && is.na(init)) stop("When lower, or upper is provided, an initial value must be provided too")
         if(any(!is.na(upper)&is.na(lower))) stop("if upper limit is provided, lower limit must also be provided.")
         dt <- data.table(lower=lower,init=init,upper=upper)[,row:=.I]
-        dt[init=="SAME",res:=init]
-        dt[init!="SAME",res:=paste0("(",paste(setdiff(c(lower,init,upper),NA),collapse=","),")",FIX),by=row]
-        dt[init!="SAME"&is.na(lower)&is.na(upper),res:=paste0(init,FIX),by=row]
+        dt[,res:=""]
+        if(!is.na(init)){
+            dt[init=="SAME",res:=init]
+            dt[init!="SAME",res:=paste0("(",paste(setdiff(c(lower,init,upper),NA),collapse=","),")",FIX),by=row]
+            dt[init!="SAME"&is.na(lower)&is.na(upper),res:=paste0(init,FIX),by=row]
+        }
+        ##if(!is.na(BLOCK)) dt[,res:=sprintf("BLOCK(%s) %s",BLOCK,res)]
         dt$res
     }
     
@@ -44,9 +53,14 @@ NMwriteInitsOne <- function(lines,inits.w,inits.orig,pars.l){
     inits.w[,type.elem:="ll.init.ul"]
     inits.w[,row:=1:.N]
     
-    
-    inits.w[,string.elem:=paste.ll.init.ul(value.elem_lower,value.elem_init,value.elem_upper,value.elem_FIX),by=row]
-    inits.w[,elemnum:=min(elemnum_lower,elemnum_init,elemnum_upper,na.rm=TRUE),by=row]
+    if(!"value.elem_BLOCK"%in%colnames(inits.w)){
+        inits.w[,value.elem_BLOCK:=NA_character_]
+    }
+    if(!"elemnum_BLOCK"%in%colnames(inits.w)){
+        inits.w[,elemnum_BLOCK:=NA]
+    }
+    inits.w[,string.elem:=paste.ll.init.ul(value.elem_lower,value.elem_init,value.elem_upper,value.elem_FIX,value.elem_BLOCK),by=row]
+    inits.w[,elemnum:=min(elemnum_lower,elemnum_init,elemnum_upper,elemnum_BLOCK,na.rm=TRUE),by=row]
 
     cnames.common <- intersect(colnames(pars.l),colnames(inits.w))
     elems.all <- rbind(
@@ -105,12 +119,12 @@ NMwriteInitsOne <- function(lines,inits.w,inits.orig,pars.l){
         newsection <- dt.lines[par.type==section,text]
         if(length(newsection)==0) return(lines.old)
         
-       NMwriteSectionOne(lines=lines.old,
-                                   section=section,
-                                   newlines=newsection,
-                                   location="replace",
-                                   quiet=TRUE,
-                                   backup=FALSE)
+        NMwriteSectionOne(lines=lines.old,
+                          section=section,
+                          newlines=newsection,
+                          location="replace",
+                          quiet=TRUE,
+                          backup=FALSE)
     }
 
     lines <- fun.update.ctl(lines,section="THETA",dt.lines=lines.all.3)
