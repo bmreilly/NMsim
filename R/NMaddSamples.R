@@ -310,8 +310,9 @@ NMaddSamples <- function(data,TIME,TAPD,CMT,EVID,DV,col.id="ID",args.NMexpandDos
     dt.obs[
        ,(col.evid):=..EVID]
 
+    
     if("MDV"%in%colnames(data)){
-        if(!is.null(dt.obs$DV)){
+        if(!is.null(DV)){
             dt.obs[,MDV:=0]
         } else {
         dt.obs[,MDV:=1]
