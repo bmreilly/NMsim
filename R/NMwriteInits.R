@@ -214,14 +214,14 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
 
 #### 
     if(missing(ext)) ext <- NULL
-    if(!is.null(ext)){
-        warning("`ext` argument experimental.")
-    }
+    ## if(!is.null(ext)){
+    ##     warning("`ext` argument experimental.")
+    ## }
 
     if(missing(inits.tab)) inits.tab <- NULL
-    if(!is.null(inits.tab)){
-        warning("`inits.tab` argument experimental.")
-    }
+    ## if(!is.null(inits.tab)){
+    ##     warning("`inits.tab` argument experimental.")
+    ## }
 
     if(is.null(file.ext)) file.ext <- file.mod
     lines.old <- readLines(file.mod,warn=FALSE)
@@ -257,8 +257,8 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
                              ext.new[,.(model,par.type,i,j,type.elem="init",
                                         value.update=as.character(value))]
                             ,by=c("model","par.type","i","j","type.elem"),all.x=TRUE,fun.na.by=NULL,quiet=TRUE)
-
-        pars.l[!is.na(value.update)&value.update!="SAME",
+        
+        pars.l[!is.na(value.update)&value.elem!="SAME",
                value.elem:=value.update
                ]
     }
