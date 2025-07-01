@@ -69,7 +69,7 @@ NMreadSimModTab <- function(x,check.time=FALSE,dir.sims,wait=FALSE,skip.missing=
         } else {
             dirSims <- dir.sims           
         }
-        file.path(dirSims,relative_path(path.sim.lst,dirSims))
+        simplePath(file.path(dirSims,relative_path(path.sim.lst,dirSims)))
     },
     ## by=.(ROWMODEL2)
     by=.(ROWTMP)
@@ -150,6 +150,7 @@ NMreadSimModTabOne <- function(modtab,check.time=FALSE,dir.sims,wait=FALSE,quiet
     
 ### will need a function to apply transformations if applicable
     wrap.trans <- function(dt,...){
+        
         funs <- list(...)
         for(name.fun in names(funs)){
             dt[,(name.fun):=funs[[name.fun]](get(name.fun))]
@@ -166,17 +167,17 @@ NMreadSimModTabOne <- function(modtab,check.time=FALSE,dir.sims,wait=FALSE,quiet
     
     
 ### if we have an fst, read it and return results
-if(is.null(read.fst)){
-    if(check.time){
-        read.fst <- rdstab[,!is.null(path.results.read) &&
-                            file.exists(path.results.read) &&
-                            file.mtime(path.results.read)>file.mtime(path.rds.read)
-                           ]
-    } else {
-        read.fst <- rdstab[,!is.null(path.results.read) &&
-                            file.exists(path.results.read)]
+    if(is.null(read.fst)){
+        if(check.time){
+            read.fst <- rdstab[,!is.null(path.results.read) &&
+                                file.exists(path.results.read) &&
+                                file.mtime(path.results.read)>file.mtime(path.rds.read)
+                               ]
+        } else {
+            read.fst <- rdstab[,!is.null(path.results.read) &&
+                                file.exists(path.results.read)]
+        }
     }
-}
 
     
     ## fsts
@@ -314,18 +315,22 @@ if(is.null(read.fst)){
                     reportFailedRun(lst=path.lst.read)
                 }
                 this.res <- NULL
-            }
 
-            if(!is.null(.SD$funs.transform)){
-                this.funs <- .SD[1,funs.transform][[1]]
-                if(!is.null(this.funs)){
-                    this.res <- do.call(wrap.trans,c(list(dt=this.res),this.funs))
+            } else {
+
+                if(!is.null(.SD$funs.transform)){
+                    this.funs <- .SD[1,funs.transform][[1]]
+                    if(!is.null(this.funs)){
+                        
+                        this.res <- do.call(wrap.trans,c(list(dt=this.res),this.funs))
+                    }
                 }
+                
+                ## we are not keeping col.row. Just used it to make sure to combine right.
+                
+                if(col.row%in%colnames(this.res)) this.res[,(col.row):=NULL]
+
             }
-            
-            ## we are not keeping col.row. Just used it to make sure to combine right.
-            
-            if(col.row%in%colnames(this.res)) this.res[,(col.row):=NULL]
             
             this.res
         },by=bycols]
