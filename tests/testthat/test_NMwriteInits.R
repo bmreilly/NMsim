@@ -253,10 +253,10 @@ THETA(1),3")
     
     ##options(warn=2)
 
-    res1 <- ## expect_warning(
+    res0 <- ## expect_warning(
         NMwriteInits(file.mod,update=FALSE,inits.tab=inits.tab)
     ## )
-
+    res1 <- sub(" +$","",res0$xgxr033)
     expect_equal_to_reference(res1,fileRef)
 
     if(F){
