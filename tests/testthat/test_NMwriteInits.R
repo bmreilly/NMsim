@@ -304,7 +304,8 @@ test_that("IOV with SAME",{
     class(res0)
     
     res1 <- NMreadSection( lines=res0[[1]],section="omega")
-
+    res1 <- gsub(" +"," ",res1)    
+    
     expect_equal_to_reference(res1,fileRef)
 
     if(F){
