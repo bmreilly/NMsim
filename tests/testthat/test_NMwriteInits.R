@@ -266,27 +266,6 @@ THETA(1),3")
     }
 })
 
-test_that("IOV with SAME",{
-
-    fileRef <- "testReference/NMwriteInits_09.rds"
-    file.mod <- "testData/nonmem/xgxr057.mod"
-    
-
-    res0 <- NMwriteInits(file.mod,update=TRUE)
-    class(res0)
-    
-    res1 <- NMreadSection( lines=res0[[1]],section="omega")
-
-    expect_equal_to_reference(res1,fileRef)
-
-    if(F){
-        ref <- readRDS(fileRef)  
-        ref
-        res1
-    }
-    
-
-})
 
 test_that("fix multiple",{
     
@@ -311,5 +290,28 @@ test_that("fix multiple",{
         print.NMctl(ref)
         print.NMctl(res1)
     }
+
+})
+
+
+test_that("IOV with SAME",{
+
+    fileRef <- "testReference/NMwriteInits_10.rds"
+    file.mod <- "testData/nonmem/xgxr057.mod"
+    
+
+    res0 <- NMwriteInits(file.mod,update=TRUE)
+    class(res0)
+    
+    res1 <- NMreadSection( lines=res0[[1]],section="omega")
+
+    expect_equal_to_reference(res1,fileRef)
+
+    if(F){
+        ref <- readRDS(fileRef)  
+        ref
+        res1
+    }
+    
 
 })
