@@ -283,14 +283,20 @@ diffr::diffr(file.mod,modTab(simres)$path.sim)
 
 Now, adding some custom values
 
-```{r}
+```{r,eval=FALSE}
 simres.inits1 <- NMsim(file.mod=file.mod,
                        data=data.sim,
                        inits=list("theta(1)"=list(init=0.54)
                                  ,"omega(3,3)"=list(init=.5)
                                   ),
                        name.sim="inits1")
+```
 
+```{r,include=FALSE,eval=TRUE}
+simres.inits1 <- NMreadSim("simres-modify/xgxr021_inits1_MetaData.rds")
+```
+
+```{r}
 diffr::diffr(file.mod,modTab(simres.inits1)$path.sim)
 ```
 
