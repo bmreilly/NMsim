@@ -261,8 +261,8 @@ THETA(1),3")
 
     if(F){
         ref <- readRDS(fileRef)            
-        ref
-        res1
+        expect_equal(ref[[1]],
+        res1[[1]])
     }
 })
 
@@ -308,6 +308,7 @@ test_that("fix multiple",{
     if(FALSE){
         ref <- readRDS(fileRef)
         NMreadSection(file.mod,section="omega")
+
         print.NMctl(ref)
         print.NMctl(res1)
     }
