@@ -272,32 +272,32 @@ simres <- NMsim(file.mod=file.mod,
                 name.sim="basic-sim")
 ```
 
-```{r}
-mods <- modTab(simres)[,.(file.mod,path.sim)] |>
-    melt(measure.vars=c("file.mod","path.sim"))
-##ctls <- setNames(lapply(mods$value,as.NMctl),cc(file1,file2))
-diffr::diffr(mods$value[1],mods$value[2])
-## mods[,
-##      as.NMctl(value)
-##      ] |> diffr::diffr()
+```{r,eval=TRUE,include=FALSE}
+simres <- NMreadSim("simres-modify/xgxr021_basicsim_MetaData.rds")
+```
 
+
+```{r}
+diffr::diffr(file.mod,modTab(simres)$path.sim)
 ```
 
 Now, adding some custom values
 
-```{r}
-if(F){
-    load_all("~/wdirs/NMsim",export_all=FALSE)
-}
-
-options(warn=2)
+```{r,eval=FALSE}
 simres.inits1 <- NMsim(file.mod=file.mod,
                        data=data.sim,
                        inits=list("theta(1)"=list(init=0.54)
                                  ,"omega(3,3)"=list(init=.5)
                                   ),
                        name.sim="inits1")
-modTab(simres.inits1)[,diffr::diffr(file1=file.mod,file2=path.sim)]
+```
+
+```{r,include=FALSE,eval=TRUE}
+simres.inits1 <- NMreadSim("simres-modify/xgxr021_inits1_MetaData.rds")
+```
+
+```{r}
+diffr::diffr(file.mod,modTab(simres.inits1)$path.sim)
 ```
 
 
