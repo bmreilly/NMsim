@@ -278,14 +278,7 @@ simres <- NMreadSim("simres-modify/xgxr021_basicsim_MetaData.rds")
 
 
 ```{r}
-mods <- modTab(simres)[,.(file.mod,path.sim)] |>
-    melt(measure.vars=c("file.mod","path.sim"))
-##ctls <- setNames(lapply(mods$value,as.NMctl),cc(file1,file2))
-diffr::diffr(mods$value[1],mods$value[2])
-## mods[,
-##      as.NMctl(value)
-##      ] |> diffr::diffr()
-
+diffr::diffr(modTab(simres)$file.mod,modTab(simres)$path.sim)
 ```
 
 Now, adding some custom values
