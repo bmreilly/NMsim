@@ -302,8 +302,8 @@
 ##'     you need to merge by a row identifier. You would do
 ##'     `args.NMscanData=list(col.row="ROW")` to merge by a column
 ##'     called `ROW`. This is only used in rare cases.
-##' @param system.type A charachter string, either \"windows\" or
-##'     \"linux\" - case insensitive. Windows is only experimentally
+##' @param system.type A charachter string, either "windows" or
+##'     "linux" - case insensitive. Windows is only experimentally
 ##'     supported. Default is to use \code{Sys.info()[["sysname"]]}.
 ##' @param format.data.complete For development purposes - users do
 ##'     not need this argument. Controls what format the complete
