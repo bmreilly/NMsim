@@ -277,8 +277,12 @@ simres <- NMreadSim("simres-modify/xgxr021_basicsim_MetaData.rds")
 ```
 
 
-```{r}
-diffr::diffr(file.mod,modTab(simres)$path.sim)
+```{r,echo=FALSE}
+my.file.diff <- function(file1,file2){
+    waldo::compare(readLines(file1),readLines(file2),ignore_attr=TRUE)
+}
+## diffr::diffr(file.mod,modTab(simres)$path.sim)
+my.file.diff(file.mod,modTab(simres)$path.sim)
 ```
 
 Now, adding some custom values
@@ -298,6 +302,7 @@ simres.inits1 <- NMreadSim("simres-modify/xgxr021_inits1_MetaData.rds")
 
 ```{r}
 diffr::diffr(file.mod,modTab(simres.inits1)$path.sim)
+my.file.diff(file.mod,modTab(simres.inits1)$path.sim)
 ```
 
 

@@ -32,7 +32,7 @@ Suggests:
   kableExtra,
   coveffectsplot,
   NMcalc,
-  diffr
+  waldo
 Enhances:
   simpar
 Encoding: UTF-8
