@@ -163,30 +163,30 @@ matrix. Default is `FALSE`.}
     estimation.
 \itemize{
 
-\item{`method="nmsim"`}, all other
-    arguments are passed to `NMwriteInits`. This is a flexible
-    method that allows for modification of the parameter values
-    and is expected to be the default method in the
-    future. Example which will update the parameter values based
-    on the available estimate, but with `THETA(2)=1.3`:
-    `inits=list(method="nmsim","THETA(2)"=list(init=1.3))`. See
-    `?NMwriteInits` too.
+\item{`method="nmsim"`} (default) A highly flexible internal
+     method, allows for modification of the parameter values. All
+     other elements in `inits` are passed to
+     `NMwriteInits()`. Example where `THETA(2)` is customized:
+     `inits=list("THETA(2)"=list(init=1.3))`. See `?NMwriteInits`
+     too.
 
 \item{`method="psn"`}
-    uses PSN's "update_inits". Requires a functioning PSN
+    Uses PSN's "update_inits". Requires a functioning PSN
     installation and possibly that \code{dir.psn} is correctly
     set. The advantages of this method are that it keeps comments
     in the control stream and that it is a method known to many.
 
-\item{`method="nmsim"`}
- Uses a simple internal method to update the parameter values
-based on the ext file.  The advantages of "nmsim" are it does not
-require PSN, and that it does not rely on code-interpretation for generation of simulation control streams. "nmsim" fixes the whole
-OMEGA and SIGMA matrices as single blocks making the $OMEGA and
-$SIGMA sections of the control streams less easy to read. On the
-other hand, this method is robust because it avoids any
-interpretation of BLOCK structure or other code in the control
-streams.
+\item{`method="nmsim.deprec"`} Uses a simple internal method to
+ update the parameter values based on the ext file.  The
+ advantages are it does not require PSN, and that it does not rely
+ on code-interpretation for generation of simulation control
+ streams. "nmsim.deprec" fixes the whole OMEGA and SIGMA matrices
+ as single blocks which is robust because it avoids any
+ interpretation of BLOCK structure or other code in the control
+ streams. The downside is it strips all comments, and generally
+ makes the $OMEGA and $SIGMA sections of the simulation control
+ streams less easy to read. "nmsim.deprec" can be used as a
+ fallback in case of any issues with `method="nmsim"`.
 
 \item{`method="none"`} Do nothing. This is useful if the model to simulate
 has not been estimated but parameter values have been manually put

@@ -48,7 +48,6 @@ test_that("NMsim_NWPRI",{
         fileRef <- "testReference/NMsim_NWPRI_01.rds"
         
         file.mod <- "testData/nonmem/xgxr032.mod"
-
         
         sim1 <- NMsim(file.mod=file.mod,
                       data=dat.sim,
