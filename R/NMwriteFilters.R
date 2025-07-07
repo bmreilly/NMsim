@@ -1,11 +1,20 @@
+##' Write IGNORE/ACCEPT filters to NONMEM model
+##' @param file Path to control stream. Use `file` or `lines`.
+##' @param lines Control stream as text lines. Use `file` or `lines`.
+##' @param filters A data frome with filters, like returned by
+##'     `NMreadFilters()`.
+##' @param write If `file` is provided, write the results to file? If
+##'     `lines` is used, `write` cannot be used.
+##' @return Resulting control stream (lines) as character vector 
+##' @export
 
 ##' @keywords internal
 
 NMwriteFilters <- function(file=NULL,lines=NULL,filters,write){
 
-cond <- NULL
-text <- NULL
-type <- NULL
+    cond <- NULL
+    text <- NULL
+    type <- NULL
     
     if(missing(write) || is.null(write)){
         write <- !is.null(file)
@@ -30,7 +39,15 @@ type <- NULL
                 ]
     } else if (is.character(filters)){
         filters <- list(text=paste(filters,collapse = " "))
-    }
+    }  else if (is.function(filters)){
+        stop("filters is a function. This is not (yet) supported.")
+        ## read filter text
+
+        ## modify filter text
+        ##filters$text <- filters()
+        ## combine to new filter text
+
+    } 
     
     ##newdata <- sprintf("%s\n%s\n",text.no.filters,paste(filters$text,collapse="\n"))
     newdata <- c(text.no.filters,filters$text)
@@ -46,13 +63,3 @@ type <- NULL
 
 }
 
-if(F){
-file.mod <- "/data/prod_vx548_lsr_phase2_analysis/trunk/analysis/PK_review/models/12746.mod"
-
-filters <- NMreadFilters(file=file.mod)
-filters[cond=="EXCLF.NE.0",cond:="EXCLF.GT.10"]
-
-newlines <- NMwriteFilters(file=file.mod,filters=filters,write=FALSE)
-newlines
-
-}

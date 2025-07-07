@@ -302,18 +302,17 @@ need to specify this unless you want to explicitly use a
 specific installation of PSN on your system.}
 
 \item{args.psn.execute}{A charachter string that will be passed as
-arguments PSN's `execute`.}
+arguments PSN's `execute`. Notice, if `path.nonmem` is
+provided, the default is not to use PSN.}
 
-\item{args.NMscanData}{If \code{table.options} is used, NMsim
-turns to `NMdata::NMscanData()` for a general method to read
-the output tables. Use `args.NMscanData` to pass additional
-arguments (in a list) to that function if you want the results
-to be read in a specific way. This can be if the model for
-some reason drops rows, and you need to merge by a row
-identifier. You would do `args.NMscanData=list(col.row="ROW")`
-to merge by a column called `ROW`. This is only used in rare
-cases. Better just stick to NMsim's optimized default
-`table.options` and related methods for reading results.}
+\item{args.NMscanData}{If \code{execute=TRUE&sge=FALSE}, NMsim
+will normally read the results using \code{NMreadSim}. Use
+this argument to pass additional arguments (in a list) to that
+function if you want the results to be read in a specific
+way. This can be if the model for some reason drops rows, and
+you need to merge by a row identifier. You would do
+`args.NMscanData=list(col.row="ROW")` to merge by a column
+called `ROW`. This is only used in rare cases.}
 
 \item{as.fun}{The default is to return data as a data.frame. Pass
 a function (say `tibble::as_tibble`) in as.fun to convert to
@@ -321,8 +320,8 @@ something else. If data.tables are wanted, use
 as.fun="data.table". The default can be configured using
 NMdataConf.}
 
-\item{system.type}{A charachter string, either \"windows\" or
-\"linux\" - case insensitive. Windows is only experimentally
+\item{system.type}{A charachter string, either "windows" or
+"linux" - case insensitive. Windows is only experimentally
 supported. Default is to use \code{Sys.info()[["sysname"]]}.}
 
 \item{dir.sims}{The directory in which NMsim will store all
@@ -359,12 +358,15 @@ simulations are run locally but not to if they are sent to the
 cluster. Waiting for them means that the results will be read
 when simulations are done. If not waiting, path(s) to `rds`
 files to read will be returned. Pass them through
-`NMreadSim()`. Conveniently, NMreadSim() also takes the `wait` argument too, allowing flexibility to run Nonmem in the background, and then read the results, still waiting for Nonmem to finish.}
+`NMreadSim()`. Conveniently, NMreadSim() also takes the `wait`
+argument too, allowing flexibility to run Nonmem in the
+background, and then read the results, still waiting for
+Nonmem to finish.}
 
 \item{text.sim}{A character string to be pasted into
 $SIMULATION. This must not contain seed or SUBPROBLEM which
-are handled separately. Default is to include "ONLYSIM". You
-cannot avoid that using `text.sim`. Instead, you can use
+is handled separately. Default is to include "ONLYSIM". You
+cannot avoid that using `text.sim`. If needed, you can use
 `onlysim=FALSE` which will be passed to `NMsim_default()`.}
 
 \item{auto.dv}{Add a column called `DV` to input data sets if a
@@ -417,7 +419,7 @@ instead.}
 
 \item{seed}{Deprecated. See \code{seed.R} and \code{seed.nm}.}
 
-\item{file.ext}{Depecated. Use
+\item{file.ext}{Deprecated. Use
 `inits=list(file.ext="path/to/file.ext")` instead. Optionally
 provide a parameter estimate file from Nonmem. This is
 normally not needed since `NMsim` will by default use the ext
@@ -507,8 +509,6 @@ valid for simulation of `$THETA` variability. The method accepts a
 table of parameter values that can be produced with other tools
 than `NMsim`. For simulation with parameter variability based on
 bootstrap results, use \code{NMsim_default}.
-
-\item \code{NMsim_typical} Deprecated. Use \code{typical=TRUE} instead. 
 
 }
 }

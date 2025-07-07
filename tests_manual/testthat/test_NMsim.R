@@ -15,7 +15,7 @@ NMdataConf(dir.sims="testOutput/simtmp")
 NMdataConf(dir.res="testOutput/simres")
 
 dt.dos <- NMcreateDoses(AMT=300,TIME=0)
-dt.sim <- addEVID2(data=dt.dos,TIME=c(1,6,12),CMT=2)
+dt.sim <- NMaddSamples(data=dt.dos,TIME=c(1,6,12),CMT=2)
 dt.sim[,BBW:=40][,ROW:=.I]
 
 dt.sim.known <- egdt(dt.sim[,!("ID")],data.table(ID=101:105))
@@ -124,7 +124,7 @@ test_that("basic - default",{
                     name.sim="default_01"
                     )
     
-    modTab(simres)
+    ##modTab(simres)
     simres.nometa <- copy(simres)
     unNMsimRes(simres.nometa)
 

@@ -10,7 +10,7 @@ test_that("Basic",{
     df.doses <- NMcreateDoses(TIME=c(0,12),AMT=10,CMT=2)
     seq.time <- c(0,4,12,24)
 
-    res <- NMaddSamples(df.doses,time.sim=seq.time,CMT=2)
+    res <- NMaddSamples(df.doses,TIME=seq.time,CMT=2)
 
     df.doses
     
@@ -287,9 +287,11 @@ test_that("No CMT column",{
 test_that("Providing DV",{
     NMdataConf(reset=TRUE)
     dt.dos <- NMcreateDoses(TIME=c(0,12), AMT=data.table(AMT=1:2,grp=letters[1:2]),CMT=1) 
+## dt.dos contains MDV
     dt.dos
     res0 <- NMaddSamples(dt.dos,TAPD=data.frame(TAPD=c(1,1)),CMT=2,DV=0,as.fun="data.table")
     res2 <- NMaddSamples(dt.dos,TAPD=data.frame(TAPD=c(1,1)),CMT=2,as.fun="data.table")
+### res0 should have MDV=0 because DV is provided
     res0
     res2
     expect_equal(
@@ -300,7 +302,7 @@ test_that("Providing DV",{
 
     expect_equal(
         res0[,sort(unique(MDV))]
-       ,c(1))
+       ,c(0,1))
 
     expect_equal(
         res0[,sort(unique(DV))]

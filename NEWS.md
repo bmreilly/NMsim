@@ -1,3 +1,14 @@
+# NMsim 0.2.4
+
+* `NMwriteInits()` supports `ext` and `inits.tab` arguments. These
+  interfaces to specifying parameter values greatly improves
+  flexibility for programming, and for specifying multiple new
+  parameter sets.
+
+* `NMaddSamples` only inserts `MDV` column if `MDV` is already present
+  in `data`.
+
+
 # NMsim 0.2.3
 
 ## New features

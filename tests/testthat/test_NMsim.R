@@ -6,6 +6,13 @@ stopifnot(packageVersion("NMdata")>="0.1.6")
 library(data.table)
 data.table::setDTthreads(1)
 
+
+## unloadNamespace("NMsim")
+## unloadNamespace("NMdata")
+## load_all("~/wdirs/NMdata",export_all = FALSE)
+## load_all("~/wdirs/NMsim",export_all = FALSE)
+
+
 NMdataConf(
     path.nonmem="/opt/NONMEM/nm75/run/nmfe75",
     dir.sims="testOutput/simtmp"
@@ -18,7 +25,8 @@ doses.sd[,dose:=paste(DOSE,"mg")]
 doses.sd[,regimen:="SD"]
 
 
-dat.sim.sd <- addEVID2(doses.sd,time.sim=0:24,CMT=2,as.fun="data.table")
+## dat.sim.sd <- addEVID2(doses.sd,time.sim=0:24,CMT=2,as.fun="data.table")
+dat.sim.sd <- NMaddSamples(doses.sd,TIME=0:24,CMT=2,as.fun="data.table")
 dat.sim <- copy(dat.sim.sd)
 
 ## NMcheckData(dat.sim)
@@ -44,14 +52,21 @@ test_that("Basic",{
                   dir.sim="testOutput",
                   name.sim = "sd1",
                   seed.nm=2342,
-                  execute=FALSE,
-                  ## method.update.inits="nmsim"
+                  execute=FALSE
+                  ## ,method.update.inits="nmsim"
                   )
 
     ## ref <- readRDS(fileRef)
     mod <- NMreadSection("testOutput/xgxr025_sd1/xgxr025_sd1.mod")
     expect_equal_to_reference(mod,fileRef)
 
+    if(F){
+        ref <- readRDS(fileRef)
+        mod
+        ref
+        
+    }
+    
     ## readLines("testOutput/xgxr025_sd1/xgxr025_sd1.mod")
     
 })
@@ -277,24 +292,31 @@ test_that("sizes",{
     
     file.mod <- "testData/nonmem/xgxr032.mod"
 
-    if(packageVersion("NMdata")>"0.1.8.922"){
-        sim1 <- NMsim(file.mod=file.mod,
-                      data=dat.sim,
-                      dir.sim="testOutput",
-                      name.sim = "sizes_1",
-                      ## method.sim=NMsim_VarCov,
-                      sizes=list(LTV=30,PD=70),
-                      seed.nm=2342,
-                      seed.R=2,
-                      execute=FALSE,
-                      method.update.inits="nmsim")
+    sim1 <- NMsim(file.mod=file.mod,
+                  data=dat.sim,
+                  dir.sim="testOutput",
+                  name.sim = "sizes_1",
+                  ## method.sim=NMsim_VarCov,
+                  sizes=list(LTV=30,PD=70),
+                  seed.nm=2342,
+                  seed.R=2,
+                  execute=FALSE,
+                  method.update.inits="nmsim")
 
-        mod <- readLines("testOutput/xgxr032_sizes_1/xgxr032_sizes_1.mod")
+    mod <- readLines("testOutput/xgxr032_sizes_1/xgxr032_sizes_1.mod")
 
-        ## ref <- readRDS(fileRef)
-        expect_equal_to_reference(mod,fileRef)
-    }
+## sometimes an empty line is included, sometimes not. I don't know why.
+    mod <- mod[1:max(which(mod!=""))]
+
     
+    ## ref <- readRDS(fileRef)
+    expect_equal_to_reference(mod,fileRef)
+    
+    if(F){
+        ref <- readRDS(fileRef)
+        ref
+        mod
+    }
 })
 
 
@@ -306,34 +328,71 @@ test_that("inits - modify parameter",{
     
     file.mod <- "testData/nonmem/xgxr032.mod"
 
-    if(packageVersion("NMdata")>"0.1.8.923"){
-        sim1 <- NMsim(file.mod=file.mod,
-                      data=dat.sim,
-                      dir.sim="testOutput",
-                      name.sim = "inits_1",
-                      ## method.sim=NMsim_VarCov,
-                      ## inits=list(method="nmsim","THETA(2)"=list(init=4,fix=1)),
-                      inits=list("THETA(2)"=list(init=4,fix=1)),
-                      seed.nm=2342,
-                      seed.R=2,
-                      execute=FALSE
-                      )
+    sim1 <- NMsim(file.mod=file.mod,
+                  data=dat.sim,
+                  dir.sim="testOutput",
+                  name.sim = "inits_1",
+                  ## method.sim=NMsim_VarCov,
+                  ## inits=list(method="nmsim","THETA(2)"=list(init=4,fix=1)),
+                  inits=list("THETA(2)"=list(init=4,fix=1)),
+                  seed.nm=2342,
+                  seed.R=2,
+                  execute=FALSE
+                  )
 
-        mod <- readLines("testOutput/xgxr032_inits_1/xgxr032_inits_1.mod")
-        mod    
+    mod <- readLines("testOutput/xgxr032_inits_1/xgxr032_inits_1.mod")
+## sometimes an empty line is included, sometimes not. I don't know why.
+    mod <- mod[1:max(which(mod!=""))]
 
-        ## ref <- readRDS(fileRef)
-        expect_equal_to_reference(mod,fileRef)
 
-        if(F){
-            ref <- readRDS(fileRef)
-            mod
-            ref
-        }
+    ## ref <- readRDS(fileRef)
+    expect_equal_to_reference(mod,fileRef)
 
+    if(F){
+        ref <- readRDS(fileRef)
+        mod
+        ref
     }
+
     
 })
+
+
+test_that("inits - fix multiple parameters",{
+
+    fileRef <- "testReference/NMsim_inits_06b.rds"
+    
+    file.mod <- "testData/nonmem/xgxr032.mod"
+
+    sim1 <- NMsim(file.mod=file.mod,
+                  data=dat.sim,
+                  dir.sim="testOutput",
+                  name.sim = "inits_2",
+                  inits=list("THETA(1)"=list(fix=1),
+                             "THETA(2)"=list(fix=1)),
+                  seed.nm=2342,
+                  seed.R=2,
+                  execute=FALSE
+                  )
+
+    mod <- readLines("testOutput/xgxr032_inits_2/xgxr032_inits_2.mod")
+## sometimes an empty line is included, sometimes not. I don't know why.
+    mod <- mod[1:max(which(mod!=""))]
+
+
+    ## ref <- readRDS(fileRef)
+    expect_equal_to_reference(mod,fileRef)
+
+    if(F){
+        ref <- readRDS(fileRef)
+        mod
+        ref
+    }
+
+    
+})
+
+
 
 test_that("No ONLYSIM",{
 

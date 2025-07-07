@@ -1,17 +1,12 @@
-###### NB this is a copy of NMdata:::addParType. It should not be
-###### edited and should only be kept in NMsim until NMsim requires
-###### NMdata >=0.1.7 or when NMdata:::addParType is stable.
-
-
 ### add par.type, i, j to a data.table that has parameter already
 ## parameter is style THETA1, OMEGA(1,1), SIGMA(1,1)
 
-## should also add parname or par.name which is the concistent
+## should also add parname or par.name which is the consistent
 ## THETA(1), OMEGA(1,1), SIGMA(1,1) labeling.
 
 ##' @keywords internal
 addParType <- function(pars,suffix,add.idx){
-
+    
     i <- NULL
     j <- NULL
     par.name <- NULL
@@ -36,18 +31,40 @@ addParType <- function(pars,suffix,add.idx){
     pars[grepl("^SIGMA",get(col.parameter)),(col.par.type):="SIGMA"]
     pars[get(col.parameter)%in%cc("OBJ","SAEMOBJ"),(col.par.type):="OBJ"]
     if(add.idx){
-        pars[get(col.par.type)=="THETA",i:=as.integer(sub("THETA([0-9]+)","\\1",get(col.parameter)))]
+        pars[get(col.par.type)=="THETA",i:=as.integer(sub("THETA([0-9][0-9]*)","\\1",get(col.parameter)))]
         pars[get(col.par.type)=="OMEGA",i:=as.integer(sub("OMEGA\\(([0-9]+)\\,([0-9]+)\\)","\\1",get(col.parameter)))]
-        pars[get(col.par.type)=="OMEGA",j:=as.integer(sub("OMEGA\\(([0-9]+)\\,([0-9]+)\\)","\\2",get(col.parameter)))]
         pars[get(col.par.type)=="SIGMA",i:=as.integer(sub("SIGMA\\(([0-9]+)\\,([0-9]+)\\)","\\1",get(col.parameter)))]
+        pars[get(col.par.type)=="OMEGA",j:=as.integer(sub("OMEGA\\(([0-9]+)\\,([0-9]+)\\)","\\2",get(col.parameter)))]
         pars[get(col.par.type)=="SIGMA",j:=as.integer(sub("SIGMA\\(([0-9]+)\\,([0-9]+)\\)","\\2",get(col.parameter)))]
         ## cols <- cc(i,j)
         ## pars[,(cols):=lapply(.SD,as.integer),.SDcols=cols]
     }
-## par.name
+    ## par.name
     pars[,par.name:=get(col.parameter)]
     pars[get(col.par.type)=="THETA",par.name:=sprintf("THETA(%s)",i)]
     
     
     pars[]
+}
+
+
+##' @keywords internal
+addParameter <- function(pars){
+
+    cleanSpaces <- NMdata:::cleanSpaces
+    
+    par.type <- NULL
+    parameter <- NULL
+    i <- NULL
+    j <- NULL
+
+    pars <- copy(pars)
+    pars[,par.type:=cleanSpaces(par.type)]
+    pars[,par.type:=toupper(par.type)]
+    
+    pars[par.type=="THETA",parameter:=sprintf("%s%d",par.type,i)]
+    pars[par.type%in%c("OMEGA","SIGMA"),parameter:=sprintf("%s(%d,%d)",par.type,i,j)]
+
+    pars
+
 }

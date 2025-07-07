@@ -2,16 +2,21 @@
 % Please edit documentation in R/writeTextFile.R
 \name{writeTextFile}
 \alias{writeTextFile}
-\title{Conveniently writeLines to file}
+\title{Conveniently write text lines to file}
 \usage{
-writeTextFile(lines, file)
+writeTextFile(lines, file, simplify = TRUE)
 }
 \arguments{
 \item{lines}{the character lines to write}
 
 \item{file}{The file name path to write to}
+
+\item{simplify}{Passed to `nameMultipleFiles()`}
+}
+\value{
+File paths as character strings
 }
 \description{
-Conveniently writeLines to file
+Conveniently write text lines to file
 }
 \keyword{internal}

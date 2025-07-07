@@ -41,4 +41,4 @@ run.simuls <- FALSE
 Built `r Sys.Date()` using NMsim `r packageVersion("NMsim")`.
 
 ## No Longer Maintained
-This document has been replaced by [`NMsim-modified-model.html`](https://NMautoverse.github.io/NMsim/articles/NMsim-modified-model.html).
+This document has been replaced by [`NMsim-modified-model.html`](https://nmautoverse.github.io/NMsim/articles/NMsim-modified-model.html).

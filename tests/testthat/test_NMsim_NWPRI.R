@@ -44,7 +44,6 @@ dat.sim[,BBW:=75]
 
 
 test_that("NMsim_NWPRI",{
-    if(packageVersion("NMdata") >= "0.1.8.904") {
 
         fileRef <- "testReference/NMsim_NWPRI_01.rds"
         
@@ -96,8 +95,6 @@ test_that("NMsim_NWPRI",{
             ref$TABLE
 
         }
-
-    }
 })
 
 ## block OMEGA 4x4
