@@ -61,14 +61,21 @@ control stream (`file.mod`) and the simulation input data set
 re-use the estimation data for the simulation. That is the simulation
 we need for a VPC. We will use an example model included with NMsim:
 
-```{r,eval=TRUE}
+```{r,include=TRUE,eval=TRUE}
 file.mod <- system.file("examples/nonmem/xgxr032.mod",package="NMsim")
-path.nonmem <- NMsim:::prioritizePaths(c("/opt/NONMEM/nm75/run/nmfe75","/opt/nonmem/nm751/run/nmfe75"))
-NMdataConf(path.nonmem=path.nonmem)
+NMdataConf(path.nonmem="/opt/NONMEM/nm75/run/nmfe75")
 NMdataConf(dir.sims="simtmp-VPC",
            dir.res="simres-VPC"
            )
 ```
+
+```{r,include=FALSE,eval=TRUE}
+### a few options for finding Nonmem
+file.mod <- system.file("examples/nonmem/xgxr032.mod",package="NMsim")
+path.nonmem <- NMsim:::prioritizePaths(c("/opt/NONMEM/nm75/run/nmfe75","/opt/nonmem/nm751/run/nmfe75"))
+NMdataConf(path.nonmem=path.nonmem)
+```
+
 
 ```{r,eval=FALSE}
 set.seed(43)

@@ -713,7 +713,7 @@ NMsim <- function(file.mod,data,
 ### Create NMREP in $ERROR. Adding 1 to start counting at 1.
         
         modify <- c(modify,
-                          list(ERROR=add("NMREP=IREP")))
+                    list(ERROR=add("NMREP=IREP")))
     }
     
     if(!is.null(table.vars)){
@@ -1112,15 +1112,15 @@ args.inits <- append(
         ## incompatible objects - do not run as dt[,NMwriteData(),by]
         null <- lapply(split(dt.data.tmp,by="tmprow"),function(datrow){
             with(datrow,NMwriteData(data$data[[DATAROW]]
-                       ,file=path.data
-                       ,genText=T
-                       ,formats.write=c("csv",format.data.complete)
-                        ## if NMsim is not controlling $DATA, we don't know what can be dropped.
-                        
-                        ,csv.trunc.as.nm=TRUE
-                       ,script=script
-                       ,quiet=TRUE)
-        )})
+                                   ,file=path.data
+                                   ,genText=T
+                                   ,formats.write=c("csv",format.data.complete)
+                                    ## if NMsim is not controlling $DATA, we don't know what can be dropped.
+                                    
+                                   ,csv.trunc.as.nm=TRUE
+                                   ,script=script
+                                   ,quiet=TRUE)
+                 )})
         
 
     }
@@ -1527,22 +1527,22 @@ args.inits <- append(
             
             
             obj.exec <- NMexec(files=path.sim,sge=sge,nc=nc,wait=wait.exec,
-                   args.psn.execute=args.psn.execute,nmquiet=nmquiet,quiet=TRUE,
-                   method.execute=NMsimConf$method.execute,
-                   path.nonmem=NMsimConf$path.nonmem,
-                   dir.psn=NMsimConf$dir.psn,
-                   system.type=NMsimConf$system.type,
-                   files.needed=files.needed.n,
-                   input.archive=input.archive,
-                   dir.data="..",
-                   clean=clean,
-                   backup=FALSE)
+                               args.psn.execute=args.psn.execute,nmquiet=nmquiet,quiet=TRUE,
+                               method.execute=NMsimConf$method.execute,
+                               path.nonmem=NMsimConf$path.nonmem,
+                               dir.psn=NMsimConf$dir.psn,
+                               system.type=NMsimConf$system.type,
+                               files.needed=files.needed.n,
+                               input.archive=input.archive,
+                               dir.data="..",
+                               clean=clean,
+                               backup=FALSE)
             
             ## simres.n <- list(lst=path.sim.lst)
             ## simres.n
             if(do.pb){
                 setTxtProgressBar(pb, .I)
-            
+                
             }
             
             obj.exec$mod.exec
