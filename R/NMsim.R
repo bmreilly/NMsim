@@ -1143,7 +1143,8 @@ args.inits <- append(
             dt[,col.row:=col.row.this]
             
             ## if(!col.row %in% colnames(data.this)){
-            data.this[,(col.row.this):=(1:.N)/1000]
+            ## data.this[,(col.row.this):=(1:.N)/1000]
+            data.this[,(col.row.this):=(1:.N)]
             setcolorder(data.this,c(colnames(data.this)[1],col.row.this))
             
             section.input <- NMreadSection(file.mod,section="input",keep.name=FALSE)
