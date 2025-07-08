@@ -272,16 +272,38 @@ simres <- NMsim(file.mod=file.mod,
 simres <- NMreadSim("simres-modify/xgxr021_basicsim_MetaData.rds")
 ```
 
+The following compares the `$THETA`, `$OMEGA`, and `$SIGMA` sections
+of the estimated and the simulated control streams side-by-side. The
+values have been updated in the simulation control stream based on the
+`.ext` file (compare to "init" and "est" columns in table above).
 
 ```{r,echo=FALSE}
-my.file.diff <- function(file1,file2){
-    waldo::compare(readLines(file1),readLines(file2),ignore_attr=TRUE)
+my.file.diff <- function(file1,file2,sections=NULL,...){
+    if(is.null(sections)){
+        res.file1 <- readLines(file1)
+        res.file2 <- readLines(file2)
+    } else {
+        sections <- toupper(sections)
+        res.file1 <- setNames(lapply(secs,function(sec)NMreadSection(file=file1,section=sec)),sections)
+        res.file2 <- setNames(lapply(secs,function(sec)NMreadSection(file=file2,section=sec)),sections)
+    }
+   
+    waldo::compare(res.file1,res.file2,ignore_attr=FALSE,...)
 }
 ## diffr::diffr(file.mod,modTab(simres)$path.sim)
-my.file.diff(file.mod,modTab(simres)$path.sim)
+
+secs <- c("THETA","OMEGA","sigma")
+my.file.diff(file.mod,modTab(simres)$path.sim,sections=secs,x_arg="file.mod",y_arg="simulation")
+## res.file.mod <- setNames(lapply(secs,function(sec)NMreadSection(file=file.mod,section=sec)),secs)
+## res.res <- setNames(lapply(secs,function(sec)NMreadSection(file=modTab(simres)$path.sim,section=sec)),secs)
+## waldo::compare(res.file.mod,
+##                res.res
+##                )
 ```
 
-Now, adding some custom values
+To simulate the model without updating the parameters based on final model estimates, use `inits=list(method="none")`.
+
+We may want to customly specify individual parameter values. Let's now do rerun the simulation adding some custom values for `THETA(1)` and `OMEGA(3,3)`. Since we are not using `inits=list(method="none")` all other parameter values are updated with final estimates.
 
 ```{r,eval=FALSE}
 simres.inits1 <- NMsim(file.mod=file.mod,
@@ -296,9 +318,10 @@ simres.inits1 <- NMsim(file.mod=file.mod,
 simres.inits1 <- NMreadSim("simres-modify/xgxr021_inits1_MetaData.rds")
 ```
 
-```{r}
-diffr::diffr(file.mod,modTab(simres.inits1)$path.sim)
-my.file.diff(file.mod,modTab(simres.inits1)$path.sim)
+```{r,echo=FALSE}
+## diffr::diffr(file.mod,modTab(simres.inits1)$path.sim)
+my.file.diff(file.mod,modTab(simres.inits1)$path.sim,sections=c("THETA","OMEGA","sigma"),
+             x_arg="file.mod",y_arg="simulation")
 ```
 
 

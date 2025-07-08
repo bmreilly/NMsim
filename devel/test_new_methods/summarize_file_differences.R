@@ -30,3 +30,7 @@ res.diff
 
 waldo::compare(readLines(f1),readLines(f1.modif))
 
+
+diffr::diffr(f1,f1.modif)
+
+?diffr
