@@ -11,6 +11,7 @@ NMreadSim(
   wait = FALSE,
   quiet = FALSE,
   progress,
+  skip.missing = FALSE,
   rm.tmp = FALSE,
   as.fun
 )

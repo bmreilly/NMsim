@@ -231,17 +231,25 @@ NMreadSimModTabOne <- function(modtab,check.time=FALSE,dir.sims,wait=FALSE,quiet
                 close(pb)
                 ## message("")
             }
+            lsts.found <- modtab[,file.exists(path.lst.read)]
+            done <- all(lsts.found)            
         } else {
             if(skip.missing){
                 message(sprintf("%d/%d model runs found",sum(lsts.found),length(lsts.found)))
             } else {
-                lapply(modtab[lsts.found==FALSE,path.lst.read],function(x) message(sprintf("Not found: %s",x)))
+                lapply(modtab[!file.exists(path.lst.read),path.lst.read],function(x) message(sprintf("Not found: %s",x)))
                 stop("Not all model runs completed. Look in messages for which ones. If you want to go ahead and read the ones that are found, use skip.missing=`TRUE`.")
             }
         }
     }
-
-
+    
+    if(sum(lsts.found)==0) {
+        message("No results found")
+        return(NULL)
+    }
+    if(skip.missing){
+        modtab <- modtab[file.exists(path.lst.read)]
+    }
     ## if(!quiet) message("Reading Nonmem results")
     
     if("ROWMODEL2" %in%colnames(modtab)) modtab[,ROWMODEL:=.GRP,by=.(ROWMODEL,ROWMODEL2)]

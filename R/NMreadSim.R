@@ -47,7 +47,7 @@
 
 
 
-NMreadSim <- function(x,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,progress,rm.tmp=FALSE,as.fun){
+NMreadSim <- function(x,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,progress,skip.missing=FALSE,rm.tmp=FALSE,as.fun){
 
 #### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
     
@@ -119,7 +119,7 @@ NMreadSim <- function(x,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,progres
         stop("Not all objects in `x` recognized by NMreadSim. They should be either (normally) paths to `rds` files or (mostly for programming) tables of simulation model information.")
 
     }
-
+    
     
 ###### Reading results
     res.all <- NULL
@@ -140,6 +140,7 @@ NMreadSim <- function(x,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,progres
                                       dir.sims=dir.sims,wait=wait,quiet=quiet,
                                       progress=progress,
                                       ## fast.tables=fast.tables,carry.out=carry.out
+                                      skip.missing=skip.missing
                                       )
         if(is.null(res.all)){
             res.all <- res.modTab
