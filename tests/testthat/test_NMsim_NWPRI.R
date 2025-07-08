@@ -45,55 +45,57 @@ dat.sim[,BBW:=75]
 
 test_that("NMsim_NWPRI",{
 
-        fileRef <- "testReference/NMsim_NWPRI_01.rds"
-        
-        file.mod <- "testData/nonmem/xgxr032.mod"
-        
-        sim1 <- NMsim(file.mod=file.mod,
-                      data=dat.sim,
-                      name.sim = "sd1_NWPRI",
-                      method.sim=NMsim_NWPRI,
-                      seed.nm=2342,
-                      execute=FALSE,
-                      method.update.inits="nmsim")
+    fileRef <- "testReference/NMsim_NWPRI_01.rds"
+    
+    file.mod <- "testData/nonmem/xgxr032.mod"
+    
+    sim1 <- NMsim(file.mod=file.mod,
+                  data=dat.sim,
+                  name.sim = "sd1_NWPRI",
+                  method.sim=NMsim_NWPRI,
+                  seed.nm=2342,
+                  execute=FALSE,
+                  method.update.inits="nmsim")
 
-        mod <- NMreadSection("testOutput/xgxr032_sd1_NWPRI/xgxr032_sd1_NWPRI.mod")
-        
+    mod <- NMreadSection("testOutput/xgxr032_sd1_NWPRI/xgxr032_sd1_NWPRI.mod")
+    
 
-        ## ref <- readRDS(fileRef)
+    ## ref <- readRDS(fileRef)
+    if(packageVersion("NMdata")>="2.1.0"){
         expect_equal_to_reference(mod$THETAPV,fnAppend(fileRef,"THETAPV"))
         expect_equal_to_reference(mod$OMEGAP,fnAppend(fileRef,"OMEGAP"))
         expect_equal_to_reference(mod,fileRef)
+    }
+    
+    if(F){
+        ref <- readRDS(fileRef)
+        ref$OMEGA
+        mod$OMEGA 
+        ref$SIGMA
+        mod$SIGMA
+        ref$SIMULATION
+        mod$SIMULATION
 
-        if(F){
-            ref <- readRDS(fileRef)
-            ref$OMEGA
-            mod$OMEGA 
-            ref$SIGMA
-            mod$SIGMA
-            ref$SIMULATION
-            mod$SIMULATION
+        compareCols(ref,mod)
+        ref$SIZES
+        mod$SIZES
 
-            compareCols(ref,mod)
-            ref$SIZES
-            mod$SIZES
+        ref$OMEGAP
+        mod$OMEGAP
 
-            ref$OMEGAP
-            mod$OMEGAP
+        ref$THETAPV
+        mod$THETAPV
 
-            ref$THETAPV
-            mod$THETAPV
+        ref$INPUT
+        mod$INPUT
+        
+        mod$DATA
+        ref$DATA
 
-            ref$INPUT
-            mod$INPUT
-            
-            mod$DATA
-            ref$DATA
+        mod$TABLE
+        ref$TABLE
 
-            mod$TABLE
-            ref$TABLE
-
-        }
+    }
 })
 
 ## block OMEGA 4x4
