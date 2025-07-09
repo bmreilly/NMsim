@@ -53,6 +53,10 @@ FALSE and more than one model is being read. The progress
 tracking is based on the number of models completed/read, not
 the status of the individual models.}
 
+\item{skip.missing}{Skip models where results are not available?
+Default is `FALSE` meaning an error will be thrown if one or
+more models do not have completed results.}
+
 \item{rm.tmp}{If results are read successfully, remove temporary
 simulation results files? This can be useful after a script is
 developed and intermediate debugging information is not
