@@ -693,27 +693,36 @@ NMsim <- function(file.mod,data,
     
 
 ### fast.tables is true if table.vars is provided and table.options are untouched.
+    cols.table.add <- c()
+    if(nmrep){
+        
+        ## if(subproblems>0 &&
+        ##    !is.null(table.vars)
+        ## this has not been resolved in NMdata
+        ## && packageVersion("NMdata")<"1.1.7"
+        ## ){
 
-    if(subproblems>0 &&
-       !is.null(table.vars)
-       ## this has not been resolved in NMdata
-       ## && packageVersion("NMdata")<"1.1.7"
-       ){
-        
-        tabv2 <- paste(table.vars,collapse=" ")
+        if(is.null(table.vars)){
+            cols.table.add <- c(cols.table.add,"NMREP")
+        } else {
+            tabv2 <- paste(table.vars,collapse=" ")
 ### don't add col.row here. It is model dependent and will be added when writing $TABLE
-        ##tabv2 <- paste(col.row,tabv2)
+            ##tabv2 <- paste(col.row,tabv2)
 ### NMREP can be added here because it is not used if $TABLE isn't overwritten
-        if(nmrep) tabv2 <- paste(tabv2,"NMREP")
-        tabv2 <- gsub(" +"," ",tabv2 )
-        table.vars <- strsplit(tabv2," ")[[1]]
-        table.vars <- unique(table.vars)
-        
+            ## if(nmrep) {
+            tabv2 <- paste(tabv2,"NMREP")
+            ## }
+            tabv2 <- gsub(" +"," ",tabv2 )
+            table.vars <- strsplit(tabv2," ")[[1]]
+            table.vars <- unique(table.vars)
+        }
 
 ### Create NMREP in $ERROR. Adding 1 to start counting at 1.
         
         modify <- c(modify,
-                    list(ERROR=add("NMREP=IREP")))
+                    list(PRED=add("NMREP=IREP")),
+                    list(PK=add("NMREP=IREP"))
+                    )
     }
     
     if(!is.null(table.vars)){
@@ -1075,11 +1084,11 @@ NMsim <- function(file.mod,data,
         ## dt.models[,NMwriteInits(file.mod=file.mod,newfile=path.sim,file.ext=file.ext,),by=.(ROWMODEL)]
         dt.models[,{
             
-args.inits <- append(
-    list(file.mod=file.mod,newfile=path.sim,file.ext=file.ext)
-                    ,
-    inits[setdiff(names(inits),"method")]
-)
+            args.inits <- append(
+                list(file.mod=file.mod,newfile=path.sim,file.ext=file.ext)
+               ,
+                inits[setdiff(names(inits),"method")]
+            )
             do.call(NMwriteInits,args.inits)
         },by=.(ROWMODEL)]
     }
@@ -1199,18 +1208,18 @@ args.inits <- append(
 
 
     
-    ## dt.models[,{### update .msf
-    ##           newlines <- NMupdateFn(x=path.sim,
-    ##                      section="EST",
-    ##                      model=basename(fn.sim),
-    ##                      fnext=".msf",
-    ##                      add.section.text=NULL,
-    ##                      par.file="MSFO",
-    ##                      text.section=NULL,
-    ##                      quiet=TRUE)
-    ##           writeTextFile(newlines,file=path.sim)
-    ##           }
-    ## ]
+    dt.models[,{### update .msf
+        newlines <- NMupdateFn(x=path.sim,
+                               section="EST",
+                               model=basename(fn.sim),
+                               fnext=".msf",
+                               add.section.text=NULL,
+                               par.file="MSFO",
+                               text.section=NULL,
+                               quiet=TRUE)
+        writeTextFile(newlines,file=path.sim)
+    },by=.(ROWMODEL)
+    ]
 
 #### Section start: Output tables ####
     
@@ -1243,7 +1252,9 @@ args.inits <- append(
         ## if(exists("add.var.table")){
         ##     lines.tables.new <- gsub("\\$TABLE",paste("$TABLE",add.var.table),lines.tables.new)
         ## }
-        lines.tables.new <- gsub("\\$TABLE",paste("$TABLE",col.row),lines.tables.new)
+        lines.tables.new <- gsub("\\$TABLE",
+                                 sub(" +$","",paste("$TABLE",col.row,cols.table.add)),
+                                 lines.tables.new)
         ## if no $TABLE found already, just put it last
         if(length(lines.tables)){
             location <- "replace"
