@@ -62,24 +62,27 @@ Limitations:
 \item `NMwriteInits()` can only update specifications of existing
 parameters. It cannot insert new parameters.
 
-\item lower, init, and upper must be on same line
+\item lower, init, upper, and FIX must be on same line in control stream.
 
-\item If using something like CL=(.1,4,15), two of those cannot be
-on the same line
+\item If using something like CL=(.1,4,15) in control stream, two
+of those cannot be on the same line.
 }
 }
 \examples{
 \dontrun{
-file.mod <- system.file("examples/nonmem/xgxr021.mod",package="NMdata") 
-NMwriteInits(file.mod,
-values=list( "theta(2)"=list(init=1.4),
-             "THETA(3)"=list(FIX=1),
-             "omega(2,2)"=list(init=0.1))
-)
+file.mod <- system.file("examples/nonmem/xgxr021.mod",package="NMdata")
+## specify parameters using ...
 NMwriteInits(file.mod,
   "theta(2)"=list(init=1.4),
   "THETA(3)"=list(FIX=1),
   "omega(2,2)"=list(init=0.1)
 )
+## or put them in a list in the values argument
+NMwriteInits(file.mod,
+values=list( "theta(2)"=list(init=1.4),
+             "THETA(3)"=list(FIX=1),
+             "omega(2,2)"=list(init=0.1))
+)
+
 }
 }

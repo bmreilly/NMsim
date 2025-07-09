@@ -116,6 +116,7 @@ test_that("basic - default",{
     ## library(nonmem2R)
     ## extload(file.mod)
 
+    ## load_all(export_all=FALSE)
     set.seed(43)
     simres <- NMsim(file.mod,
                     data=dt.sim,
@@ -148,7 +149,11 @@ test_that("basic - default",{
         compareCols(simres,ref,keep.names=TRUE)
         ref
         simres
-        compareCols(attributes(simres)$NMsimModTab,attributes(readRDS(fileRef))$NMsimModTab,keep.names=FALSE)
+        compareCols(
+            attributes(simres)$NMsimModTab
+           ,
+            attributes(readRDS(fileRef))$NMsimModTab
+           ,keep.names=FALSE)
 
         
     }
@@ -177,6 +182,8 @@ test_that("basic - sge - dont wait",{
                     )
     ## }
     simres2 <- NMreadSim(simtab,wait=T)
+    ## simres3 <- NMreadSim(simtab,skip.missing = T)
+
 
     fix.time(simres2)
     
@@ -189,8 +196,11 @@ test_that("basic - sge - dont wait",{
         simres2
         ref
         
-        compareCols(attributes(simres2)$NMsimModTab,
-                    attributes(ref)$NMsimModTab)
+        compareCols(
+            attributes(simres2)$NMsimModTab
+           ,
+            attributes(ref)$NMsimModTab
+        )
     }
 
     
@@ -216,7 +226,8 @@ test_that("basic - sge - wait",{
                     ,reuse.results=FALSE
                      ## ,file.res=simtab
                      )
-    
+
+    simres3
     fix.time(simres3)
     
     expect_equal_to_reference(simres3,fileRef)
@@ -937,7 +948,8 @@ test_that("basic - a model that fails on NMTRAN",{
     expect_equal(nrow(simres),0)
 
     expect_equal(
-        nrow(NMreadSim(simres)),0
+        nrow(NMreadSim(simres))
+       ,0
     )
 
 ### rerunning the exact same sim with reuse.results to test how a failed sim is handled.
@@ -1065,7 +1077,7 @@ test_that("basic - ctl",{
 
 ### todo sim with ETA correlations with both update methods
 
-test_that("basic - default",{
+test_that("correlated etas",{
     
     fileRef <- "testReference/NMsim_12.rds"
 
@@ -1075,13 +1087,10 @@ test_that("basic - default",{
                     data=dt.sim,
                     table.var="PRED IPRED Y ETAS(1:LAST)",
                     name.sim="covetas_01",
-                    subproblems=5,
                     path.nonmem=path.nonmem,
                     method.update.inits="nmsim",
                     seed.R=43
                     )
-
-    simres[,ID:=.GRP,.(ID,NMREP)]
 
     NMreadExt(file.mod)[par.type=="OMEGA" & i%in%c(2,3)&j%in%c(2,3)]
     omega.sim <- NMreadSection("testOutput/simtmp/xgxr022_covetas_01/xgxr022_covetas_01.mod",section="OMEGA")
@@ -1089,7 +1098,6 @@ test_that("basic - default",{
 ### a check that nonmem uses te right dist is unnecessary
     ## cor(findCovs(simres,by="ID")[,.(ETA1,ETA2,ETA3,ETA4,ETA5)])
     ## cov2cor(dt2mat(NMreadExt(file.mod)[par.type=="OMEGA"]))
-    
 
     expect_equal_to_reference(omega.sim,fileRef)
 
@@ -1452,9 +1460,122 @@ test_that("1 subproblem - test NMREP",{
                     method.update.inits="nmsim",
                     seed.nm=43
                     )
-    simres
+    expect_true("NMREP"%in%colnames(simres))
+    expect_true(simres[,unique(NMREP)]==1)
 
     ## modTab(simres)
     names(attributes(simres))
     NMreadSection(attributes(simres)$NMsimModTab$path.sim.lst)[c("ERROR","SIMULATION")]
 })
+
+
+## vpc with subproblems and table.vars - NMREP in output
+test_that("vpc with subproblems - NMREP in output",{
+    
+    file.mod <- "testData/nonmem/xgxr022.mod"
+
+    ## with table.vars
+    simres <- NMsim(file.mod,
+                    ## data=dt.sim,
+                    table.vars=cc(PRED,IPRED),
+                    name.sim="subprob_vpc1",
+                    subproblems=3,
+                    path.nonmem=path.nonmem,
+                    seed.nm=43
+                    )
+    simres
+
+    expect_true("NMREP"%in%colnames(simres))
+    expect_true(all(simres[,unique(NMREP)]==c(1,2,3)))
+   
+})
+
+## vpc with subproblems - no table.vars - NMREP in output
+test_that("vpc with subproblems - NMREP in output",{
+    
+    file.mod <- "testData/nonmem/xgxr022.mod"
+
+    ## with table.vars
+    simres <- NMsim(file.mod,
+                    ## data=dt.sim,
+                    ## table.vars=cc(PRED,IPRED),
+                    name.sim="subprob_vpc2",
+                    subproblems=3,
+                    path.nonmem=path.nonmem,
+                    seed.nm=43
+                    )
+    simres
+
+    expect_true("NMREP"%in%colnames(simres))
+    expect_true(all(simres[,unique(NMREP)]==c(1,2,3)))
+   
+})
+
+
+test_that("PRED model basic",{
+
+    fileRef <- "testReference/NMsim_19.rds"    
+    file.mod <- "../../tests/testthat/testData/nonmem/pred030.mod"
+
+    dt.sim.pred <- data.table(X=1:4,ID=1)
+    
+    ## with table.vars
+    simres <- NMsim(file.mod,
+                    data=dt.sim.pred,
+                    ## table.vars=cc(PRED,IPRED),
+                    name.sim="pred1",
+                    ## subproblems=3,
+                    path.nonmem=path.nonmem,
+                    seed.nm=43
+                    )
+    
+    expect_equal_to_reference(simres,fileRef)
+
+   
+})
+
+test_that("PRED model with subproblems",{
+
+    fileRef <- "testReference/NMsim_20.rds"
+    file.mod <- "../../tests/testthat/testData/nonmem/pred030.mod"
+
+    dt.sim.pred <- data.table(X=1:4,ID=1)
+    
+    ## with table.vars
+    simres <- NMsim(file.mod,
+                    data=dt.sim.pred,
+                    ## table.vars=cc(PRED,IPRED),
+                    name.sim="pred1_subprob",
+                    subproblems=2,
+                    path.nonmem=path.nonmem,
+                    seed.nm=43
+                    )
+    ## NMREP present
+    simres    
+    expect_equal_to_reference(simres,fileRef)
+
+   
+})
+
+
+test_that("PRED model with subproblems table.vars",{
+
+    fileRef <- "testReference/NMsim_21.rds"
+    file.mod <- "../../tests/testthat/testData/nonmem/pred030.mod"
+
+    dt.sim.pred <- data.table(X=1:4,ID=1)
+    
+    ## with table.vars
+    simres <- NMsim(file.mod,
+                    data=dt.sim.pred,
+                    table.vars=cc(PRED),
+                    name.sim="pred1_subprob_tabvars",
+                    subproblems=2,
+                    path.nonmem=path.nonmem,
+                    seed.nm=43
+                    )
+    simres
+    expect_equal_to_reference(simres,fileRef)
+  
+})
+
