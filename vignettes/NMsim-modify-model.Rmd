@@ -14,7 +14,6 @@ author:
         editor_options:
           chunk_output_type: inline
           code_folding: show
-          bibliography: [packages.bib]
           pkgdown:
             as_is: true
 ---
@@ -160,9 +159,6 @@ set.seed(11112024)
 reuse.results <- TRUE
 ```
 
-```{r, bibs,include=FALSE,eval=FALSE}
-knitr::write_bib(c('rmarkdown','data.table','NMdata','NMsim','xgxr'), 'intro-packages.bib')
-```
 
 <!-- <img src="../reference/figures/NMsimlogo.png" alt="Logo" style="width:200px; float:right;"> -->
 

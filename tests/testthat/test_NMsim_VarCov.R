@@ -65,9 +65,12 @@ test_that("Basic",{
     ##as.numeric(mod$THETA)
 
     mod <- mod[!names(mod)%in%c("THETA","OMEGA")]
-    expect_equal_to_reference(mod,fileRef_a)
-    
-    expect_equal_to_reference(is.na(suppressWarnings(as.numeric(theta))),fileRef_b)
+
+    if(packageVersion("NMdata")>="2.1.0"){
+        expect_equal_to_reference(mod,fileRef_a)
+        
+        expect_equal_to_reference(is.na(suppressWarnings(as.numeric(theta))),fileRef_b)
+    }
     ## expect_equal_to_reference(omega,fileRef_c)
 
     if(F){

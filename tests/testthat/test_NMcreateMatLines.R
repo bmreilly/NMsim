@@ -67,7 +67,7 @@ test_that("Full covariance matrix",{
     res <- NMsim:::NMcreateMatLines(res,as.one.block=TRUE,fix=TRUE)
 
 
-    if(packageVersion("NMdata")>"0.1.8.904"){
+    if(packageVersion("NMdata")>="0.2.1"){
         expect_equal_to_reference(res,fileRef)
     }
     

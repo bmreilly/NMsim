@@ -15,7 +15,6 @@ output:
       editor_options:
         chunk_output_type: inline
       code_folding: show
-bibliography: [packages.bib]
 pkgdown:
   as_is: true
 ---
@@ -182,10 +181,6 @@ options(ggplot2.discrete.fill=c("orange","blue","darkgreen"))
 set.seed(11112024)
 
 reuse.results <- TRUE
-```
-
-```{r, bibs,include=FALSE,eval=FALSE}
-knitr::write_bib(c('rmarkdown','data.table','NMdata','NMsim','xgxr'), 'intro-packages.bib')
 ```
 
 
