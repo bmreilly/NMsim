@@ -57,13 +57,8 @@ classify_matches <- function(matches,patterns) {
         ## if (grepl("^BLOCK\\(\\d+\\)$",match)) {
         if (grepl(use.pattern("block"),match)) {
             ## Extract the number from BLOCK(N)
-            
-            ## number <- as.numeric(str_match(match, "BLOCK\\((\\d+)\\)")[1, 2])
             if(grepl("\\( *(\\d+) *\\)",match)){
-                number <- ## as.numeric(
-                    ## stri_match_all_regex(match, "BLOCK\\s*\\( *(\\d+) *\\)")[[1]][1, 2]
-                    regmatches(match, regexec("BLOCK\\s*\\( *(\\d+) *\\)",match))[[1]][2]
-                ##)
+                number <- regmatches(match, regexec("BLOCK\\s*\\( *(\\d+) *\\)",match))[[1]][2]
             } else {
                 number <- "1"
             }
@@ -232,6 +227,10 @@ count_ij <- function(res){
 ##' @keywords internal
 NMreadInits <- function(file,lines,section,return="pars",as.fun) {
 
+    getLines <- NMdata:::getLines
+    NMdataDecideOption <- NMdata:::NMdataDecideOption
+    cleanSpaces <- NMdata:::cleanSpaces
+
     . <- NULL
     blocksize <- NULL
     does.count <- NULL
@@ -261,10 +260,10 @@ NMreadInits <- function(file,lines,section,return="pars",as.fun) {
     return <- match.arg(return,choices=c("pars","all"))
 
     if(missing(as.fun)) as.fun <- NULL
-    as.fun <- NMdata:::NMdataDecideOption("as.fun",as.fun)
+    as.fun <- NMdataDecideOption("as.fun",as.fun)
 
     section <- sub("\\$","",section)
-    section <- NMdata:::cleanSpaces(section)
+    section <- cleanSpaces(section)
     section <- toupper(section)
     
     ## if(length(section)>1) stop("Only one section can be handled at a time.")
@@ -276,22 +275,23 @@ NMreadInits <- function(file,lines,section,return="pars",as.fun) {
     if(missing(lines)) lines <- NULL
     if(missing(file)) file <- NULL
 ### this is assuming there is only one file, or that lines contains only one control stream.
-    lines <- NMdata:::getLines(file=file,lines=lines)
+    lines <- getLines(file=file,lines=lines)
     
     section <- unique(section)
     if(!all(section%in%c("THETA","OMEGA","SIGMA"))) stop("section cannot be other than THETA, OMEGA and SIGMA.")
 
 
-#### these are the patterns used to identfy the different types of elements in parameter sections. It would be better to dfine them inside NMreadInits() and pass them to classify_matches.
-patterns <- 
-    c("block"="BLOCK\\s*(?:\\s*\\(\\d+\\s*\\))?",  # BLOCK(N)
-      "ll.init.ul"="\\(\\s*-?(?:\\d+(\\.\\d+)?|(?:\\d+)?\\.\\d+)([eE][+-]?\\d+)?\\s*,\\s*-?-?(?:\\d+(\\.\\d+)?|(?:\\d+)?\\.\\d+)([eE][+-]?\\d+)?\\s*,\\s*-?-?(?:\\d+(\\.\\d+)?|(?:\\d+)?\\.\\d+)([eE][+-]?\\d+)?\\s*\\)", # (ll,init,ul)
-      "ll.init"="\\(\\s*-?-?(?:\\d+(\\.\\d+)?|(?:\\d+)?\\.\\d+)([eE][+-]?\\d+)?\\s*,\\s*-?-?(?:\\d+(\\.\\d+)?|(?:\\d+)?\\.\\d+)([eE][+-]?\\d+)?\\s*\\)", # (ll,init)
-      "(init)"="\\(\\s*-?(?:\\d+(\\.\\d+)?|(?:\\d+)?\\.\\d+)([eE][+-]?\\d+)?\\s*\\)",  # (init)
-      "init" = "(?<!\\d)-?(\\d+\\.\\d+|\\d+\\.|\\.\\d+|\\d+)([eE][+-]?\\d+)?(?!\\.)",
-      "fix"="\\bFIX(ED)?\\b",  # FIX(ED)
-      "same"="SAME"
-      )
+#### these are the patterns used to identfy the different types of elements in parameter sections. passed to classify_matches.
+    patterns <- 
+        c("block"="BLOCK\\s*(?:\\s*\\(\\d+\\s*\\))?",  # BLOCK(N)
+          ## "ll.init.ul"="\\(\\s*-?(?:\\d+(\\.\\d+)?|(?:\\d+)?\\.\\d+)([eE][+-]?\\d+)?\\s*,\\s*-?-?(?:\\d+(\\.\\d+)?|(?:\\d+)?\\.\\d+)([eE][+-]?\\d+)?\\s*,\\s*-?-?(?:\\d+(\\.\\d+)?|(?:\\d+)?\\.\\d+)([eE][+-]?\\d+)?\\s*\\)", # (ll,init,ul)
+          "ll.init.ul"="\\( *(\\s*-?(?:\\d+(\\.\\d+)?|(?:\\d+)?\\.\\d+)([eE][+-]?\\d+)?\\s*)*,\\s*-?-?(?:\\d+(\\.\\d+)?|(?:\\d+)?\\.\\d+)([eE][+-]?\\d+)?\\s*,( *\\s*-?-?(?:\\d+(\\.\\d+)?|(?:\\d+)?\\.\\d+)([eE][+-]?\\d+)?\\s*)*\\)", # (ll,init,ul)
+          "ll.init"="\\( *(\\s*-?-?(?:\\d+(\\.\\d+)?|(?:\\d+)?\\.\\d+)([eE][+-]?\\d+)?\\s*)*,\\s*-?-?(?:\\d+(\\.\\d+)?|(?:\\d+)?\\.\\d+)([eE][+-]?\\d+)?\\s*\\)", # (ll,init)
+          "(init)"="\\(\\s*-?(?:\\d+(\\.\\d+)?|(?:\\d+)?\\.\\d+)([eE][+-]?\\d+)?\\s*\\)",  # (init)
+          "init" = "(?<!\\d)-?(\\d+\\.\\d+|\\d+\\.|\\.\\d+|\\d+)([eE][+-]?\\d+)?(?!\\.)",
+          "fix"="\\bFIX(ED)?\\b",  # FIX(ED)
+          "same"="SAME"
+          )
 
     
     dt.lines <- rbindlist(
@@ -302,30 +302,20 @@ patterns <-
                ,linenum:=.I][
                ,par.type:=sec]
             dt.l
-                        })
-,fill=TRUE
+        })
+       ,fill=TRUE
     )
     
     
     pattern <- paste(patterns,collapse="|")
 
-    
-    
-### dt.lines <- data.table(linenum=1:length(lines),text=lines)
-
     ## Preprocess to remove comments (everything after ";")
-    ## dt.lines[,text.after:=sub("^[^;]*;","",text)]
-    ## dt.lines[grepl(";", text),text.after:= gsub(";.*", "", text)]
     dt.lines[grepl(";", text),text.after:=sub("^[^;]*;","",text)]
-    ## dt.lines[is.na(text.after),text.after:=""]
-    
-    ## dt.lines[,text.before:=sub(paste0("(.*?)\\b(",patterns()[1],")\\b.*"),"\\1",text)]
-    ## dt.lines[,text.before:=sub(paste0("(.*?)\\b(",pattern,")\\b.*"),"\\1",text)]
     dt.lines[grepl(pattern,text,perl=TRUE),text.before:=sub(paste0("(.*?)(?:",pattern,").*"),"\\1",text,perl=TRUE)]
     ## dt.lines[is.na(text.before),text.before:=""]
 
     dt.lines[,text.clean:=gsub( " *;.*", "",text)]
-    dt.lines[,text.clean:=NMdata:::cleanSpaces(text.clean)]
+    dt.lines[,text.clean:=cleanSpaces(text.clean)]
     ## If inside parentheses, move FIX(ED) to after parentheses
     dt.lines[,text.clean:=gsub(
                   pattern = "\\(\\s*(-?\\d+(\\.\\d+)?(?:[eE][+-]?\\d+)?)\\s+FIX(?:ED)?\\s*\\)",
@@ -334,13 +324,10 @@ patterns <-
                   x=text.clean)]
 
     getMatches <- function(dt.lines){
+        ## Function to classify matches and insert NA where applicable
         text.clean <- NULL
         matches <- regmatches(dt.lines[,text.clean],gregexpr(pattern,dt.lines[,text.clean],perl=TRUE))
         
-        ## Function to classify matches and insert NA where applicable
-
-
-
         matches.list <- lapply(seq_along(matches),function(I){
             match <- matches[[I]]
             if(length(match)==0) return(NULL)
@@ -348,7 +335,7 @@ patterns <-
         })
         dt.match <- rbindlist(matches.list)
 
-        ## elemnum counts the fidings. It is an arbitrary counter because it groups (ll,init,ul) together but not FIX. It really can't be used for anything beyond this function so should not be exported.
+        ## elemnum counts the findings. It is an arbitrary counter because it groups (ll,init,ul) together but not FIX. It really can't be used for anything beyond this function so should not be exported.
         dt.match[,elemnum:=.I]
         dt.match
     }
@@ -373,7 +360,12 @@ patterns <-
                 this.parnum <- this.parnum + 1
             }
             res[r,parnum:=this.parnum]
-            prev.type <- this.type
+            if(this.type!="FIX") {
+                ## if this type is FIX the type relevant for
+                ## classification hasn't changed from block, lower,
+                ## etc.
+                prev.type <- this.type
+            }
         }
         
 
@@ -397,7 +389,6 @@ patterns <-
     })
 
     res <- rbindlist(res.list)
-    ## res <- NMdata:::addParameter(res)
     res <- addParameter(res)
     
     pars <- initsToExt(res)
