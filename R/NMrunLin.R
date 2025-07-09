@@ -10,7 +10,7 @@ NMrunLin <- function(fn.mod,dir.mod.abs,exts.cp,meta.tables,path.nonmem,clean,sg
 
     name <- NULL
     fn.lst <- fnExtension( fn.mod,".lst")
-    line.run <- sprintf("%s %s %s",path.nonmem,fn.mod,fn.lst)
+    line.run <- sprintf("%s %s %s  -maxlim=2",path.nonmem,fn.mod,fn.lst)
 
     if(sge){
         ## executing from model execution dir.
@@ -20,7 +20,7 @@ NMrunLin <- function(fn.mod,dir.mod.abs,exts.cp,meta.tables,path.nonmem,clean,sg
         if(grepl("^[0-9]",jobname)) {
             jobname <- paste0("NM",jobname)
         }
-        line.run <- sprintf('qsub -terse %s -V -e \"%s\" -o \"%s\" -N \"%s\" -j y -cwd -b y \"%s\" -background -maxlim=2'
+        line.run <- sprintf('qsub -terse %s -V -e \"%s\" -o \"%s\" -N \"%s\" -j y -cwd -b y \"%s\" -background'
                            ,ifelse(nc>1,paste("-pe orte",nc),"")
                            ,"NMexec.err"
                            ,"NMexec.out"
