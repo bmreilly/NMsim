@@ -1528,6 +1528,8 @@ test_that("PRED model basic",{
                     path.nonmem=path.nonmem,
                     seed.nm=43
                     )
+
+    fix.time(simres)
     
     expect_equal_to_reference(simres,fileRef)
 
@@ -1550,6 +1552,8 @@ test_that("PRED model with subproblems",{
                     path.nonmem=path.nonmem,
                     seed.nm=43
                     )
+    fix.time(simres)
+    
     ## NMREP present
     simres    
     expect_equal_to_reference(simres,fileRef)
@@ -1574,7 +1578,8 @@ test_that("PRED model with subproblems table.vars",{
                     path.nonmem=path.nonmem,
                     seed.nm=43
                     )
-    simres
+
+    fix.time(simres)
     expect_equal_to_reference(simres,fileRef)
   
 })
