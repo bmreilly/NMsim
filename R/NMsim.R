@@ -135,16 +135,16 @@
 ##'     set. The advantages of this method are that it keeps comments
 ##'     in the control stream and that it is a method known to many.
 ##'
-##' \item{`method="nmsim.deprec"`} Uses a simple internal method to
+##' \item{`method="simple"`} Uses a simple internal method to
 ##'  update the parameter values based on the ext file.  The
 ##'  advantages are it does not require PSN, and that it does not rely
 ##'  on code-interpretation for generation of simulation control
-##'  streams. "nmsim.deprec" fixes the whole OMEGA and SIGMA matrices
+##'  streams. "simple" fixes the whole OMEGA and SIGMA matrices
 ##'  as single blocks which is robust because it avoids any
 ##'  interpretation of BLOCK structure or other code in the control
 ##'  streams. The downside is it strips all comments, and generally
 ##'  makes the $OMEGA and $SIGMA sections of the simulation control
-##'  streams less easy to read. "nmsim.deprec" can be used as a
+##'  streams less easy to read. "simple" can be used as a
 ##'  fallback in case of any issues with `method="nmsim"`.
 ##'
 ##' \item{`method="none"`} Do nothing. This is useful if the model to simulate

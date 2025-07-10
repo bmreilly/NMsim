@@ -177,6 +177,8 @@ test_that("basic - sge - dont wait",{
                     dir.sims="testOutput",
                     name.sim="default_01"
                    ,sge=TRUE
+
+                    ,path.nonmem=path.nonmem
                     ##,reuse.results=TRUE
                     ## ,file.res=simtab
                     )

@@ -4,6 +4,8 @@
 ##'     FALSE and more than one model is being simulated. The progress
 ##'     tracking is based on the number of models completed, not the
 ##'     status of the individual models.
+##' @import data.table
+##' @importFrom xfun relative_path
 ##' @keywords internal
 
 NMreadSimModTab <- function(x,check.time=FALSE,dir.sims,wait=FALSE,skip.missing=FALSE,quiet=FALSE,progress,read.fst=NULL,fast.tables=NULL,carry.out=NULL,as.fun){
