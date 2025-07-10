@@ -61,6 +61,7 @@ NMwriteInitsOne <- function(lines,inits.w,inits.orig,pars.l){
     if(!"elemnum_BLOCK"%in%colnames(inits.w)){
         inits.w[,elemnum_BLOCK:=NA]
     }
+    
     inits.w[,string.elem:=paste.ll.init.ul(value.elem_lower,value.elem_init,value.elem_upper,value.elem_FIX,value.elem_BLOCK),by=row]
     inits.w[,elemnum:=min(elemnum_lower,elemnum_init,elemnum_upper,elemnum_BLOCK,na.rm=TRUE),by=row]
 

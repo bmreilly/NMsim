@@ -328,6 +328,8 @@ test_that("inits - modify parameter",{
     
     file.mod <- "testData/nonmem/xgxr032.mod"
 
+    options(warn=2)
+    
     sim1 <- NMsim(file.mod=file.mod,
                   data=dat.sim,
                   dir.sim="testOutput",
