@@ -20,6 +20,16 @@
 <meta name="google-site-verification" content="1z2VLiQgr7hTGMX0G9VbQ3MzwU_Q9WWRLpdXynhsg30">
 </head>
 <body>
+<p>
+
+
+
+
+  pkgdown/in-header.html
+
+  
+
+  </p>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -27,7 +37,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3.913</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3.919</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,10 +67,8 @@
 
 
 
-<link href="NMsim-modify-model_files/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
-<script src="NMsim-modify-model_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="NMsim-modify-model_files/highlight-8.9.1/highlight.min.js"></script><script src="NMsim-modify-model_files/difflib-1/difflib.js"></script><link href="NMsim-modify-model_files/codediff-1/codediff.css" rel="stylesheet">
-<link href="NMsim-modify-model_files/codediff-1/googlecode.css" rel="stylesheet">
-<script src="NMsim-modify-model_files/codediff-1/codediff.js"></script><script src="NMsim-modify-model_files/diffr-binding-0.3.0/diffr.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Simulation with Modifications to Parameters and Model Code</h1>
                         <h4 data-toc-skip class="author">Simone Cassani,
@@ -274,10 +282,34 @@ start.</p>
 <code class="sourceCode R"><span><span class="va">simres</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,</span>
 <span>                data<span class="op">=</span><span class="va">data.sim</span>,</span>
 <span>                name.sim<span class="op">=</span><span class="st">"basic-sim"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">diffr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/diffr/man/diffr.html" class="external-link">diffr</a></span><span class="op">(</span><span class="va">file.mod</span>,<span class="fu"><a href="../reference/modTab.html">modTab</a></span><span class="op">(</span><span class="va">simres</span><span class="op">)</span><span class="op">$</span><span class="va">path.sim</span><span class="op">)</span></span></code></pre></div>
-<div class="diffr html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:100%;height:355.2px;"></div>
-<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"message":["function (..., domain = NULL, appendLF = TRUE) ","{","    cond <- if (...length() == 1L && inherits(..1, \"condition\")) {","        if (nargs() > 1L) ","            warning(\"additional arguments ignored in message()\")","        ..1","    }","    else {","        msg <- .makeMessage(..., domain = domain, appendLF = appendLF)","        call <- sys.call()","        simpleMessage(msg, call)","    }","    defaultHandler <- function(c) {","        cat(conditionMessage(c), file = stderr(), sep = \"\")","    }","    withRestarts({","        signalCondition(cond)","        defaultHandler(cond)","    }, muffleMessage = function() NULL)","    invisible()","}"],"contextSize":3,"minJumpSize":10,"wordWrap":true,"file1":"/home/runner/work/_temp/Library/NMsim/examples/nonmem/xgxr021.mod","file2":"simtmp-modify/xgxr021_basicsim/xgxr021_basicsim.mod","f1":"$PROBLEM    018 with 2 comp\n\n$INPUT ROW ID NOMTIME TIME EVID CMT AMT DV FLAG STUDY\nBLQ CYCLE DOSE PART PROFDAY PROFTIME WEIGHTB eff0\n\n$DATA     ../data/xgxr2.csv IGNORE=@ IGNORE=(FLAG.NE.0) IGNORE(DOSE.LT.30)\n\n$SUBROUTINE ADVAN4 TRANS4\n\n$PK\nTVKA=THETA(1)\nTVV2=THETA(2)\nTVCL=THETA(3)\nTVV3=THETA(4)\nTVQ=THETA(5)\n                   \nKA=TVKA*EXP(ETA(1))\nV2=TVV2*EXP(ETA(2))\nCL=TVCL*EXP(ETA(3))\nV3=TVV3*EXP(ETA(4))\nQ=TVQ*EXP(ETA(5))\nS2=V2\n\n$ERROR\n  IPRED=F\n  IRES=DV-IPRED\n\n  IF (IPRED.GT.1) THEN\n    W = SQRT(IPRED**2*SIGMA(1,1) + SIGMA(2,2))\n  ELSE\n    W=1\n  ENDIF\n\n  IWRES=IRES/W\n  Y=F+F*ERR(1)+ERR(2)\n\n;-----------------------INITIAL ESTIMATES---------------------------------\n$THETA  (0,1)             ; POPKA\n$THETA  (0,100)             ; POPV2\n$THETA  (0,3)             ; POPCL\n$THETA  (0,50)             ; POPV3\n$THETA  (0,.5)             ; TVQ\n\n$OMEGA 0 FIX  ; BSV KA\n$OMEGA 0.1   ; BSV V2\n$OMEGA 0.1  ; BSV CL\n$OMEGA 0 FIX ; BSV V3\n$OMEGA 0 FIX  ; BSV Q\n\n$SIGMA 0.1  ; Prop Err\n$SIGMA 0 FIX ; Add Err\n\n$ESTIMATION METHOD=1 POSTHOC INTER MAXEVAL=9999 NSIG=2 SIGL=9\n            PRINT=10 NOABORT MSFO=xgxr021.msf\n\n$COV \n\n$TABLE TVKA TVV2 TVV3 TVCL KA V2 V3 CL Q PRED IPRED Y NOPRINT FILE=xgxr021_res.txt","f2":"$PROBLEM    018 with 2 comp\n\n$INPUT NMROW ID TIME EVID CMT AMT II ADDL DV MDV\n\n$DATA NMsimData_xgxr021_basicsim.csv\nIGN=@\n\n$SUBROUTINE ADVAN4 TRANS4\n\n$PK\nTVKA=THETA(1)\nTVV2=THETA(2)\nTVCL=THETA(3)\nTVV3=THETA(4)\nTVQ=THETA(5)\n                   \nKA=TVKA*EXP(ETA(1))\nV2=TVV2*EXP(ETA(2))\nCL=TVCL*EXP(ETA(3))\nV3=TVV3*EXP(ETA(4))\nQ=TVQ*EXP(ETA(5))\nS2=V2\n\n$ERROR\n  IPRED=F\n  IRES=DV-IPRED\n\n  IF (IPRED.GT.1) THEN\n    W = SQRT(IPRED**2*SIGMA(1,1) + SIGMA(2,2))\n  ELSE\n    W=1\n  ENDIF\n\n  IWRES=IRES/W\n  Y=F+F*ERR(1)+ERR(2)\n\n;-----------------------INITIAL ESTIMATES---------------------------------\n$THETA (0,2.16656)  ; POPKA\n$THETA (0,75.7289)  ; POPV2\n$THETA (0,13.9777)  ; POPCL\n$THETA (0,150.06)   ; POPV3\n$THETA (0,8.48651)  ; TVQ\n\n\n$OMEGA 0 FIX     ; BSV KA\n$OMEGA 0.178666  ; BSV V2\n$OMEGA 0.249779  ; BSV CL\n$OMEGA 0 FIX     ; BSV V3\n$OMEGA 0 FIX     ; BSV Q\n\n\n$SIGMA 0.0822435  ; Prop Err\n$SIGMA 0 FIX      ; Add Err\n\n\n\n\n\n\n$SIMULATION ONLYSIM (1629095608) \n\n$TABLE NMROW TVKA TVV2 TVV3 TVCL KA V2 V3 CL Q PRED IPRED Y NOPRINT FILE=xgxr021_basicsim.tab\n"},"evals":[],"jsHooks":[]}</script><p>Now, adding some custom values</p>
+<p>The following compares the <code>$THETA</code>, <code>$OMEGA</code>,
+and <code>$SIGMA</code> sections of the estimated and the simulated
+control streams side-by-side. The values have been updated in the
+simulation control stream based on the <code>.ext</code> file (compare
+to “init” and “est” columns in table above).</p>
+<pre><code><span><span class="co">##     file.mod$THETA                        | simulation$THETA                 </span></span>
+<span><span class="co">## [1] <span style="color: #00BB00;">"$THETA  (0,1)             ; POPKA"</span>   - <span style="color: #00BB00;">"$THETA (0,2.16656)  ; POPKA"</span> [1]</span></span>
+<span><span class="co">## [2] <span style="color: #00BB00;">"$THETA  (0,100)             ; POPV2"</span> - <span style="color: #00BB00;">"$THETA (0,75.7289)  ; POPV2"</span> [2]</span></span>
+<span><span class="co">## [3] <span style="color: #00BB00;">"$THETA  (0,3)             ; POPCL"</span>   - <span style="color: #00BB00;">"$THETA (0,13.9777)  ; POPCL"</span> [3]</span></span>
+<span><span class="co">## [4] <span style="color: #00BB00;">"$THETA  (0,50)             ; POPV3"</span>  - <span style="color: #00BB00;">"$THETA (0,150.06)   ; POPV3"</span> [4]</span></span>
+<span><span class="co">## [5] <span style="color: #00BB00;">"$THETA  (0,.5)             ; TVQ"</span>    - <span style="color: #00BB00;">"$THETA (0,8.48651)  ; TVQ"</span>   [5]</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     file.mod$OMEGA           | simulation$OMEGA               </span></span>
+<span><span class="co">## [1] <span style="color: #00BB00;">"$OMEGA 0 FIX  ; BSV KA"</span> - <span style="color: #00BB00;">"$OMEGA 0 FIX     ; BSV KA"</span> [1]</span></span>
+<span><span class="co">## [2] <span style="color: #00BB00;">"$OMEGA 0.1   ; BSV V2"</span>  - <span style="color: #00BB00;">"$OMEGA 0.178666  ; BSV V2"</span> [2]</span></span>
+<span><span class="co">## [3] <span style="color: #00BB00;">"$OMEGA 0.1  ; BSV CL"</span>   - <span style="color: #00BB00;">"$OMEGA 0.249779  ; BSV CL"</span> [3]</span></span>
+<span><span class="co">## [4] <span style="color: #00BB00;">"$OMEGA 0 FIX ; BSV V3"</span>  - <span style="color: #00BB00;">"$OMEGA 0 FIX     ; BSV V3"</span> [4]</span></span>
+<span><span class="co">## [5] <span style="color: #00BB00;">"$OMEGA 0 FIX  ; BSV Q"</span>  - <span style="color: #00BB00;">"$OMEGA 0 FIX     ; BSV Q"</span>  [5]</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## `file.mod$SIGMA`:   <span style="color: #00BB00;">"$SIGMA 0.1  ; Prop Err"</span>       <span style="color: #00BB00;">"$SIGMA 0 FIX ; Add Err"</span>     </span></span>
+<span><span class="co">## `simulation$SIGMA`: <span style="color: #00BB00;">"$SIGMA 0.0822435  ; Prop Err"</span> <span style="color: #00BB00;">"$SIGMA 0 FIX      ; Add Err"</span></span></span></code></pre>
+<p>To simulate the model without updating the parameters based on final
+model estimates, use <code>inits=list(method="none")</code>.</p>
+<p>We may want to customly specify individual parameter values. Let’s
+now do rerun the simulation adding some custom values for
+<code>THETA(1)</code> and <code>OMEGA(3,3)</code>. Since we are not
+using <code>inits=list(method="none")</code> all other parameter values
+are updated with final estimates.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simres.inits1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/NMsim.html">NMsim</a></span><span class="op">(</span>file.mod<span class="op">=</span><span class="va">file.mod</span>,</span>
 <span>                       data<span class="op">=</span><span class="va">data.sim</span>,</span>
@@ -285,10 +317,22 @@ start.</p>
 <span>                                 ,<span class="st">"omega(3,3)"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>init<span class="op">=</span><span class="fl">.5</span><span class="op">)</span></span>
 <span>                                  <span class="op">)</span>,</span>
 <span>                       name.sim<span class="op">=</span><span class="st">"inits1"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">diffr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/diffr/man/diffr.html" class="external-link">diffr</a></span><span class="op">(</span><span class="va">file.mod</span>,<span class="fu"><a href="../reference/modTab.html">modTab</a></span><span class="op">(</span><span class="va">simres.inits1</span><span class="op">)</span><span class="op">$</span><span class="va">path.sim</span><span class="op">)</span></span></code></pre></div>
-<div class="diffr html-widget html-fill-item" id="htmlwidget-e5c8c404fe174e4c81bd" style="width:100%;height:355.2px;"></div>
-<script type="application/json" data-for="htmlwidget-e5c8c404fe174e4c81bd">{"x":{"message":["function (..., domain = NULL, appendLF = TRUE) ","{","    cond <- if (...length() == 1L && inherits(..1, \"condition\")) {","        if (nargs() > 1L) ","            warning(\"additional arguments ignored in message()\")","        ..1","    }","    else {","        msg <- .makeMessage(..., domain = domain, appendLF = appendLF)","        call <- sys.call()","        simpleMessage(msg, call)","    }","    defaultHandler <- function(c) {","        cat(conditionMessage(c), file = stderr(), sep = \"\")","    }","    withRestarts({","        signalCondition(cond)","        defaultHandler(cond)","    }, muffleMessage = function() NULL)","    invisible()","}"],"contextSize":3,"minJumpSize":10,"wordWrap":true,"file1":"/home/runner/work/_temp/Library/NMsim/examples/nonmem/xgxr021.mod","file2":"simtmp-modify/xgxr021_inits1/xgxr021_inits1.mod","f1":"$PROBLEM    018 with 2 comp\n\n$INPUT ROW ID NOMTIME TIME EVID CMT AMT DV FLAG STUDY\nBLQ CYCLE DOSE PART PROFDAY PROFTIME WEIGHTB eff0\n\n$DATA     ../data/xgxr2.csv IGNORE=@ IGNORE=(FLAG.NE.0) IGNORE(DOSE.LT.30)\n\n$SUBROUTINE ADVAN4 TRANS4\n\n$PK\nTVKA=THETA(1)\nTVV2=THETA(2)\nTVCL=THETA(3)\nTVV3=THETA(4)\nTVQ=THETA(5)\n                   \nKA=TVKA*EXP(ETA(1))\nV2=TVV2*EXP(ETA(2))\nCL=TVCL*EXP(ETA(3))\nV3=TVV3*EXP(ETA(4))\nQ=TVQ*EXP(ETA(5))\nS2=V2\n\n$ERROR\n  IPRED=F\n  IRES=DV-IPRED\n\n  IF (IPRED.GT.1) THEN\n    W = SQRT(IPRED**2*SIGMA(1,1) + SIGMA(2,2))\n  ELSE\n    W=1\n  ENDIF\n\n  IWRES=IRES/W\n  Y=F+F*ERR(1)+ERR(2)\n\n;-----------------------INITIAL ESTIMATES---------------------------------\n$THETA  (0,1)             ; POPKA\n$THETA  (0,100)             ; POPV2\n$THETA  (0,3)             ; POPCL\n$THETA  (0,50)             ; POPV3\n$THETA  (0,.5)             ; TVQ\n\n$OMEGA 0 FIX  ; BSV KA\n$OMEGA 0.1   ; BSV V2\n$OMEGA 0.1  ; BSV CL\n$OMEGA 0 FIX ; BSV V3\n$OMEGA 0 FIX  ; BSV Q\n\n$SIGMA 0.1  ; Prop Err\n$SIGMA 0 FIX ; Add Err\n\n$ESTIMATION METHOD=1 POSTHOC INTER MAXEVAL=9999 NSIG=2 SIGL=9\n            PRINT=10 NOABORT MSFO=xgxr021.msf\n\n$COV \n\n$TABLE TVKA TVV2 TVV3 TVCL KA V2 V3 CL Q PRED IPRED Y NOPRINT FILE=xgxr021_res.txt","f2":"$PROBLEM    018 with 2 comp\n\n$INPUT NMROW ID TIME EVID CMT AMT II ADDL DV MDV\n\n$DATA NMsimData_xgxr021_inits1.csv\nIGN=@\n\n$SUBROUTINE ADVAN4 TRANS4\n\n$PK\nTVKA=THETA(1)\nTVV2=THETA(2)\nTVCL=THETA(3)\nTVV3=THETA(4)\nTVQ=THETA(5)\n                   \nKA=TVKA*EXP(ETA(1))\nV2=TVV2*EXP(ETA(2))\nCL=TVCL*EXP(ETA(3))\nV3=TVV3*EXP(ETA(4))\nQ=TVQ*EXP(ETA(5))\nS2=V2\n\n$ERROR\n  IPRED=F\n  IRES=DV-IPRED\n\n  IF (IPRED.GT.1) THEN\n    W = SQRT(IPRED**2*SIGMA(1,1) + SIGMA(2,2))\n  ELSE\n    W=1\n  ENDIF\n\n  IWRES=IRES/W\n  Y=F+F*ERR(1)+ERR(2)\n\n;-----------------------INITIAL ESTIMATES---------------------------------\n$THETA (0,0.54)     ; POPKA\n$THETA (0,75.7289)  ; POPV2\n$THETA (0,13.9777)  ; POPCL\n$THETA (0,150.06)   ; POPV3\n$THETA (0,8.48651)  ; TVQ\n\n\n$OMEGA 0 FIX     ; BSV KA\n$OMEGA 0.178666  ; BSV V2\n$OMEGA 0.5       ; BSV CL\n$OMEGA 0 FIX     ; BSV V3\n$OMEGA 0 FIX     ; BSV Q\n\n\n$SIGMA 0.0822435  ; Prop Err\n$SIGMA 0 FIX      ; Add Err\n\n\n\n\n\n\n$SIMULATION ONLYSIM (1579623536) \n\n$TABLE NMROW TVKA TVV2 TVV3 TVCL KA V2 V3 CL Q PRED IPRED Y NOPRINT FILE=xgxr021_inits1.tab\n"},"evals":[],"jsHooks":[]}</script>
+<pre><code><span><span class="co">##     file.mod$THETA                        | simulation$THETA                 </span></span>
+<span><span class="co">## [1] <span style="color: #00BB00;">"$THETA  (0,1)             ; POPKA"</span>   - <span style="color: #00BB00;">"$THETA (0,0.54)     ; POPKA"</span> [1]</span></span>
+<span><span class="co">## [2] <span style="color: #00BB00;">"$THETA  (0,100)             ; POPV2"</span> - <span style="color: #00BB00;">"$THETA (0,75.7289)  ; POPV2"</span> [2]</span></span>
+<span><span class="co">## [3] <span style="color: #00BB00;">"$THETA  (0,3)             ; POPCL"</span>   - <span style="color: #00BB00;">"$THETA (0,13.9777)  ; POPCL"</span> [3]</span></span>
+<span><span class="co">## [4] <span style="color: #00BB00;">"$THETA  (0,50)             ; POPV3"</span>  - <span style="color: #00BB00;">"$THETA (0,150.06)   ; POPV3"</span> [4]</span></span>
+<span><span class="co">## [5] <span style="color: #00BB00;">"$THETA  (0,.5)             ; TVQ"</span>    - <span style="color: #00BB00;">"$THETA (0,8.48651)  ; TVQ"</span>   [5]</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     file.mod$OMEGA           | simulation$OMEGA               </span></span>
+<span><span class="co">## [1] <span style="color: #00BB00;">"$OMEGA 0 FIX  ; BSV KA"</span> - <span style="color: #00BB00;">"$OMEGA 0 FIX     ; BSV KA"</span> [1]</span></span>
+<span><span class="co">## [2] <span style="color: #00BB00;">"$OMEGA 0.1   ; BSV V2"</span>  - <span style="color: #00BB00;">"$OMEGA 0.178666  ; BSV V2"</span> [2]</span></span>
+<span><span class="co">## [3] <span style="color: #00BB00;">"$OMEGA 0.1  ; BSV CL"</span>   - <span style="color: #00BB00;">"$OMEGA 0.5       ; BSV CL"</span> [3]</span></span>
+<span><span class="co">## [4] <span style="color: #00BB00;">"$OMEGA 0 FIX ; BSV V3"</span>  - <span style="color: #00BB00;">"$OMEGA 0 FIX     ; BSV V3"</span> [4]</span></span>
+<span><span class="co">## [5] <span style="color: #00BB00;">"$OMEGA 0 FIX  ; BSV Q"</span>  - <span style="color: #00BB00;">"$OMEGA 0 FIX     ; BSV Q"</span>  [5]</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## `file.mod$SIGMA`:   <span style="color: #00BB00;">"$SIGMA 0.1  ; Prop Err"</span>       <span style="color: #00BB00;">"$SIGMA 0 FIX ; Add Err"</span>     </span></span>
+<span><span class="co">## `simulation$SIGMA`: <span style="color: #00BB00;">"$SIGMA 0.0822435  ; Prop Err"</span> <span style="color: #00BB00;">"$SIGMA 0 FIX      ; Add Err"</span></span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
