@@ -44,6 +44,8 @@ NMwriteInitsOne <- function(lines,inits.w,inits.orig,pars.l){
             dt[init=="SAME",res:=init]
             dt[init!="SAME",res:=paste0("(",paste(setdiff(c(lower,init,upper),NA),collapse=","),")",FIX),by=row]
             dt[init!="SAME"&is.na(lower)&is.na(upper),res:=paste0(init,FIX),by=row]
+        } else if (!is.na(FIX)) {
+            dt[,res:=FIX,by=row]
         }
         ##if(!is.na(BLOCK)) dt[,res:=sprintf("BLOCK(%s) %s",BLOCK,res)]
         dt$res
