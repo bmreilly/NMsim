@@ -332,8 +332,14 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
     ## pars.l[,j2:=fifelse(is.na(j),max(j[!is.na(j)]),j),by=.(par.type,i)]
     ## pars.l[,linenum:=uniquePresent(linenum),by=.(par.type,i2,j)]
     
-    pars.l[type.elem%in%c("init","lower","upper","FIX"),
-           linenum:=uniquePresent(linenum),by=.(par.type,i,j)]
+    ## pars.l[type.elem%in%c("init","lower","upper","FIX"),
+    ##        linenum:=uniquePresent(linenum),by=.(par.type,i,j)]
+    
+    pars.l[type.elem%in%c("init","lower","upper"),
+           linenum:=uniquePresent(linenum,req.n1=T),by=.(par.type,i,j)]
+    pars.l[type.elem%in%c("FIX"),
+           linenum:=uniquePresent(linenum,req.n1=T),by=.(par.type,i,j)]
+
     
     pars.l[,parnum:=uniquePresent(parnum),by=.(par.type,i,j)]
 ### redefining parnumline to be within line

@@ -1584,3 +1584,39 @@ test_that("PRED model with subproblems table.vars",{
   
 })
 
+
+test_that("BLOCK(2) FIX .1 .1 .1 rather than BLOCK(2) 0.1 FIX .1 .1",{
+    
+    fileRef <- "testReference/NMsim_22.rds"
+
+    file.mod <- "testData/nonmem/xgxr059.mod"
+    load_all(export_all=FALSE)
+
+    NMreadExt(file.mod,as.fun="data.table")[par.type=="OMEGA"&i%in%c(2,3)&j%in%c(2,3)]
+    
+    simres <- NMsim(file.mod,
+                    data=dt.sim,
+                    table.var="PRED IPRED Y ETAS(1:LAST)",
+                    name.sim="covetas_02",
+                    path.nonmem=path.nonmem,
+                    ## inits=list(method="none"),
+                    seed.R=43
+                    )
+
+    NMreadExt(file.mod)[par.type=="OMEGA" & i%in%c(2,3)&j%in%c(2,3)]
+    omega.sim <- NMreadSection("testOutput/simtmp/xgxr059_covetas_02/xgxr059_covetas_02.mod",section="OMEGA")
+    
+### a check that nonmem uses te right dist is unnecessary
+    ## cor(findCovs(simres,by="ID")[,.(ETA1,ETA2,ETA3,ETA4,ETA5)])
+    ## cov2cor(dt2mat(NMreadExt(file.mod)[par.type=="OMEGA"]))
+
+    expect_equal_to_reference(omega.sim,fileRef)
+
+    if(F){
+        ref <- readRDS(fileRef)
+        ref
+        omega.sim
+    }
+    
+
+})

@@ -319,6 +319,8 @@ NMexec <- function(files,file.pattern,dir,sge=TRUE,input.archive,
                 ##obj.exec$dir <- dirname(obj.exec$cmd)
 
                 if(NMsimConf$system.type=="linux"){
+                    ## a patch. ~ does not get expanded by system(). But maybe this should be handled earlier, not sure.
+                    obj.exec$dir.exec <- gsub("~", path.expand("~"), obj.exec$dir.exec, fixed = TRUE)
                     obj.exec$cmd <- sprintf("cd \"%s\"; \"./%s\"",obj.exec$dir.exec,basename(obj.exec$path.script))
                 }
                 if(NMsimConf$system.type=="windows"){
@@ -348,9 +350,9 @@ NMexec <- function(files,file.pattern,dir,sge=TRUE,input.archive,
                 
                 if(nmquiet) obj.exec$cmd <- paste(obj.exec$cmd, ">/dev/null 2>&1")
                 if(!wait) obj.exec$cmd <- paste(obj.exec$cmd,"&")
-                if(exists("dir.tmp") && !is.null(dir.tmp)) {          
-                    writeTextFile(string.cmd,file.path(dir.tmp,"NMexec_command.txt"))
-                }
+                ## if(exists("dir.tmp") && !is.null(dir.tmp)) {          
+                ##     writeTextFile(string.cmd,file.path(dir.tmp,"NMexec_command.txt"))
+                ## }
                 
                 procres <- system(obj.exec$cmd,ignore.stdout=nmquiet)
                 if(procres!=0) {##stop("Nonmem failed. Exiting.")
