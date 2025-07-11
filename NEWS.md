@@ -2,19 +2,31 @@
 
 ## New features
 
-* `NMsim()`'s support for control of initial values has been greatly
-  improved.
+* `NMsim()`'s support for handling and control of initial values (the
+  `inits` argument) has been greatly improved. In recent versions a
+  new method for reading, updating, and writing the parameter
+  definitions in control streams has been implemented. This allows for
+  modification of this information and for fixing/unfixing
+  parameters. The downside is it comes with some limitations to
+  control stream syntax. With 0.2.4 those limitations are getting
+  rare. The original much simpler method is still available and
+  provides a robust alternative for many simulation purposes and is
+  kept as a fallback workaround.
 
-* `NMwriteInits()` supports `ext` and `inits.tab` arguments. These
-  are interfaces to specifying parameter values greatly improves
-  flexibility for programming, and for specifying multiple new
-  parameter sets.
+* `NMsim()`'s `init` argument supports `ext` and `inits.tab`
+  formats. These interfaces to specifying parameter values greatly
+  improves flexibility for programming, and for specifying multiple
+  new parameter sets for series of model runs.
 
-* `NMreadSim()` gains the `skip.missing` argument
+* `NMreadSim()` gains the `skip.missing` argument. In case some model
+  runs fail or haven't finished, this allows `NMreadSim()` to read
+  whatever it can and skip the ones missing.
 
 ## Bugfixes
-* `NMREP` in PREDPP (`$PRED`) models and in VPC mode
-
+* `NMREP` is a data column that `NMsim()` automatically adds to count
+  subproblems when `subproblem` is used. This was not added when
+  simulating PREDPP (`$PRED`) models and when not providing a
+  simulaiton data set (VPC style).
 
 ## Other improvements
 * `NMaddSamples()` only inserts `MDV` column if `MDV` is already present
