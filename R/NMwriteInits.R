@@ -334,7 +334,11 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
     
     ## pars.l[type.elem%in%c("init","lower","upper","FIX"),
     ##        linenum:=uniquePresent(linenum),by=.(par.type,i,j)]
-    
+### if linenum is missing (new values not from control stream), put
+### them on same line as first elem related to that par (will break if
+### (lower, init,upper) spans multiple lines.
+    pars.l[type.elem%in%c("init","lower","upper","FIX"),linenum.min:=min(linenum,na.rm=TRUE),by=.(par.type,i,j)]
+    pars.l[type.elem%in%c("init","lower","upper","FIX")&is.na(linenum),linenum:=linenum.min]
     pars.l[type.elem%in%c("init","lower","upper"),
            linenum:=uniquePresent(linenum,req.n1=T),by=.(par.type,i,j)]
     pars.l[type.elem%in%c("FIX"),

@@ -177,6 +177,8 @@ test_that("basic - sge - dont wait",{
                     dir.sims="testOutput",
                     name.sim="default_01"
                    ,sge=TRUE
+
+                    ,path.nonmem=path.nonmem
                     ##,reuse.results=TRUE
                     ## ,file.res=simtab
                     )
@@ -1528,6 +1530,8 @@ test_that("PRED model basic",{
                     path.nonmem=path.nonmem,
                     seed.nm=43
                     )
+
+    fix.time(simres)
     
     expect_equal_to_reference(simres,fileRef)
 
@@ -1550,6 +1554,8 @@ test_that("PRED model with subproblems",{
                     path.nonmem=path.nonmem,
                     seed.nm=43
                     )
+    fix.time(simres)
+    
     ## NMREP present
     simres    
     expect_equal_to_reference(simres,fileRef)
@@ -1574,7 +1580,8 @@ test_that("PRED model with subproblems table.vars",{
                     path.nonmem=path.nonmem,
                     seed.nm=43
                     )
-    simres
+
+    fix.time(simres)
     expect_equal_to_reference(simres,fileRef)
   
 })

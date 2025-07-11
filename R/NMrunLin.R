@@ -48,6 +48,7 @@ NMrunLin <- function(fn.mod,dir.mod.abs,exts.cp,meta.tables,path.nonmem,clean,sg
         "#!/bin/bash"
        ,""
        ,line.run
+        ##,"echo \"job submitted\" > "        
        ,lines.wait
 ### copy output tables back
 ### this would be simpler. Needs testing.

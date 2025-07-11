@@ -1,18 +1,23 @@
 # NMsim 0.2.4
 
-* `NMREP` in `$PRED` models and in VPC mode
-
-* `skip.missing` argument
+## New features
 
 * `NMsim()`'s support for control of initial values has been greatly
   improved.
 
 * `NMwriteInits()` supports `ext` and `inits.tab` arguments. These
-  interfaces to specifying parameter values greatly improves
+  are interfaces to specifying parameter values greatly improves
   flexibility for programming, and for specifying multiple new
   parameter sets.
 
-* `NMaddSamples` only inserts `MDV` column if `MDV` is already present
+* `NMreadSim()` gains the `skip.missing` argument
+
+## Bugfixes
+* `NMREP` in PREDPP (`$PRED`) models and in VPC mode
+
+
+## Other improvements
+* `NMaddSamples()` only inserts `MDV` column if `MDV` is already present
   in `data`.
 
 * `NMexec()` uses the `-maxlim=2` option when executing Nonmem. This
