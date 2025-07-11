@@ -72,6 +72,7 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
     iblock <- NULL
     j <- NULL
     linenum <- NULL
+    linenum.min <- NULL
     model <- NULL
     modified <- NULL
     parameter <- NULL
@@ -328,12 +329,7 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
     
 ### this is identifying positions of elements that were not in existing model. I don't know that we can handle that at the moment.
 ######### Limitation: lower, init, and upper must be on same line
-    ## pars.l[,i2:=fifelse(is.na(linenum),max(i[!is.na(linenum)]),i),by=.(par.type,j)]
-    ## pars.l[,j2:=fifelse(is.na(j),max(j[!is.na(j)]),j),by=.(par.type,i)]
-    ## pars.l[,linenum:=uniquePresent(linenum),by=.(par.type,i2,j)]
-    
-    ## pars.l[type.elem%in%c("init","lower","upper","FIX"),
-    ##        linenum:=uniquePresent(linenum),by=.(par.type,i,j)]
+ 
 ### if linenum is missing (new values not from control stream), put
 ### them on same line as first elem related to that par (will break if
 ### (lower, init,upper) spans multiple lines.
