@@ -258,8 +258,10 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
         
         ext.new <- NMreadExt(file.ext,as.fun="data.table")
 
-        pars.l <- mergeCheck(pars.l,
-                             ext.new[,.(model,par.type,i,j,type.elem="init",
+        pars.l <- mergeCheck(
+            pars.l
+           ,
+            ext.new[,.(model,par.type,i,j,type.elem="init",
                                         value.update=as.character(value))]
                             ,by=c("model","par.type","i","j","type.elem"),all.x=TRUE,fun.na.by=NULL,quiet=TRUE)
         

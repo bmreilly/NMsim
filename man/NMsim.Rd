@@ -30,10 +30,9 @@ NMsim(
   transform = NULL,
   order.columns = TRUE,
   method.execute,
+  nmfe.options,
   nmrep,
   col.flagn = FALSE,
-  sim.dir.from.scratch = TRUE,
-  create.dirs = TRUE,
   dir.psn,
   args.psn.execute,
   args.NMscanData,
@@ -46,6 +45,8 @@ NMsim(
   text.sim = "",
   auto.dv = TRUE,
   clean,
+  sim.dir.from.scratch = TRUE,
+  create.dirs = TRUE,
   quiet = FALSE,
   nmquiet,
   progress,
@@ -264,6 +265,11 @@ in the system search path. So as long as you know where your
 Nonmem executable is, "nmsim" is recommended. The default is
 "nmsim" if path.nonmem is specified, and "psn" if not.}
 
+\item{nmfe.options}{additional options that will be passed to
+nmfe. It is only used when path.nonmem is available (directly
+or using `NMdataConf()`). Default is "-maxlim=2" For PSN, see
+`args.psn.execute`.}
+
 \item{nmrep}{Include `NMREP` as counter of subproblems? The
 default is to do so if `subproblems>0`. This will insert a
 counter called `NMREP` in the `$ERROR` section and include
@@ -276,24 +282,6 @@ NMsim will then do is to require that column to equal `0`
 (zero) for the rows to be simulated. It is often better to
 subset the data before simulation. See `filters` too.}
 
-\item{sim.dir.from.scratch}{If TRUE (default) this will wipe the
-simulation directory before running new simulations. The
-directory that will be emptied is _not_ dir.sims where you may
-keep many or all your simulations. It is the subdirectory
-named based on the run name and \code{name.sim}. The reason it
-is advised to wipe this directory is that if you in a previous
-simulation created simulation runs that are now obsolete, you
-could end up reading those too when collecting the
-results. NMsim will delete previously generated simulation
-control streams with the same name, but this option goes
-further. An example where it is important is if you first ran
-1000 replications, fixed something and now rand 500. If you
-choose FALSE here, you can end up with the results of 500 new
-and 500 old simulations.}
-
-\item{create.dirs}{If the directories specified in dir.sims and
-dir.res do not exists, should it be created? Default is TRUE.}
-
 \item{dir.psn}{The directory in which to find PSN's executables
 ('execute' and 'update_inits'). The default is to rely on the
 system's search path. So if you can run 'execute' and
@@ -302,8 +290,10 @@ need to specify this unless you want to explicitly use a
 specific installation of PSN on your system.}
 
 \item{args.psn.execute}{A charachter string that will be passed as
-arguments PSN's `execute`. Notice, if `path.nonmem` is
-provided, the default is not to use PSN.}
+arguments PSN's `execute`. The default is
+"-model_dir_name -nm_output=coi,cor,cov,ext,phi,shk,xml -nmfe_options=\"-maxlim=2\""
+in addition to the "-clean" based on the `clean`
+argument. Notice, if `path.nonmem` is provided, the default is not to use PSN.}
 
 \item{args.NMscanData}{If \code{execute=TRUE&sge=FALSE}, NMsim
 will normally read the results using \code{NMreadSim}. Use
@@ -385,6 +375,24 @@ behavior is applied, even though not as granular. NMsim's
 internal method only distinguishes between 0 (no cleaning),
 any integer 1-4 (default, quite a bit of cleaning) and 5
 (remove temporary dir completely).}
+
+\item{sim.dir.from.scratch}{If TRUE (default) this will wipe the
+simulation directory before running new simulations. The
+directory that will be emptied is _not_ dir.sims where you may
+keep many or all your simulations. It is the subdirectory
+named based on the run name and \code{name.sim}. The reason it
+is advised to wipe this directory is that if you in a previous
+simulation created simulation runs that are now obsolete, you
+could end up reading those too when collecting the
+results. NMsim will delete previously generated simulation
+control streams with the same name, but this option goes
+further. An example where it is important is if you first ran
+1000 replications, fixed something and now rand 500. If you
+choose FALSE here, you can end up with the results of 500 new
+and 500 old simulations.}
+
+\item{create.dirs}{If the directories specified in dir.sims and
+dir.res do not exists, should it be created? Default is TRUE.}
 
 \item{quiet}{If TRUE, messages from what is going on will be
 suppressed.}

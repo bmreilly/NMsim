@@ -22,11 +22,16 @@
   runs fail or haven't finished, this allows `NMreadSim()` to read
   whatever it can and skip the ones missing.
 
+* Summary function included on NMsim simulation results. There is
+  still room for improvement - try it out with `summary()` on results
+  from `NMsim()` and `NMreadSim()`.
+
 ## Bugfixes
 * `NMREP` is a data column that `NMsim()` automatically adds to count
   subproblems when `subproblem` is used. This was not added when
   simulating PREDPP (`$PRED`) models and when not providing a
-  simulaiton data set (VPC style).
+  simulaiton data set (VPC style). Thanks to Ahmed Abulfathi for
+  reporting.
 
 ## Other improvements
 * `NMaddSamples()` only inserts `MDV` column if `MDV` is already present

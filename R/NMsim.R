@@ -209,9 +209,15 @@
 ##'     in the system search path. So as long as you know where your
 ##'     Nonmem executable is, "nmsim" is recommended. The default is
 ##'     "nmsim" if path.nonmem is specified, and "psn" if not.
+##' @param nmfe.options additional options that will be passed to
+##'     nmfe. It is only used when path.nonmem is available (directly
+##'     or using `NMdataConf()`). Default is "-maxlim=2" For PSN, see
+##'     `args.psn.execute`.
 ##' @param args.psn.execute A charachter string that will be passed as
-##'     arguments PSN's `execute`. Notice, if `path.nonmem` is
-##'     provided, the default is not to use PSN.
+##'     arguments PSN's `execute`. The default is
+##'     "-model_dir_name -nm_output=coi,cor,cov,ext,phi,shk,xml -nmfe_options=\"-maxlim=2\""
+##'     in addition to the "-clean" based on the `clean`
+##'     argument. Notice, if `path.nonmem` is provided, the default is not to use PSN.
 ##' @param path.nonmem The path to the Nonmem executable to use. The
 ##'     could be something like "/usr/local/NONMEM/run/nmfe75" (which
 ##'     is a made up example). No default is available. You should be
@@ -424,10 +430,9 @@ NMsim <- function(file.mod,data,
                   transform=NULL,
                   order.columns=TRUE,
                   method.execute,
+                  nmfe.options,
                   nmrep,
                   col.flagn=FALSE,
-                  sim.dir.from.scratch=TRUE,
-                  create.dirs=TRUE,
                   dir.psn,
                   args.psn.execute,
                   args.NMscanData,
@@ -440,6 +445,9 @@ NMsim <- function(file.mod,data,
                   text.sim="",
                   auto.dv=TRUE,
                   clean,
+                  sim.dir.from.scratch=TRUE,
+                  create.dirs=TRUE,
+
                   quiet=FALSE,
                   nmquiet,
                   progress,
@@ -564,7 +572,7 @@ NMsim <- function(file.mod,data,
     if(missing(dir.psn)) dir.psn <- NULL
     if(missing(path.nonmem)) path.nonmem <- NULL
     if(missing(method.execute)) method.execute <- NULL
-    ## NMsimConf <- NMsimTestConf(path.nonmem=path.nonmem,dir.psn=dir.psn,method.execute=method.execute,must.work=execute)
+    if(missing(nmfe.options)) nmfe.options <- NULL
     NMsimConf <- NMsimTestConf(path.nonmem=path.nonmem,dir.psn=dir.psn,method.execute=method.execute,must.work=FALSE)
 
     
@@ -1547,6 +1555,7 @@ NMsim <- function(file.mod,data,
                                input.archive=input.archive,
                                dir.data="..",
                                clean=clean,
+                               nmfe.options=nmfe.options,
                                backup=FALSE)
             
             ## simres.n <- list(lst=path.sim.lst)
@@ -1562,7 +1571,7 @@ NMsim <- function(file.mod,data,
             close(pb)
         }
     }
-
+    
 ###  Section end: Execute
     
     dt.models.save <- split(dt.models,by="path.rds")

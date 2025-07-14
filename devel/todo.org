@@ -1,7 +1,10 @@
 #+PROPERTY: LOGGING nil
 * NMsim todo
 ** general
-
+*** nmfe.options
+just NULL in NMsim, NMexec
+NMrunLin
+NMrunWin
 *** model object structure
 
 #+begin_src R

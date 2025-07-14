@@ -37,6 +37,10 @@
 ##' @param input.archive A function of the model file path to generate
 ##'     the path in which to archive the input data as RDS. Set to
 ##'     FALSE not to archive the data.
+##' @param nmfe.options additional options that will be passed to
+##'     nmfe. It is only used when path.nonmem is available (directly
+##'     or using `NMdataConf()`). Default is "-maxlim=2" For PSN, see
+##'     `args.psn.execute`.
 ##' @param args.psn.execute A character string with arguments passed
 ##'     to execute. Default is
 ##'     "-model_dir_name -nm_output=coi,cor,cov,ext,phi,shk,xml".
@@ -70,6 +74,7 @@
 ##' }
 ##'
 ##' See `sge` as well.
+##' 
 ##' @param clean The degree of cleaning (file removal) to do after
 ##'     Nonmem execution. If `method.execute=="psn"`, this is passed
 ##'     to PSN's `execute`. If `method.execute=="nmsim"` a similar
@@ -135,7 +140,9 @@ NMexec <- function(files,file.pattern,dir,sge=TRUE,input.archive,
                    nc,dir.data=NULL,wait=FALSE, path.nonmem,
                    update.only=FALSE,
                    fun.post,
-                   method.execute,dir.psn,args.psn.execute,
+                   method.execute,
+                   nmfe.options,
+                   dir.psn,args.psn.execute,
                    files.needed,clean=1,backup=TRUE,quiet=FALSE
                   ,nmquiet=FALSE
                   ,system.type){
@@ -182,7 +189,14 @@ NMexec <- function(files,file.pattern,dir,sge=TRUE,input.archive,
 
     if(missing(fun.post)) fun.post <- NULL
 
-
+    ## nmfe.options
+    if(missing(nmfe.options)) nmfe.options <- NULL
+    nmfe.options <- simpleCharArg("nmfe.options"
+                                     ,nmfe.options
+                                     ,default="-maxlim=2"
+                                     ,accepted=NULL
+                                     ,clean=FALSE
+                                     ,lower=FALSE)
     
     ## args.psn.execute
     if(missing(args.psn.execute)) args.psn.execute <- NULL
@@ -295,9 +309,9 @@ NMexec <- function(files,file.pattern,dir,sge=TRUE,input.archive,
             
             if(NMsimConf$method.execute=="psn"){
                 obj.exec <- list()
-                obj.exec$dir.exec <- NA_character_
-                obj.exec$mod.exec <- NA_character_
-                obj.exec$path.script <- NA_character_
+                obj.exec$dir.exec <- "(PSN)"
+                obj.exec$mod.exec <- "(PSN)"
+                obj.exec$path.script <- "(PSN)"
                 obj.exec$cmd <- sprintf('cd "%s"; "%s" %s',rundir,cmd.execute ,args.psn.execute)
                 ##}
                 ## if(system.type=="windows"){
@@ -315,7 +329,7 @@ NMexec <- function(files,file.pattern,dir,sge=TRUE,input.archive,
             
             if(NMsimConf$method.execute=="nmsim"){
                 
-                obj.exec <- NMexecDirectory(file.mod,NMsimConf$path.nonmem,files.needed=files.needed,system.type=NMsimConf$system.type,dir.data=dir.data,clean=clean,sge,nc,pnm=pnm,fun.post=fun.post)
+                obj.exec <- NMexecDirectory(file.mod,NMsimConf$path.nonmem,files.needed=files.needed,system.type=NMsimConf$system.type,dir.data=dir.data,clean=clean,sge,nc,pnm=pnm,fun.post=fun.post,nmfe.options=nmfe.options)
                 ##obj.exec$dir <- dirname(obj.exec$cmd)
 
                 if(NMsimConf$system.type=="linux"){
@@ -366,6 +380,7 @@ NMexec <- function(files,file.pattern,dir,sge=TRUE,input.archive,
             
             as.data.table(obj.exec)
         })
+    
     dt.obj.exec <- rbindlist(list.obj.exec)
 
     return(invisible(dt.obj.exec))

@@ -178,7 +178,7 @@ test_that("basic - sge - dont wait",{
                     name.sim="default_01"
                    ,sge=TRUE
 
-                    ,path.nonmem=path.nonmem
+                    ## ,path.nonmem=path.nonmem
                     ##,reuse.results=TRUE
                     ## ,file.res=simtab
                     )
@@ -240,8 +240,11 @@ test_that("basic - sge - wait",{
         simres3
         ref
 
-        compareCols(attributes(simres3)$NMsimModTab,
-                    attributes(ref)$NMsimModTab)
+        compareCols(
+            attributes(simres3)$NMsimModTab
+           ,
+            attributes(ref)$NMsimModTab
+        )
     }
 
 })
@@ -422,6 +425,8 @@ test_that("basic - spaces in paths",{
 
 
 test_that("SAEM - default",{
+
+
 
     fileRef <- "testReference/NMsim_05.rds"
 
@@ -874,8 +879,11 @@ test_that("transform",{
         ref
         simres
         
-        compareCols(attributes(simres)$NMsimModTab,
-                    attributes(ref)$NMsimModTab)
+        compareCols(
+            attributes(simres)$NMsimModTab
+           ,
+            attributes(ref)$NMsimModTab
+        )
     }
 
 
@@ -910,8 +918,11 @@ test_that("dir.sims and dir.res with NMdataConf",{
         ref
         simres
         
-        compareCols(attributes(simres)$NMsimModTab,
-                    attributes(ref)$NMsimModTab)
+        compareCols(
+            attributes(simres)$NMsimModTab
+           ,
+            attributes(ref)$NMsimModTab
+        )
     }
 
     
@@ -1090,7 +1101,6 @@ test_that("correlated etas",{
                     table.var="PRED IPRED Y ETAS(1:LAST)",
                     name.sim="covetas_01",
                     path.nonmem=path.nonmem,
-                    method.update.inits="nmsim",
                     seed.R=43
                     )
 
@@ -1139,7 +1149,6 @@ test_that("Non-numeric DATE and TIME",{
                     table.var="TIME PRED IPRED",
                     name.sim="timeAsChar_01",
                     path.nonmem=path.nonmem,
-                    method.update.inits="nmsim",
                     seed.R=43
                     ##,quiet=TRUE
                     )
@@ -1151,7 +1160,6 @@ test_that("Non-numeric DATE and TIME",{
                         table.var="PRED IPRED",
                         name.sim="timeAsChar_02",
                         path.nonmem=path.nonmem,
-                        method.update.inits="nmsim",
                         seed.R=43,
                         quiet=TRUE
                         )
@@ -1163,7 +1171,6 @@ test_that("Non-numeric DATE and TIME",{
                          carry.out="TIME",
                          name.sim="timeAsChar_03",
                          path.nonmem=path.nonmem,
-                         method.update.inits="nmsim",
                          seed.R=43,
                          quiet=TRUE
                          )
@@ -1489,7 +1496,7 @@ test_that("vpc with subproblems - NMREP in output",{
 
     expect_true("NMREP"%in%colnames(simres))
     expect_true(all(simres[,unique(NMREP)]==c(1,2,3)))
-   
+    
 })
 
 ## vpc with subproblems - no table.vars - NMREP in output
@@ -1510,7 +1517,7 @@ test_that("vpc with subproblems - NMREP in output",{
 
     expect_true("NMREP"%in%colnames(simres))
     expect_true(all(simres[,unique(NMREP)]==c(1,2,3)))
-   
+    
 })
 
 
@@ -1535,7 +1542,7 @@ test_that("PRED model basic",{
     
     expect_equal_to_reference(simres,fileRef)
 
-   
+    
 })
 
 test_that("PRED model with subproblems",{
@@ -1560,7 +1567,7 @@ test_that("PRED model with subproblems",{
     simres    
     expect_equal_to_reference(simres,fileRef)
 
-   
+    
 })
 
 
@@ -1583,7 +1590,7 @@ test_that("PRED model with subproblems table.vars",{
 
     fix.time(simres)
     expect_equal_to_reference(simres,fileRef)
-  
+    
 })
 
 
@@ -1622,3 +1629,76 @@ test_that("BLOCK(2) FIX .1 .1 .1 rather than BLOCK(2) 0.1 FIX .1 .1",{
     
 
 })
+
+
+test_that("basic - default - nmfe74",{
+    
+
+    file.mod <- "../../tests/testthat/testData/nonmem/xgxr021.mod"
+    
+    
+
+    simres.74 <- NMsim(file.mod,
+                       data=dt.sim,
+                       table.var="PRED IPRED",
+                       name.sim="default_01.74",
+                       seed.nm=1,
+                       path.nonmem="/opt/NONMEM/nm74gf/run/nmfe74",
+                                        #path.nonmem="/opt/NONMEM/nm74gf_nmfe/run/nmfe74",
+                       as.fun="data.table"
+                       )
+
+    simres.75 <- NMsim(file.mod,
+                       data=dt.sim,
+                       table.var="PRED IPRED",
+                       name.sim="default_01.75",
+                       seed.nm=1,
+                       path.nonmem=path.nonmem,
+                       ## path.nonmem="/opt/NONMEM/nm74gf_nmfe/run/nmfe74",
+                       as.fun="data.table"
+                       )
+
+    expect_equal(unNMsimRes(simres.74)[,!(c("model.sim","name.sim"))],
+                 unNMsimRes(simres.75)[,!(c("model.sim","name.sim"))]
+                 )
+    
+    expect_error(
+        NMsim(file.mod,
+              data=dt.sim,
+              table.var="PRED IPRED",
+              name.sim="default_01.73",
+              path.nonmem="/opt/NONMEM/nm73gf/run/nmfe73"
+              ## path.nonmem="/opt/NONMEM/nm74gf_nmfe/run/nmfe74"
+              )
+    )
+
+    ## this is not using fast tables so precision is different
+    simres.73 <- NMsim(file.mod,
+                     data=dt.sim,
+                     ## table.var="PRED IPRED",
+                     seed.nm=1,
+                     name.sim="default_01.73b",
+                     path.nonmem="/opt/NONMEM/nm73gf/run/nmfe73",
+                     wait=TRUE
+                     ## path.nonmem="/opt/NONMEM/nm74gf_nmfe/run/nmfe74"
+                     )
+    
+
+    if(F){
+        ref <- readRDS(fileRef)
+        colnames(ref)
+        colnames(simres)
+        compareCols(simres,ref,keep.names=TRUE)
+        ref
+        simres
+        compareCols(
+            attributes(simres)$NMsimModTab
+           ,
+            attributes(readRDS(fileRef))$NMsimModTab
+           ,keep.names=FALSE)
+
+        
+    }
+
+})
+
