@@ -9,14 +9,15 @@ NMwriteSectionOne <- function(file0,lines,section,location=c("replace","before",
     before <- NULL
     mad.dl <- NULL
 
-    
-    
+    filePathSimple <- NMdata:::filePathSimple
+    messageWrap <- NMdata:::messageWrap
+
     location <- match.arg(location)
 
     if(missing(file0)) file0 <- NULL
     
     if(!is.null(file0)){
-        file0 <- NMdata:::filePathSimple(file0)
+        file0 <- filePathSimple(file0)
         stopifnot(file.exists(file0))
         ## see below why we need to read the lines for now
         lines <- readLines(file0,warn=FALSE)
@@ -26,7 +27,7 @@ NMwriteSectionOne <- function(file0,lines,section,location=c("replace","before",
 
     if(missing(newfile)) newfile <- NULL
     if(!is.null(newfile)){
-        newfile <- NMdata:::filePathSimple(newfile)
+        newfile <- filePathSimple(newfile)
     }
 
 
@@ -37,7 +38,7 @@ NMwriteSectionOne <- function(file0,lines,section,location=c("replace","before",
     } else {
         
         if(length(list.sections)>1 && location!="replace"){
-            NMdata:::messageWrap("Only location=replace is supported in combination with list.sections.",fun.msg=stop)
+            messageWrap("Only location=replace is supported in combination with list.sections.",fun.msg=stop)
         }
     }
     
@@ -146,7 +147,7 @@ NMwriteSectionOne <- function(file0,lines,section,location=c("replace","before",
     if(write && !is.null(file0) && file0==newfile && backup ) {
         dir.backup <- file.path(dirname(file0),"NMdata_backup")
         ## make sure backup dir exists
-        if(file.exists(dir.backup)&&!dir.exists(dir.backup)) NMdata:::messageWrap("Something called NMdata_backup is found and it is not a directory. Please remove or use backup=FALSE.",fun.msg=stop)
+        if(file.exists(dir.backup)&&!dir.exists(dir.backup)) messageWrap("Something called NMdata_backup is found and it is not a directory. Please remove or use backup=FALSE.",fun.msg=stop)
         if(!dir.exists(dir.backup)) dir.create(dir.backup)
         file.copy(file0,dir.backup,overwrite=T)
     }

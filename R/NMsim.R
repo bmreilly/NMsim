@@ -1511,7 +1511,8 @@ NMsim <- function(file.mod,data,
         }
 
         if(is.null(nmquiet)){
-            nmquiet <- wait && dt.models[,.N]==1 && !do.pb && !quiet 
+            ## easier to do ! (talk)
+            nmquiet <- ! (wait && dt.models[,.N]==1 && !do.pb && !quiet && subproblems<=1 )
         }
         
         if(do.pb){

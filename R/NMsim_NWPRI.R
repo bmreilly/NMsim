@@ -38,11 +38,7 @@
 
 NMsim_NWPRI <- function(file.sim,file.mod,data.sim,PLEV=0.999,...){
 
-    NMdata:::messageWrap("NMsim_NWPRI: Simulation with variability on OMEGA and SIGMA are only reliable starting from Nonmem 7.60. Prior to Nonmem 7.60, NMsim_NWPRI reliably samples THETAs only. For that to work, also make sure to use NMdata >= 0.1.9. To explicitly skip sampling OMEGAs, run NMsim with `typical=TRUE`",fun.msg=message)
-    
-    if(packageVersion("NMdata")<"0.1.6.932"){
-        stop("NMsim_NWPRI requires NMdata 0.1.7 or later.")
-    }
+    NMdata:::messageWrap("NMsim_NWPRI: Simulation with variability on OMEGA and SIGMA are only reliable starting from Nonmem 7.60. Prior to Nonmem 7.60, NMsim_NWPRI reliably samples THETAs only. To explicitly skip sampling OMEGAs, run NMsim with `typical=TRUE`",fun.msg=message)
     
     . <- NULL
     DF <- NULL
@@ -99,7 +95,7 @@ NMsim_NWPRI <- function(file.sim,file.mod,data.sim,PLEV=0.999,...){
     cov.l <- addParType(cov.l,suffix="i")
     cov.l <- addParType(cov.l,suffix="j")
     
-    # Identify fixed thetas and set their diagonal in the $THETAPV cov matrix to be 1.0 for compatibility with nm7.60
+                                        # Identify fixed thetas and set their diagonal in the $THETAPV cov matrix to be 1.0 for compatibility with nm7.60
     cov.l = merge.data.table(x = cov.l, y = pars[par.type=="THETA",.(i, parameter.i=parameter,FIX)], by = c("i", "parameter.i"))
     cov.l[i==j&FIX==1, value := 1.0]    
     
@@ -109,13 +105,13 @@ NMsim_NWPRI <- function(file.sim,file.mod,data.sim,PLEV=0.999,...){
           , type="THETAPV",as.one.block=TRUE,fix=TRUE)
     
     ## $OMEGAP
-    # note: NMcreateMatLines sets 0 FIXED sigmas/omegas to 1e-30 to avoid non-semi-positive definite matrices error
+                                        # note: NMcreateMatLines sets 0 FIXED sigmas/omegas to 1e-30 to avoid non-semi-positive definite matrices error
     lines.omegap <- NMcreateMatLines(
         pars[par.type=="OMEGA"]
        ,type="OMEGAP",as.one.block = FALSE)
     
     ## $OMEGAPD
-    # see nwpri_df() for calculations of degrees of freedom for inverse-wishart prior
+                                        # see nwpri_df() for calculations of degrees of freedom for inverse-wishart prior
     lines.omegapd = nwpri_df[par.type=="OMEGA",line]
     
     ## $SIGMAP
@@ -128,20 +124,25 @@ NMsim_NWPRI <- function(file.sim,file.mod,data.sim,PLEV=0.999,...){
     
     ## $PRIOR
     lines.prior = sprintf("$PRIOR NWPRI PLEV=%f",PLEV)
+
     
     all.lines = c(lines.prior, lines.thetap, lines.thetapv, lines.omegap, lines.omegapd, lines.sigmap, lines.sigmapd)
 
     
     ## insert the lines into file.sim using NMdata::NMwriteSection().  
-    lines.sim <- NMdata:::NMwriteSectionOne(lines=lines.sim, section="SIMULATION", location="before", newlines=all.lines, backup=FALSE, quiet=TRUE)
+    ## lines.sim <- NMdata:::NMwriteSectionOne(lines=lines.sim, section="SIMULATION", location="before", newlines=all.lines, backup=FALSE, quiet=TRUE)
+    
+    lines.sim <- NMwriteSectionOne(lines=lines.sim, section="SIMULATION", location="before", newlines=all.lines, backup=FALSE, quiet=TRUE)
 
+    
 ### add TRUE=PRIOR to $SIMULATION
-    lines.sim <- NMdata:::NMwriteSectionOne(lines=lines.sim, section="SIMULATION", location="after", newlines="TRUE=PRIOR", backup=FALSE, quiet=TRUE)
+    ## lines.sim <- NMdata:::NMwriteSectionOne(lines=lines.sim, section="SIMULATION", location="after", newlines="TRUE=PRIOR", backup=FALSE, quiet=TRUE)
+    lines.sim <- NMwriteSectionOne(lines=lines.sim, section="SIMULATION", location="after", newlines="TRUE=PRIOR", backup=FALSE, quiet=TRUE)
 
 ### update $SIZES LTH and LVR to reflect the parameters in NWPRI (not resized automatically like other subroutines)
-    # add 10 to both numbers per Bob Bauer (doesn't hurt to have slightly more memory/size)
-    # LTH = number of thetas = $THETA + $THETAP + $OMEGAPD + $SIGMAPD
-    # LVR = number of diagonal omegas + sigmas = $OMEGA + $OMEGAP + $SIGMA + $SIGMAP + $THETAPV
+                                        # add 10 to both numbers per Bob Bauer (doesn't hurt to have slightly more memory/size)
+                                        # LTH = number of thetas = $THETA + $THETAP + $OMEGAPD + $SIGMAPD
+                                        # LVR = number of diagonal omegas + sigmas = $OMEGA + $OMEGAP + $SIGMA + $SIGMAP + $THETAPV
     lth = 2*nrow(pars[par.type=="THETA"]) + nrow(nwpri_df) + 10 
     lvr = 2*nrow(pars[(par.type=="OMEGA"|par.type=="SIGMA")&i==j]) + nrow(pars[par.type=="THETA"]) + 10
     
