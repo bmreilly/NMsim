@@ -33,6 +33,9 @@
   simulaiton data set (VPC style). Thanks to Ahmed Abulfathi for
   reporting.
 
+* In some cases `NMsim_NMWPRI()` in combination with `typical=TRUE`
+  would create wrong `$PRIOR` dimensions. Fixed.
+
 ## Other improvements
 * `NMaddSamples()` only inserts `MDV` column if `MDV` is already present
   in `data`.
