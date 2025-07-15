@@ -1663,8 +1663,8 @@ test_that("basic - default - nmfe74",{
                  )
     
     expect_error(
-        NMsim(file.mod,
-              data=dt.sim,
+        simres.73a <- NMsim(file.mod,
+                            data=dt.sim,
               table.var="PRED IPRED",
               name.sim="default_01.73",
               path.nonmem="/opt/NONMEM/nm73gf/run/nmfe73"

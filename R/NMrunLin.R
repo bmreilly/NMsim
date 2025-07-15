@@ -14,7 +14,7 @@ NMrunLin <- function(fn.mod,dir.mod.abs,exts.cp,meta.tables,path.nonmem,clean,sg
 
     name <- NULL
     fn.lst <- fnExtension( fn.mod,".lst")
-    line.run <- sprintf("%s %s %s  -maxlim=2",path.nonmem,fn.mod,fn.lst)
+    line.run <- sprintf("%s %s %s %s",path.nonmem,fn.mod,fn.lst,nmfe.options)
 
     if(sge){
         ## executing from model execution dir.

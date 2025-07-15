@@ -18,7 +18,8 @@ NMrunWin <- function(fn.mod,dir.mod.abs,exts.cp,meta.tables,path.nonmem,clean,nm
     }
 
     lines.bat <- c("@echo off",
-                   sprintf("call %s %s %s %s",path.nonmem,nmfe.options,fn.mod,fnExtension(fn.mod,".lst"))
+                   sprintf("call %s %s %s %s",
+                           path.nonmem,fn.mod,fnExtension(fn.mod,".lst"),nmfe.options)
                   ,
                    paste(unlist(lapply(fnExtension(fn.mod,exts.cp),cp.if.pres,dest=dir.mod.abs)),collapse="\n")
                   ,
