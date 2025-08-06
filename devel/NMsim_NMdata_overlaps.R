@@ -22,7 +22,7 @@ res.list <- lapply(1:nrow(dtf.w),function(row){
 
 ## Maybe NMwriteSection belongs better in NMsim?
 
-## NMreadInits. Belongs in NMdata. NMdata 0.2.1 required.
+## NMreadInits. Belongs in NMdata. NMdata 0.2.2 required.
 ## NMwriteFilters. Belongs in NMsim (internal). Dropped in NMdata 0.2.1.
 ## NMwriteInits. Belongs in NMsim (internal). Dropped in NMdata 0.2.1.
 ## NMwriteInitsOne. Belongs in NMsim (internal). Dropped in NMdata 0.2.1.
@@ -35,6 +35,7 @@ res.list <- lapply(1:nrow(dtf.w),function(row){
 ## NMextractText. Belongs in NMdata. NMdata 0.2.1 required.
 ## NMreadSizes. Belongs in NMdata. NMdata 0.2.1 required. NMreadSizes uses NMreadSection.
 ## NMwriteSectionOne. Belongs in NMdata. NMdata 0.2.1 required. 
+## dtapply?
 
 res.list[[1]]
 res.list[[2]]
