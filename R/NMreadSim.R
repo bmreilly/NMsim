@@ -137,7 +137,7 @@ NMreadSim <- function(x,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,progres
             res.all <- rbind(res.all,res.simRes)  
         }
     }
-
+    
     if(sum(dt.x$is.ModTab)){
         res.modTab <- NMreadSimModTab(x[dt.x$is.ModTab],check.time=check.time,
                                       dir.sims=dir.sims,wait=wait,quiet=quiet,
@@ -171,9 +171,13 @@ NMreadSim <- function(x,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,progres
         }   
     }
 
-
+    
+    res.modtab <- modTab(res.all)
     res.all <- as.fun(res.all)
     addClass(res.all,"NMsimRes")
+    if(!is.null(res.modtab)){
+        setattr(res.all,"NMsimModTab",res.modtab)
+    }
     return(res.all)
 }
 

@@ -75,6 +75,8 @@ NMreadSection <- function(file=NULL, lines=NULL, text=NULL, section, return="tex
     keep.comments <- deprecatedArg("keepComments","keep.comments",args=args)
 
     lines <- getLines(file=file,lines=lines)
+
+    
     
     if(missing(section)||is.null(section)){
         section="."
