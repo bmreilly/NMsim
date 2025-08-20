@@ -230,7 +230,7 @@ NMexec <- function(files,file.pattern,dir,sge=TRUE,input.archive,
                                  ,lower=FALSE)
 
 
-    if(is.null(files) && is.null(file.pattern)) file.pattern <- ".+\\.mod"
+    if(is.null(files) && is.null(file.pattern)) file.pattern <- ".+\\.mod$"
     files.all <- NMdata:::getFilePaths(files=files,file.pattern=file.pattern,dir=dir,quiet=TRUE)
     
     files.exec <- files.all
@@ -241,8 +241,11 @@ NMexec <- function(files,file.pattern,dir,sge=TRUE,input.archive,
             message(length(files.exec)," model(s) to be executed:\n",paste(files.exec,collapse=",\n"),"\n")
         }
     }
-
-
+    if(length(files.exec)<1){
+        message("No models to run. Exiting.")
+        return(invisible())
+    }
+    
     list.obj.exec <- 
         lapply(1:length(files.exec),function(I){
             file.mod <- NMdata:::filePathSimple(files.exec[I])
