@@ -49,7 +49,7 @@ test_that("Basic",{
     file.mod <- "testData/nonmem/xgxr025.mod"
     sim1 <- NMsim(file.mod=file.mod,
                   data=dat.sim,
-                  dir.sim="testOutput",
+                  dir.sims="testOutput",
                   name.sim = "sd1",
                   seed.nm=2342,
                   execute=FALSE
@@ -78,7 +78,7 @@ if(FALSE){
     file.mod <- "testData/nonmem/xgxr021.mod"
     sim1 <- NMsim(file.mod=file.mod,
                   data=dat.sim,
-                  dir.sim="testOutput",
+                  dir.sims="testOutput",
                   suffix.sim = "sd1",
                   seed=2342,
                   ## execute=FALSE,
@@ -95,7 +95,7 @@ test_that("modify.model",{
     file.mod <- "testData/nonmem/xgxr021.mod"
     sim1 <- NMsim(file.mod=file.mod,
                   data=dat.sim,
-                  dir.sim="testOutput",
+                  dir.sims="testOutput",
                   name.sim = "sd1_modify",
                   seed.nm=2342,
                   modify.model=list(pk=add("CL=CL/2","V2=V2*2"),
@@ -148,7 +148,7 @@ test_that("modify.model with list",{
     file.mod <- "testData/nonmem/xgxr021.mod"
     sim1 <- NMsim(file.mod=file.mod,
                   data=dat.sim,
-                  dir.sim="testOutput",
+                  dir.sims="testOutput",
                   name.sim = "sd1_modify2",
                   seed.nm=2342,
                   modify.model=list(problem=list(newlines="$SIZES LTV=200",location="before")),
@@ -201,7 +201,7 @@ test_that("NMsim_EBE",{
 
     sim1 <- NMsim(file.mod=file.mod,
                   data=dat.sim.ebe,
-                  dir.sim="testOutput",
+                  dir.sims="testOutput",
                   name.sim = "sd1_EBE",
                   method.sim=NMsim_EBE,
                   seed.nm=2342,
@@ -246,7 +246,7 @@ test_that("typical",{
     file.mod <- "testData/nonmem/xgxr025.mod"
     sim1 <- NMsim(file.mod=file.mod,
                   data=dat.sim,
-                  dir.sim="testOutput",
+                  dir.sims="testOutput",
                   name.sim = "sd1",
                   seed.nm=2342,
                   typical=TRUE,
@@ -269,7 +269,7 @@ if(F){
 
         sim1 <- NMsim(file.mod=file.mod,
                       data=dat.sim,
-                      dir.sim="testOutput",
+                      dir.sims="testOutput",
                       name.sim = "sd1_VarCov",
                       method.sim=NMsim_VarCov,
                       seed.nm=2342,
@@ -294,7 +294,7 @@ test_that("sizes",{
 
     sim1 <- NMsim(file.mod=file.mod,
                   data=dat.sim,
-                  dir.sim="testOutput",
+                  dir.sims="testOutput",
                   name.sim = "sizes_1",
                   ## method.sim=NMsim_VarCov,
                   sizes=list(LTV=30,PD=70),
@@ -328,11 +328,11 @@ test_that("inits - modify parameter",{
     
     file.mod <- "testData/nonmem/xgxr032.mod"
 
-    options(warn=2)
+    ## options(warn=2)
     
     sim1 <- NMsim(file.mod=file.mod,
                   data=dat.sim,
-                  dir.sim="testOutput",
+                  dir.sims="testOutput",
                   name.sim = "inits_1",
                   ## method.sim=NMsim_VarCov,
                   ## inits=list(method="nmsim","THETA(2)"=list(init=4,fix=1)),
@@ -368,7 +368,7 @@ test_that("inits - fix multiple parameters",{
 
     sim1 <- NMsim(file.mod=file.mod,
                   data=dat.sim,
-                  dir.sim="testOutput",
+                  dir.sims="testOutput",
                   name.sim = "inits_2",
                   inits=list("THETA(1)"=list(fix=1),
                              "THETA(2)"=list(fix=1)),
@@ -404,7 +404,7 @@ test_that("No ONLYSIM",{
     file.mod <- "testData/nonmem/xgxr025.mod"
     sim1 <- NMsim(file.mod=file.mod,
                   data=dat.sim,
-                  dir.sim="testOutput",
+                  dir.sims="testOutput",
                   name.sim = "sd1",
                   seed.nm=2342,
                   onlysim=FALSE,
@@ -429,7 +429,7 @@ test_that("Named table variables",{
     file.mod <- "testData/nonmem/xgxr025.mod"
     sim1 <- NMsim(file.mod=file.mod,
                   data=dat.sim,
-                  dir.sim="testOutput",
+                  dir.sims="testOutput",
                   name.sim = "tabvars1",
                   seed.nm=2342,
                   execute=FALSE,
@@ -439,7 +439,7 @@ test_that("Named table variables",{
 
     sim2 <- NMsim(file.mod=file.mod,
                   data=dat.sim,
-                  dir.sim="testOutput",
+                  dir.sims="testOutput",
                   name.sim = "tabvars2",
                   seed.nm=2342,
                   execute=FALSE,
@@ -450,7 +450,7 @@ test_that("Named table variables",{
 
     sim3 <- NMsim(file.mod=file.mod,
                   data=dat.sim,
-                  dir.sim="testOutput",
+                  dir.sims="testOutput",
                   name.sim = "tabvars3",
                   seed.nm=2342,
                   execute=FALSE,
@@ -490,7 +490,7 @@ test_that("seed, seed.R, seed.nm",{
     file.mod <- "testData/nonmem/xgxr025.mod"
     sim1 <- NMsim(file.mod=file.mod,
                   data=dat.sim,
-                  dir.sim="testOutput",
+                  dir.sims="testOutput",
                   name.sim = "seed1nm",
                   seed.nm=2,
                   execute=FALSE
@@ -501,7 +501,7 @@ test_that("seed, seed.R, seed.nm",{
 
     sim1 <- NMsim(file.mod=file.mod,
                   data=dat.sim,
-                  dir.sim="testOutput",
+                  dir.sims="testOutput",
                   name.sim = "seed1r",
                   seed.R=2,
                   execute=FALSE
@@ -512,7 +512,7 @@ test_that("seed, seed.R, seed.nm",{
 
     sim1 <- NMsim(file.mod=file.mod,
                   data=dat.sim,
-                  dir.sim="testOutput",
+                  dir.sims="testOutput",
                   name.sim = "seed1depr",
                   seed=2,
                   execute=FALSE
@@ -529,7 +529,7 @@ test_that("seed, seed.R, seed.nm",{
 ### dont use seed.nm and seed simultaneously
     expect_error(NMsim(file.mod=file.mod,
                        data=dat.sim,
-                       dir.sim="testOutput",
+                       dir.sims="testOutput",
                        seed.nm=3,
                        seed=2,
                        execute=FALSE
@@ -547,7 +547,7 @@ test_that("Basic - deprecated update inits method",{
     file.mod <- "testData/nonmem/xgxr025.mod"
     sim1 <- NMsim(file.mod=file.mod,
                   data=dat.sim,
-                  dir.sim="testOutput",
+                  dir.sims="testOutput",
                   name.sim = "inits_depr",
                   seed.nm=2342,
                   execute=FALSE,

@@ -41,6 +41,7 @@ NMsim(
   dir.sims,
   dir.res,
   file.res,
+  dir.sim.sub = TRUE,
   wait,
   text.sim = "",
   auto.dv = TRUE,

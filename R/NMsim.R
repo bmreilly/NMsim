@@ -441,13 +441,13 @@ NMsim <- function(file.mod,data,
                   dir.sims,
                   dir.res,
                   file.res,
+                  dir.sim.sub=TRUE,
                   wait,
                   text.sim="",
                   auto.dv=TRUE,
                   clean,
                   sim.dir.from.scratch=TRUE,
                   create.dirs=TRUE,
-
                   quiet=FALSE,
                   nmquiet,
                   progress,
@@ -537,7 +537,7 @@ NMsim <- function(file.mod,data,
     
     
     ## Section end: Dummy variables, only not to get NOTE's in pacakge checks
-
+    
 
     ## as.fun
     if(missing(as.fun)) as.fun <- NULL
@@ -928,10 +928,15 @@ NMsim <- function(file.mod,data,
     
     ## dir.sim is the model-individual directory in which the model will be run
     ## dt.models[,
-    ##           dir.sim:=file.path(dir.sims,paste(name.mod,name.sim.paths,sep="_"))]
-    dt.models[,
-              dir.sim:=file.path(dir.sims,cleanStrings(paste(model,name.sim.paths,sep="_")))]
-    
+    ##        dir.sim:=file.path(dir.sims,paste(name.mod,name.sim.paths,sep="_"))]
+
+    if(dir.sim.sub){
+        dt.models[,
+                  dir.sim:=file.path(dir.sims,cleanStrings(paste(model,name.sim.paths,sep="_")))]
+    } else {
+        dt.models[,
+                  dir.sim:=dir.sims]
+    }
     
     ## path.sim.tmp is a temporary path to the sim control stream - it
     ## will be moved to path.sim once created.
@@ -993,7 +998,7 @@ NMsim <- function(file.mod,data,
 
     
 ### clear simulation directories so user does not end up with old results
-    if(sim.dir.from.scratch){
+    if(dir.sim.sub && sim.dir.from.scratch){
         dt.models[,if(dir.exists(dir.sim)) unlink(dir.sim,recursive=TRUE),by=.(ROWMODEL)]
     }
     dt.models[,if(file.exists(path.sim)) unlink(path.sim),by=.(ROWMODEL)]
@@ -1372,10 +1377,12 @@ NMsim <- function(file.mod,data,
     ## dt.models[,seed:={if(is.function(seed))  seed() else seed},by=.(ROWMODEL2)]
     ## if(is.numeric(dt.models[,seed])) dt.model[,seed:=sprintf("(%s)",seed)]
 
-
+    
 ### if typical
     if(typical){
-        dt.mods.sim <- dt.models[,.(mod=typicalize(file.sim=path.sim,file.mod=file.mod,return.text=TRUE,file.ext=file.ext)),by=.(ROWMODEL,path.sim)]
+#### old typicalize version
+        ## dt.mods.sim <- dt.models[,.(mod=typicalize(file.sim=path.sim,file.mod=file.mod,return.text=TRUE,file.ext=file.ext)),by=.(ROWMODEL,path.sim)]
+        dt.mods.sim <- dt.models[,.(mod=typicalize(file.mod=path.sim)),by=.(ROWMODEL,path.sim)]
         ## write results
         
         ## dt.models[,writeTextFile(dt.mods.sim[ROWMODEL2==ROWMODEL,mod],file=path.sim),by=ROWMODEL2]
