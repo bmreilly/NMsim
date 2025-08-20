@@ -1,5 +1,5 @@
 #### This file is a copy from NMdata - except NMreadInits is made
-#### internal. And replaced NMdataDecideOption with NMdata:::NMdataDecideOption. Same for cleanSpaces and getLines. Must be deleted when NMsim requires NMdata 0.1.9.
+#### internal. 
 
 ##' Calculate number of elements for matrix specification
 ##' 
@@ -10,8 +10,9 @@
 ##'     or columns.
 ##' 
 ##' @return An integer
-##' @keywords internal
-## triagSize(1:5)
+##' @examples
+##' triagSize(1:5)
+
 triagSize <- function(diagSize){
     ((diagSize^2)-diagSize)/2+diagSize
 }
@@ -149,6 +150,8 @@ classify_matches <- function(matches,patterns) {
 }
 
 ##' Assign i and j indexes based on parameter section text
+##'
+##' Internal function used by NMreadInits()
 ##' @param res elements as detected by `NMreadInits()`
 ##' @import data.table
 ##' @keywords internal
@@ -224,7 +227,7 @@ count_ij <- function(res){
 ##' @return A `data.frame` with parameter values. If `return="all"`, a
 ##'     list of three tables.
 ##' @import data.table
-##' @keywords internal
+
 NMreadInits <- function(file,lines,section,return="pars",as.fun) {
 
     getLines <- NMdata:::getLines
@@ -251,11 +254,20 @@ NMreadInits <- function(file,lines,section,return="pars",as.fun) {
     text.clean <- NULL
     type.elem <- NULL
     value.elem <- NULL
+
+    
+    
+    if(missing(lines)) lines <- NULL
+    if(missing(file)) file <- NULL
+### this is assuming there is only one file, or that lines contains only one control stream.
+    lines <- getLines(file=file,lines=lines)
+    
     
     if(missing(section)) section <- NULL
     if(is.null(section)) {
         section <- cc("theta","omega","sigma")
     }
+
     
     return <- match.arg(return,choices=c("pars","all"))
 
@@ -265,21 +277,22 @@ NMreadInits <- function(file,lines,section,return="pars",as.fun) {
     section <- sub("\\$","",section)
     section <- cleanSpaces(section)
     section <- toupper(section)
+    section <- unique(section)
     
     ## if(length(section)>1) stop("Only one section can be handled at a time.")
     ## We want to keep everything, even empty lines so we can keep track of line numbers
     ## lines <- NMreadSection(lines=lines,section=section,keep.empty=TRUE,keep.comments=TRUE)
     ## if(length(lines)==0) return(NULL)
+    
 
-    
-    if(missing(lines)) lines <- NULL
-    if(missing(file)) file <- NULL
-### this is assuming there is only one file, or that lines contains only one control stream.
-    lines <- getLines(file=file,lines=lines)
-    
+    all.sections <- c("THETA","OMEGA","SIGMA","THETAP","OMEGAP","OMEGAPD","SIGMAP","SIGMAPD")
+    if(all(section=="ALL")){
+        section <- all.sections
+    }
     section <- unique(section)
-    if(!all(section%in%c("THETA","OMEGA","SIGMA"))) stop("section cannot be other than THETA, OMEGA and SIGMA.")
-
+    if(!all(section%in%all.sections)){
+        stop(sprintf("section cannot be other than %s",paste(all.sections,collapse=", ")))
+    }
 
 #### these are the patterns used to identfy the different types of elements in parameter sections. passed to classify_matches.
     patterns <- 
@@ -292,7 +305,6 @@ NMreadInits <- function(file,lines,section,return="pars",as.fun) {
           "fix"="\\bFIX(ED)?\\b",  # FIX(ED)
           "same"="SAME"
           )
-
     
     dt.lines <- rbindlist(
         lapply(section,function(sec){
@@ -407,7 +419,6 @@ NMreadInits <- function(file,lines,section,return="pars",as.fun) {
 ##' @param elements The elements object produced by `NMreadInits()`.
 ##' @import data.table
 ##' @keywords internal
-##' @noRd
 initsToExt <- function(elements){
 
 #### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
@@ -450,15 +461,19 @@ initsToExt <- function(elements){
     
     if(!"upper"%in% colnames(pars)) pars[,upper:=NA_real_]
     
-    pars[par.type=="THETA",parameter:=paste0(par.type,i)]
-    pars[par.type%in%c("OMEGA","SIGMA"),parameter:=sprintf("%s(%d,%d)",par.type,i,j)]
-    pars[,par.name:=parameter]
-    pars[par.type=="THETA",par.name:=sprintf("%s(%d)",par.type,i)]
+    ## pars[par.type=="THETA",parameter:=paste0(par.type,i)]
+    ## pars[par.type%in%c("OMEGA","SIGMA"),parameter:=sprintf("%s(%d,%d)",par.type,i,j)]
+    ## pars[,par.name:=parameter]
+    ## pars[par.type=="THETA",par.name:=sprintf("%s(%d)",par.type,i)]
 
 
 
     pars <- pars[,.(par.type,parameter,par.name,i,j,iblock,blocksize,init,lower,upper,FIX)]
-    pars <- pars[order(match(par.type,c("THETA","OMEGA","SIGMA")),i,j)]
+    ##pars <- pars[order(match(par.type,c("THETA","OMEGA","SIGMA")),i,j)]
+    ## all.sections <- c("THETA","OMEGA","SIGMA","THETAP","OMEGAP","OMEGAPD","SIGMAP","SIGMAPD") 
+    pars <- pars[
+        order(match(par.type,
+                    c("THETA","OMEGA","SIGMA","THETAP","OMEGAP","OMEGAPD","SIGMAP","SIGMAPD")) ,i,j)]
     
     pars[]
 }
