@@ -23,10 +23,10 @@ test_that("basic",{
 
 if(FALSE){
 ### NMriteInits for typicalize
-    library(devtools)
+##     library(devtools)
 
-    load_all("~/wdirs/NMdata",export_all = F)
-    load_all("~/wdirs/NMsim",export_all = F)
+    ## load_all("~/wdirs/NMdata",export_all = F)
+    ## load_all("~/wdirs/NMsim",export_all = F)
 
 
     file.mod="testData/nonmem/xgxr011.mod"
@@ -45,8 +45,8 @@ if(FALSE){
 
     inits
 
-    load_all("~/wdirs/NMdata",export_all = F)
-    load_all("~/wdirs/NMsim",export_all = F)
+    ## load_all("~/wdirs/NMdata",export_all = F)
+    ## load_all("~/wdirs/NMsim",export_all = F)
 
     inits
 
