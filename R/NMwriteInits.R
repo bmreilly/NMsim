@@ -62,8 +62,7 @@
 ##' @export
 
 
-NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values,newfile,...){
-    
+NMwriteInits <- function(file.mod,lines,update=TRUE,file.ext=NULL,ext,inits.tab,values,newfile,...){
     . <- NULL
     blocksize <- NULL
     elemnum <- NULL
@@ -92,6 +91,9 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
 
     cleanSpaces <- NMdata:::cleanSpaces
 
+    if(missing(file.mod)) file.mod <- NULL
+    if(missing(lines)) lines <- NULL
+    
     fun.merge.tabs <- function(pars.l,tab.new,name.step){
 
         parameter <- NULL
@@ -100,8 +102,10 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
         tab.new <- copy(tab.new)
         setDT(tab.new)
 
+        
+        tab.new <- addParameter(tab.new)
         ## we allow THETA(1) but the real parameter name is THETA1
-        tab.new[,parameter:=sub("THETA\\(([0-9]+)\\)","THETA\\1",parameter)]
+        ##tab.new[,parameter:=sub("THETA\\(([0-9]+)\\)","THETA\\1",parameter)]
         tab.new <- addParType(tab.new)
         ## don´t use lower,upper,fix. Missing lower or upper will result in NA in table. Missing should mean don´t edit, not remove. But also, not sure we would use the tab.new interface to edit those. For now, those have to be edit trough the values interface
         
@@ -142,13 +146,14 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
         setnames(tab.new,toConvert,function(x)cleanSpaces(tolower(x)))
         setnames(tab.new,"fix","FIX",skip_absent = TRUE)
         toConvert[toConvert=="fix"] <- "FIX"
+
         
-        if("parameter"%in%colnames(tab.new)){
-            tab.new[,parameter:=toupper(parameter)]
-            tab.new[,parameter:=sub("THETA\\(([0-9]+)\\)","THETA\\1",parameter,ignore.case=TRUE)]
-            tab.new <- addParType(tab.new)
-            tab.new[,par.type:=toupper(par.type)]
-        }
+        ## if("parameter"%in%colnames(tab.new)){
+        ##     tab.new[,parameter:=toupper(parameter)]
+        ##     tab.new[,parameter:=sub("THETA\\(([0-9]+)\\)","THETA\\1",parameter,ignore.case=TRUE)]
+        ##     tab.new <- addParType(tab.new)
+        ## }
+        
         
         inits.l <- melt(tab.new,measure.vars=intersect(pars.init,toConvert),variable.name="type.elem",value.name="value.new")
 
@@ -200,14 +205,31 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
         pars.l
     }
     
-    
-### maybe more than one model could be allowed. If not, NMsim will break all the time?    
-    if(length(file.mod)>1) stop("`file.mod` points to more than one model. `NMwriteInits()` can only one model in `file.mod`.")
 
+### maybe more than one model could be allowed. If not, NMsim will break all the time?
+    
+### call getLines(,simplify=FALSE). Then test if length>1. Then simplify.
+    lines <- NMdata:::getLines(file=file.mod,lines=lines,simplify=FALSE)
+    if(length(lines)>1) stop("`file.mod` and `lines` point to more than one model. `NMwriteInits()` can currently only one model at a time.")
+    lines <- lines[[1]]
+    lines.old <- lines
+    
+    ## if(length(file.mod)>1) stop("`file.mod` points to more than one model. `NMwriteInits()` can only one model in `file.mod`.")
+
+    ## if(missing(lines)){
+    ##     lines.old <- readLines(file.mod,warn=FALSE)
+    ##     lines <- lines.old
+    ## } else {
+    ##     lines.old <- lines
+    ## }
+
+    
+    
     if(missing(values)) values <- NULL
     dots <- list(...)
     values <- append(values,dots)
 
+    
 
     if(any(!tolower(unlist(sapply(values,names)))%in%c("init","lower","upper","fix"))){
         stop("`values` must be a list of named lists.
@@ -229,14 +251,23 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
     ## }
 
     if(is.null(file.ext)) file.ext <- file.mod
-    lines.old <- readLines(file.mod,warn=FALSE)
+
+
+### pars.l is the resulting parameter sets that will be sequentially
+### updated based on different methods.
     
-    inits.orig <- NMreadInits(file=file.mod,return="all",as.fun="data.table")
+    ## inits.orig <- NMreadInits(file=file.mod,return="all",as.fun="data.table",section="all")
+    inits.orig <- NMreadInits(lines=lines,return="all",as.fun="data.table",section="all")
     pars.l <- inits.orig$elements
     ## until NMdata 0.2.1
     pars.l <- addParameter(pars.l)
-    
-    pars.l[,model:=fnExtension(basename(file.mod),"")]
+
+    ### this sould be supported with a model object
+    if(!is.null(file.mod)){
+        pars.l[,model:=fnExtension(basename(file.mod),"")]
+    } else {
+        pars.l[,model:="model1"]
+    }
     
     pars.l[type.elem=="FIX"&value.elem=="1",value.elem:=" FIX"]
     pars.l[type.elem=="FIX"&value.elem=="0",value.elem:=""]
@@ -253,7 +284,8 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
 
 
 ############ update paramters using .ext file
-### update from ext. This methods drops all current values. Hence, it cannot be used for updating selected values.
+### update from ext. This methods drops all current values. Hence, it
+### cannot be used for updating selected values.
     if(update){
         
         ext.new <- NMreadExt(file.ext,as.fun="data.table")
@@ -262,8 +294,8 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
             pars.l
            ,
             ext.new[,.(model,par.type,i,j,type.elem="init",
-                                        value.update=as.character(value))]
-                            ,by=c("model","par.type","i","j","type.elem"),all.x=TRUE,fun.na.by=NULL,quiet=TRUE)
+                       value.update=as.character(value))]
+           ,by=c("model","par.type","i","j","type.elem"),all.x=TRUE,fun.na.by=NULL,quiet=TRUE)
         
         pars.l[!is.na(value.update)&value.elem!="SAME",
                value.elem:=value.update
@@ -302,6 +334,7 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
     }
 
     if(!is.null(inits.tab)){
+### inits.tab <- addParType(inits.tab)
         pars.l <- fun.merge.tabs(pars.l,inits.tab,name.step="initstab")
     }
     
@@ -312,12 +345,17 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
         values <- values[!names(values)%in%c("method")]
         names.values <- names(values)
         valuestab.list <- lapply(names.values,function(name){
+            
             tab <- do.call(data.table,values[[name]])
-            tab[,parameter:=name]
+            ## prioritizing parameter in list over name of list
+            if(!"parameter"%in%colnames(tab)){
+                tab[,parameter:=name]
+            }
             tab
         })
+        
         valuestab <- rbindlist(valuestab.list,fill=TRUE)
-
+        
         pars.l <- fun.merge.tabs(pars.l,valuestab,name.step="values")
 
     }
@@ -331,10 +369,16 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
     
 ### this is identifying positions of elements that were not in existing model. I don't know that we can handle that at the moment.
 ######### Limitation: lower, init, and upper must be on same line
- 
+    
 ### if linenum is missing (new values not from control stream), put
 ### them on same line as first elem related to that par (will break if
 ### (lower, init,upper) spans multiple lines.
+### parameter is THETA(6), should be THETA6.
+### par.type, i, and j are missing. Those seem OK for OMEGA(1,1)
+### looks like parameter should be trimmed first, 
+
+    
+    
     pars.l[type.elem%in%c("init","lower","upper","FIX"),linenum.min:=min(linenum,na.rm=TRUE),by=.(par.type,i,j)]
     pars.l[type.elem%in%c("init","lower","upper","FIX")&is.na(linenum),linenum:=linenum.min]
     pars.l[type.elem%in%c("init","lower","upper"),
@@ -365,6 +409,7 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
     if("model"%in%colnames(inits.w)){
         all.models <- inits.w[,unique(model)]
         lines.new <- lapply(all.models,function(this.mod){
+            
             ## lines.new <- lapply(split(inits.w,by="model"),function(dat){
             lines.res <- NMwriteInitsOne(lines=lines.old,
                                          inits.w=inits.w[model==this.mod],
@@ -372,8 +417,20 @@ NMwriteInits <- function(file.mod,update=TRUE,file.ext=NULL,ext,inits.tab,values
                                          pars.l=pars.l[model==this.mod])
             lines.res
         })
+        
         names(lines.new) <- all.models
-        lines.new
+
+        ## lines.new
+
+        ## lines.new2 <- list()
+        ## for(n in 1:length(all.models)){
+        ##     this.mod <- all.models[[n]]
+        ##     lines.res <- NMwriteInitsOne(lines=lines.old,
+        ##                                  inits.w=inits.w[model==this.mod],
+        ##                                  inits.orig=inits.orig,
+        ##                                  pars.l=pars.l[model==this.mod])
+        ##     lines.new2[n] <- lines.res
+        ## }
     } else {
         lines.new <- NMwriteInitsOne(lines=lines.old,
                                      inits.w=inits.w,

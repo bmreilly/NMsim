@@ -130,10 +130,13 @@ NMwriteInitsOne <- function(lines,inits.w,inits.orig,pars.l){
                           backup=FALSE)
     }
 
+    
+    
     lines <- fun.update.ctl(lines,section="THETA",dt.lines=lines.all.3)
     lines <- fun.update.ctl(lines,section="OMEGA",dt.lines=lines.all.3)
     lines <- fun.update.ctl(lines,section="SIGMA",dt.lines=lines.all.3)
-
+    ## lines <- fun.update.ctl(lines,section="OMEGAPD",dt.lines=lines.all.3)
+    
 
     lines
 }

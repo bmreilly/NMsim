@@ -151,6 +151,7 @@ test_that("comments on parameters",{
     file.mod <- "testData/nonmem/xgxr053.mod"
     
     ## NMreadSection(file.mod,section="THETA")
+    ## options(warn=2)
     res1 <- NMwriteInits(file.mod,"THETA(1)"=list(init=3),"OMEGA(3,2)"=list(init=-4),"OMEGA(3,3)"=list(init=6),update=FALSE)
 
 

@@ -6,6 +6,7 @@
 \usage{
 NMwriteInits(
   file.mod,
+  lines,
   update = TRUE,
   file.ext = NULL,
   ext,
