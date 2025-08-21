@@ -417,6 +417,10 @@ NMreadInits <- function(file,lines,section,return="pars",as.fun) {
 
 ##' Convert inits elements to a parameter data.frame
 ##' @param elements The elements object produced by `NMreadInits()`.
+##' @details the elements object is more detailed as it contains
+##'     information about where information is found in control stream
+##'     lines. The `ext` object is a parameter `data.frame`, same
+##'     format as returned by `NMdata::NMreadExt()`.
 ##' @import data.table
 ##' @keywords internal
 initsToExt <- function(elements){
@@ -444,7 +448,6 @@ initsToExt <- function(elements){
 
 ###  init=SAME may not work for blocksizes>1
     if("init"%in%colnames(pars)){
-        
         suppressWarnings(pars[,init.num:=as.numeric(init)])
         pars[!is.na(init.num)|init=="SAME",init.num:=nafill(init.num,type="locf")]
         pars[,init:=init.num]
