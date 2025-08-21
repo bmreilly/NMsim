@@ -43,13 +43,7 @@ if(FALSE){
     inits[par.type%in%sections.typ,init:=valc.0]
     inits[par.type%in%sections.typ,FIX:=1]
 
-
-    inits[par.type=="OMEGAP",init:=0]
-    inits[par.type=="OMEGAPD",init:=0]
-
     inits
-
-
 
     load_all("~/wdirs/NMdata",export_all = F)
     load_all("~/wdirs/NMsim",export_all = F)

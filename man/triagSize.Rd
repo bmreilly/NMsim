@@ -18,5 +18,5 @@ calculate number of elements in the diagonal and lower triangle of
 a squared matrix, based on the length of the diagonal.
 }
 \examples{
-triagSize(1:5)
+NMsim:::triagSize(1:5)
 }

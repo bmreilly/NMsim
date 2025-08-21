@@ -1,8 +1,8 @@
 ##' clean up temporary directories left by PSN and NMsim.
 ##'
 ##' @param dir The directory in which to look for contents to clean
-##' @param types The sources to delete temporary content from. This is
-##'     a character vector, and the defailt is
+##' @param methods The sources to delete temporary content from. This
+##'     is a character vector, and the defailt is
 ##'     `c("nmsim","psn","psnfit","backup")`. Each of these correspond
 ##'     to a preconfigured pattern.
 ##' @param recursive Look recursively in folder? Notice, matches will
@@ -17,7 +17,10 @@
 
 
 deleteTmpDirs <- function(dir,methods,recursive=FALSE,delete=TRUE){
-    library(data.table)
+
+    . <- NULL
+    method <- NULL
+    pattern <- NULL
     
     findTmpType <- function(pattern){
         

@@ -153,15 +153,14 @@
 ##' }
 ##' 
 ##' See also `file.ext` which can now be handled by `inits` too. This
-##' change collects the update of the "initial"
-##' parameter values into one interface rather than multiple
-##' arguments.
-##' @param modify Named list of additional control stream
-##'     section edits. Note, these can be functions that define how to
-##'     edit sections. This is an advanced feature which is not needed
-##'     to run most simulations. It is however powerful for some types
-##'     of analyses, like modifying parameter values. See vignettes
-##'     for further information.
+##' change collects the update of the "initial" parameter values into
+##' one interface rather than multiple arguments.
+##' @param modify Named list of additional control stream section
+##'     edits. Note, these can be functions that define how to edit
+##'     sections. This is an advanced feature which is not needed to
+##'     run most simulations. It is however powerful for some types of
+##'     analyses, like modifying parameter values. See vignettes for
+##'     further information.
 ##' @param filters Edit data filters (`IGNORE`/`ACCEPT` statements)
 ##'     before running model. This should normally only be used if no
 ##'     data set is provided. It can be useful if simulating for a VPC
@@ -217,7 +216,8 @@
 ##'     arguments PSN's `execute`. The default is
 ##'     "-model_dir_name -nm_output=coi,cor,cov,ext,phi,shk,xml -nmfe_options=\"-maxlim=2\""
 ##'     in addition to the "-clean" based on the `clean`
-##'     argument. Notice, if `path.nonmem` is provided, the default is not to use PSN.
+##'     argument. Notice, if `path.nonmem` is provided, the default is
+##'     not to use PSN.
 ##' @param path.nonmem The path to the Nonmem executable to use. The
 ##'     could be something like "/usr/local/NONMEM/run/nmfe75" (which
 ##'     is a made up example). No default is available. You should be
@@ -274,6 +274,12 @@
 ##'     file containing information about all simulated models will be
 ##'     created. Notice if \code{file.res} is supplied, \code{dir.res}
 ##'     is not used.
+##' @param dir.sim.sub If `TRUE` (default) a dedicated subdirectory
+##'     will be created for eac model run. This is normally the
+##'     cleanest way to run simulations. However, when `NMsim()` is
+##'     used for estimation, it may be better to provide model results
+##'     in the same folder as the input control stream (like PSN would
+##'     do). Use `dir.sim.sub=FALSE` to get this behavior.
 ##' @param clean The degree of cleaning (file removal) to do after
 ##'     Nonmem execution. If `method.execute=="psn"`, this is passed
 ##'     to PSN's `execute`. If `method.execute=="nmsim"` a similar

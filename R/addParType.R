@@ -14,7 +14,7 @@
 ##' \itemize{
 ##' \item parameter: THETA1 , OMEGA(1,1), SIGMA(1,1), OBJ, SAEMOBJ
 ##' \item par.name: THETA(1), OMEGA(1,1), SIGMA(1,1), OBJ, SAEMOBJ
-##' \par.type THETA, OMEGA, SIGMA, OBJ
+##' \item par.type THETA, OMEGA, SIGMA, OBJ
 ##' \item i: 1, 1, 1, NA, NA (No indexes for OBJ)
 ##' \item i: NA, 1, 1, NA, NA (j not defined for THETA)
 ##' }
@@ -123,7 +123,7 @@ addParType <- function(pars,suffix,add.idx,overwrite=FALSE){
                 pars[get(col.par.type)%in%allpars.mat,
                      j:=as.integer(sub(
                          pattern=sprintf("%s\\(([0-9]+)\\,([0-9]+)\\)",get(col.par.type)),
-                         replace="\\2",
+                         replacement="\\2",
                          x=get(col.parameter)
                      )),by=row]
             }
@@ -151,6 +151,7 @@ addParType <- function(pars,suffix,add.idx,overwrite=FALSE){
 addParameter <- function(pars,overwrite=FALSE){
     cleanSpaces <- NMdata:::cleanSpaces
     
+    par.name <- NULL
     par.type <- NULL
     parameter <- NULL
     i <- NULL

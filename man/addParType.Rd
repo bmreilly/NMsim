@@ -25,7 +25,7 @@ Add par.type, i, j to a data.table that has parameter already
 \itemize{
 \item parameter: THETA1 , OMEGA(1,1), SIGMA(1,1), OBJ, SAEMOBJ
 \item par.name: THETA(1), OMEGA(1,1), SIGMA(1,1), OBJ, SAEMOBJ
-\par.type THETA, OMEGA, SIGMA, OBJ
+\item par.type THETA, OMEGA, SIGMA, OBJ
 \item i: 1, 1, 1, NA, NA (No indexes for OBJ)
 \item i: NA, 1, 1, NA, NA (j not defined for THETA)
 }

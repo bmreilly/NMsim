@@ -9,6 +9,11 @@ deleteTmpDirs(dir, methods, recursive = FALSE, delete = TRUE)
 \arguments{
 \item{dir}{The directory in which to look for contents to clean}
 
+\item{methods}{The sources to delete temporary content from. This
+is a character vector, and the defailt is
+`c("nmsim","psn","psnfit","backup")`. Each of these correspond
+to a preconfigured pattern.}
+
 \item{recursive}{Look recursively in folder? Notice, matches will
 be deleted recursively (they are often
 directories). `recursive` controls whether they are searched
@@ -16,11 +21,6 @@ for recursively.}
 
 \item{delete}{Delete the found matches? If not, the matches are
 just reported, but nothing deleted.}
-
-\item{types}{The sources to delete temporary content from. This is
-a character vector, and the defailt is
-`c("nmsim","psn","psnfit","backup")`. Each of these correspond
-to a preconfigured pattern.}
 }
 \description{
 clean up temporary directories left by PSN and NMsim.

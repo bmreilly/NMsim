@@ -196,16 +196,15 @@ into the respective sections in the control stream.
 }
 
 See also `file.ext` which can now be handled by `inits` too. This
-change collects the update of the "initial"
-parameter values into one interface rather than multiple
-arguments.}
+change collects the update of the "initial" parameter values into
+one interface rather than multiple arguments.}
 
-\item{modify}{Named list of additional control stream
-section edits. Note, these can be functions that define how to
-edit sections. This is an advanced feature which is not needed
-to run most simulations. It is however powerful for some types
-of analyses, like modifying parameter values. See vignettes
-for further information.}
+\item{modify}{Named list of additional control stream section
+edits. Note, these can be functions that define how to edit
+sections. This is an advanced feature which is not needed to
+run most simulations. It is however powerful for some types of
+analyses, like modifying parameter values. See vignettes for
+further information.}
 
 \item{filters}{Edit data filters (`IGNORE`/`ACCEPT` statements)
 before running model. This should normally only be used if no
@@ -294,7 +293,8 @@ specific installation of PSN on your system.}
 arguments PSN's `execute`. The default is
 "-model_dir_name -nm_output=coi,cor,cov,ext,phi,shk,xml -nmfe_options=\"-maxlim=2\""
 in addition to the "-clean" based on the `clean`
-argument. Notice, if `path.nonmem` is provided, the default is not to use PSN.}
+argument. Notice, if `path.nonmem` is provided, the default is
+not to use PSN.}
 
 \item{args.NMscanData}{If \code{execute=TRUE&sge=FALSE}, NMsim
 will normally read the results using \code{NMreadSim}. Use
@@ -343,6 +343,13 @@ multiple rds files. Specifying a path ensures that one rds
 file containing information about all simulated models will be
 created. Notice if \code{file.res} is supplied, \code{dir.res}
 is not used.}
+
+\item{dir.sim.sub}{If `TRUE` (default) a dedicated subdirectory
+will be created for eac model run. This is normally the
+cleanest way to run simulations. However, when `NMsim()` is
+used for estimation, it may be better to provide model results
+in the same folder as the input control stream (like PSN would
+do). Use `dir.sim.sub=FALSE` to get this behavior.}
 
 \item{wait}{Wait for simulations to finish? Default is to do so if
 simulations are run locally but not to if they are sent to the

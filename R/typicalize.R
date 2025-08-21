@@ -10,6 +10,12 @@
 
 typicalize <- function(file.mod,lines,sections,newfile){
     
+    file.sim <- NULL
+    FIX <- NULL
+    init <- NULL
+    par.type <- NULL
+    
+
     if(missing(file.mod)) file.mod <- NULL
     if(missing(lines)) lines <- NULL
     if(missing(sections)) sections <- NULL
@@ -35,7 +41,7 @@ typicalize <- function(file.mod,lines,sections,newfile){
         return(mod.new)            
     }
 
-    writeTextFile(lines=mod.new,file=file.sim)
+    writeTextFile(lines=mod.new,file=newfile)
 
     return(file.sim)    
 

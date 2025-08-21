@@ -19,6 +19,9 @@ NMwriteInits(
 \arguments{
 \item{file.mod}{Path to control stream.}
 
+\item{lines}{Control stream as character vector. Use either
+`file.mod` or `lines`, not both.}
+
 \item{update}{If `TRUE` (default), the parameter values are
 updated based on the `.ext` file. The path to the `.ext` file
 can be specified with `file.ext` but that is normally not

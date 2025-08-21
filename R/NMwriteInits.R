@@ -3,6 +3,8 @@
 ##' Edit parameter values, fix/unfix them, or edit lower/upper bounds.
 ##' 
 ##' @param file.mod Path to control stream.
+##' @param lines Control stream as character vector. Use either
+##'     `file.mod` or `lines`, not both.
 ##' @param update If `TRUE` (default), the parameter values are
 ##'     updated based on the `.ext` file. The path to the `.ext` file
 ##'     can be specified with `file.ext` but that is normally not
@@ -95,7 +97,7 @@ NMwriteInits <- function(file.mod,lines,update=TRUE,file.ext=NULL,ext,inits.tab,
     if(missing(lines)) lines <- NULL
     
     fun.merge.tabs <- function(pars.l,tab.new,name.step){
-
+        
         parameter <- NULL
         value.new <- NULL
         

@@ -11,7 +11,7 @@
 ##' 
 ##' @return An integer
 ##' @examples
-##' triagSize(1:5)
+##' NMsim:::triagSize(1:5)
 
 triagSize <- function(diagSize){
     ((diagSize^2)-diagSize)/2+diagSize
