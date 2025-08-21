@@ -135,7 +135,12 @@ NMwriteInitsOne <- function(lines,inits.w,inits.orig,pars.l){
     lines <- fun.update.ctl(lines,section="THETA",dt.lines=lines.all.3)
     lines <- fun.update.ctl(lines,section="OMEGA",dt.lines=lines.all.3)
     lines <- fun.update.ctl(lines,section="SIGMA",dt.lines=lines.all.3)
-    ## lines <- fun.update.ctl(lines,section="OMEGAPD",dt.lines=lines.all.3)
+    lines <- fun.update.ctl(lines,section="THETAP",dt.lines=lines.all.3)
+    lines <- fun.update.ctl(lines,section="THETAPV",dt.lines=lines.all.3)
+    lines <- fun.update.ctl(lines,section="OMEGAP",dt.lines=lines.all.3)
+    lines <- fun.update.ctl(lines,section="OMEGAPD",dt.lines=lines.all.3)
+    lines <- fun.update.ctl(lines,section="SIGMAP",dt.lines=lines.all.3)
+    lines <- fun.update.ctl(lines,section="SIGMAPD",dt.lines=lines.all.3)
     
 
     lines
