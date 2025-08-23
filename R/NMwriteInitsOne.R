@@ -40,6 +40,7 @@ NMwriteInitsOne <- function(lines,inits.w,inits.orig,pars.l){
         if(any(!is.na(upper)&is.na(lower))) stop("if upper limit is provided, lower limit must also be provided.")
         dt <- data.table(lower=lower,init=init,upper=upper)[,row:=.I]
         dt[,res:=""]
+        
         if(!is.na(init)){
             dt[init=="SAME",res:=init]
             dt[init!="SAME",res:=paste0("(",paste(setdiff(c(lower,init,upper),NA),collapse=","),")",FIX),by=row]
@@ -62,7 +63,20 @@ NMwriteInitsOne <- function(lines,inits.w,inits.orig,pars.l){
         inits.w[,elemnum_BLOCK:=NA]
     }
     
-    inits.w[,string.elem:=paste.ll.init.ul(value.elem_lower,value.elem_init,value.elem_upper,value.elem_FIX,value.elem_BLOCK),by=row]
+### The way paste.ll.unit.ul works, it pastes FIX after all fixed
+### parameters. But BLOCKs should only be fixed once. Dropping FIX
+### from non-first elements in blocks.
+########## I think the best would be to summarize FIX in the BLOCK element. Then have paste.ll..... add FIX right after BLOCK() like BLOCK(2) FIX 0 0 0     
+    ## inits.w[,iblock.unique:=.GRP,by=.(par.type,iblock)]
+    ## !is.na(value.elem_init) is because we don't count BLOCK elements here
+    ##inits.w[!is.na(value.elem_init)&duplicated(iblock.unique),value.elem_FIX:=""]
+    ## inits.w[blocksize>1&elemn]
+    ## inits.w[,value.elem_FIX:=ifelse(any(grepl("FIX",value.elem_FIX))," FIX",""),by=iblock.unique]
+    inits.w[,string.elem:=paste.ll.init.ul(lower=value.elem_lower,
+                                           init=value.elem_init,
+                                           upper=value.elem_upper,
+                                           FIX=value.elem_FIX,
+                                           BLOCK=value.elem_BLOCK),by=row]
     inits.w[,elemnum:=min(elemnum_lower,elemnum_init,elemnum_upper,elemnum_BLOCK,na.rm=TRUE),by=row]
 
     cnames.common <- intersect(colnames(pars.l),colnames(inits.w))
@@ -71,12 +85,15 @@ NMwriteInitsOne <- function(lines,inits.w,inits.orig,pars.l){
        ,
         inits.w[,cnames.common,with=FALSE]
     )
-
+    
     elems.all <- elems.all[order(par.type,linenum,elemnum)]
     elems.all[,row:=.I]
     ## idx.update <- elems.all[par.type%in%c("OMEGA","SIGMA"), row[1], by = .(par.type,iblock)][,V1]
     idx.update <- elems.all[, row[1], by = .(par.type,iblock)][,V1]
-    elems.all[idx.update, string.elem := paste(paste0("$",par.type),string.elem)]
+    ## putting $SECTION in front of every new line
+    elems.all[,linenum.unique:=.GRP,by=.(par.type,linenum)]
+## elems.all[idx.update, string.elem := paste(paste0("$",par.type),string.elem)]
+    elems.all[!duplicated(linenum.unique)&row%in%idx.update, string.elem := paste(paste0("$",par.type),string.elem)]
 
     ## lines.all should also include empty lines and before and after text
 

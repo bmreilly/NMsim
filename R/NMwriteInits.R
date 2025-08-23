@@ -394,6 +394,8 @@ NMwriteInits <- function(file.mod,lines,update=TRUE,file.ext=NULL,ext,inits.tab,
     ## pars.l[,parnumline:=1:.N,by=.(par.type,i,j)]
     pars.l[,iblock:=uniquePresent(iblock),by=.(par.type,i,j)]
     pars.l[,blocksize:=uniquePresent(blocksize),by=.(par.type,i,j)]
+
+    
     
     inits.w <- dcastSe(pars.l,
                        l=intersect(c("model","par.type","linenum","parnum","i","j","iblock","blocksize"),colnames(pars.l)),
@@ -406,7 +408,22 @@ NMwriteInits <- function(file.mod,lines,update=TRUE,file.ext=NULL,ext,inits.tab,
         inits.w[,(cols.miss):=NA_character_]
     }
     inits.w[is.na(value.elem_FIX),value.elem_FIX:=""]
-
+    if(!"model"%in%colnames(inits.w)){
+        inits.w[,model:="model1"]
+    }
+    
+    inits.w[,iblock.unique:=.GRP,by=.(par.type,iblock)]
+    inits.w[blocksize>1,value.elem_FIX:=ifelse(any(i==j&grepl("FIX",value.elem_FIX))," FIX",""),by=.(model,iblock.unique)]
+    
+    inits.w <- rbindlist(lapply(split(inits.w,"model"),FUN=function(ini){
+        if(ini[blocksize>1&!is.na(value.elem_init),.N]==0) return(ini)
+        ini[blocksize>1&!is.na(value.elem_init),
+            row.within.block:=1:.N,
+            by=.(model,iblock.unique)]
+        ini}))
+    if(!"row.within.block"%in%colnames(inits.w)) inits.w[,row.within.block:=1]
+    inits.w[blocksize>1&is.na(row.within.block)|row.within.block!=1,
+            value.elem_FIX:=""]
     
     if("model"%in%colnames(inits.w)){
         all.models <- inits.w[,unique(model)]
