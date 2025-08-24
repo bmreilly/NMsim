@@ -1,4 +1,4 @@
-##' Simulate from an estimated Nonmem model
+##' Simulate from a Nonmem model
 ##'
 ##' Supply a data set and an estimation input control stream, and
 ##' NMsim can create neccesary files (control stream, data files), run
@@ -1385,10 +1385,12 @@ NMsim <- function(file.mod,data,
 
     
 ### if typical
-    if(typical){
+    if(is.character(typical)||typical){
+        typical.use <- typical
+        if(!is.character(typical)) typical.use <- NULL
 #### old typicalize version
         ## dt.mods.sim <- dt.models[,.(mod=typicalize(file.sim=path.sim,file.mod=file.mod,return.text=TRUE,file.ext=file.ext)),by=.(ROWMODEL,path.sim)]
-        dt.mods.sim <- dt.models[,.(mod=typicalize(file.mod=path.sim)),by=.(ROWMODEL,path.sim)]
+        dt.mods.sim <- dt.models[,.(mod=typicalize(file.mod=path.sim,section=typical.use)),by=.(ROWMODEL,path.sim)]
         ## write results
         
         ## dt.models[,writeTextFile(dt.mods.sim[ROWMODEL2==ROWMODEL,mod],file=path.sim),by=ROWMODEL2]
