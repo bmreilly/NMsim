@@ -41,6 +41,13 @@
 ##' \item If using something like CL=(.1,4,15) in control stream, two
 ##' of those cannot be on the same line.
 ##' }
+##'
+##' In Nonmem an entire block is either fixed or not.
+##' `NMwriteInits()` fixes/unfixes the entire block based on the
+##' top-left element in the block. This means, if
+##' OMEGA(2,2)-OMEGA(3,3) is a block, the `FIX` status of OMEGA(2,2)
+##' determines whether the block is fixed. `FIX` of all other elements
+##' in the block has no effect.
 ##' 
 ##' @return a control stream as lines in a character vector.
 ##' @examples
@@ -264,7 +271,7 @@ NMwriteInits <- function(file.mod,lines,update=TRUE,file.ext=NULL,ext,inits.tab,
     ## until NMdata 0.2.1
     pars.l <- addParameter(pars.l)
 
-    ### this sould be supported with a model object
+### this sould be supported with a model object
     if(!is.null(file.mod)){
         pars.l[,model:=fnExtension(basename(file.mod),"")]
     } else {
@@ -408,23 +415,51 @@ NMwriteInits <- function(file.mod,lines,update=TRUE,file.ext=NULL,ext,inits.tab,
         inits.w[,(cols.miss):=NA_character_]
     }
     inits.w[is.na(value.elem_FIX),value.elem_FIX:=""]
-    if(!"model"%in%colnames(inits.w)){
-        inits.w[,model:="model1"]
+
+
+#### adjusting FIX for NMwriteInitsOne(). FIX must be on the first and
+#### only the first value element in each block. If any fix is found
+#### in the block, the whole block will be fixed.
+
+### the code gets simpler if a model column can be assumed - see
+### if/else below. Only enable after checking that output isn't
+### affected. Or drop the column before returning if added here?
+    ## if(!"model"%in%colnames(inits.w)){
+    ##     inits.w[,model:="model1"]
+    ## }
+
+### not assuming model column.
+    bymodel <- NULL
+    if("model"%in%colnames(inits.w)){
+        bymodel <- "model"
+    }
+    ## iblock.unique is unique across model and parameter type (iblock is not)
+    inits.w[,iblock.unique:=.GRP,by=c(bymodel,"par.type","iblock")]
+
+    ### fixing everything if any element in block is fixed
+    ## inits.w[blocksize>1,value.elem_FIX:=ifelse(any(grepl("FIX",value.elem_FIX))," FIX",""),by=c(bymodel,"iblock.unique")]
+
+### adding an element counter within blocks to know where to FIX (first element)
+    if("model"%in%colnames(inits.w)){
+        inits.w <- rbindlist(lapply(split(inits.w,bymodel),FUN=function(ini){
+            if(ini[blocksize>1&!is.na(value.elem_init),.N]==0) return(ini)
+            ini[blocksize>1&!is.na(value.elem_init),
+                row.within.block:=1:.N,
+                by=c(bymodel,"iblock.unique")]
+            ini}),fill=TRUE)
+    } else {
+        if(inits.w[blocksize>1&!is.na(value.elem_init),.N]>0) 
+            inits.w[blocksize>1&!is.na(value.elem_init),
+                    row.within.block:=1:.N,
+                    by=c(bymodel,"iblock.unique")]
     }
     
-    inits.w[,iblock.unique:=.GRP,by=.(par.type,iblock)]
-    inits.w[blocksize>1,value.elem_FIX:=ifelse(any(i==j&grepl("FIX",value.elem_FIX))," FIX",""),by=.(model,iblock.unique)]
-    
-    inits.w <- rbindlist(lapply(split(inits.w,"model"),FUN=function(ini){
-        if(ini[blocksize>1&!is.na(value.elem_init),.N]==0) return(ini)
-        ini[blocksize>1&!is.na(value.elem_init),
-            row.within.block:=1:.N,
-            by=.(model,iblock.unique)]
-        ini}))
+### if not first element, drop FIX
     if(!"row.within.block"%in%colnames(inits.w)) inits.w[,row.within.block:=1]
     inits.w[blocksize>1&is.na(row.within.block)|row.within.block!=1,
             value.elem_FIX:=""]
-    
+
+### call NMwriteInitsOne()
     if("model"%in%colnames(inits.w)){
         all.models <- inits.w[,unique(model)]
         lines.new <- lapply(all.models,function(this.mod){
@@ -439,17 +474,6 @@ NMwriteInits <- function(file.mod,lines,update=TRUE,file.ext=NULL,ext,inits.tab,
         
         names(lines.new) <- all.models
 
-        ## lines.new
-
-        ## lines.new2 <- list()
-        ## for(n in 1:length(all.models)){
-        ##     this.mod <- all.models[[n]]
-        ##     lines.res <- NMwriteInitsOne(lines=lines.old,
-        ##                                  inits.w=inits.w[model==this.mod],
-        ##                                  inits.orig=inits.orig,
-        ##                                  pars.l=pars.l[model==this.mod])
-        ##     lines.new2[n] <- lines.res
-        ## }
     } else {
         lines.new <- NMwriteInitsOne(lines=lines.old,
                                      inits.w=inits.w,
