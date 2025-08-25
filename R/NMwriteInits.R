@@ -439,7 +439,11 @@ NMwriteInits <- function(file.mod,lines,update=TRUE,file.ext=NULL,ext,inits.tab,
     ### fixing everything if any element in block is fixed
     ## inits.w[blocksize>1,value.elem_FIX:=ifelse(any(grepl("FIX",value.elem_FIX))," FIX",""),by=c(bymodel,"iblock.unique")]
 
-### adding an element counter within blocks to know where to FIX (first element)
+### adding an element counter within blocks to know where to FIX
+### (first element). I'm not sure the use of is.na(value.elem_init) is
+### right. Maybe it can be avoided, or maybe it's to avoid BLOCK
+### elements. What would happen if only FIX is modified in a function
+### call?
     if("model"%in%colnames(inits.w)){
         inits.w <- rbindlist(lapply(split(inits.w,bymodel),FUN=function(ini){
             if(ini[blocksize>1&!is.na(value.elem_init),.N]==0) return(ini)

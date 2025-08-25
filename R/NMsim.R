@@ -99,8 +99,8 @@
 ##' @param script The path to the script where this is run. For
 ##'     stamping of dataset so results can be traced back to code.
 ##' @param text.sim A character string to be pasted into
-##'     $SIMULATION. This must not contain seed or SUBPROBLEM which
-##'     is handled separately. Default is to include "ONLYSIM". You
+##'     $SIMULATION. This must not contain seed or SUBPROBLEM which is
+##'     handled separately. Default is to include "ONLYSIM". You
 ##'     cannot avoid that using `text.sim`. If needed, you can use
 ##'     `onlysim=FALSE` which will be passed to `NMsim_default()`.
 ##' @param method.sim A function (not quoted) that creates the
@@ -114,13 +114,22 @@
 ##' @param typical Run with all ETAs fixed to zero? Technically all
 ##'     ETAs=0 is obtained by replacing \code{$OMEGA} by a zero
 ##'     matrix. Default is `FALSE`.
-##' @param inits Control the parameter values. `inits` is a list. The
-##'     `method` element controls which method is used to do this, and
-##'     this corresponds to the old `method.update.inits` argument. If
-##'     using the new `method=nmsim` you can specify parameter
-##'     values, fix/unfix them, and edit lower and upper limits for
-##'     estimation.
-##' \itemize{
+##' @param inits Control the parameter values. `inits` is a list and
+##'     contains (any of) the `method` used to edit the parameters,
+##'     and what modifications to do.
+##'
+##' Using the defaul `method`, all other list elements are passed as
+##' arguments to `NMwriteInits()`. Please see `?NMwriteInits` and the
+##' examples on the NMsim website for how to edit the parameter
+##' values: https://nmautoverse.github.io/NMsim/vignettes/NMsim-modify-model.html
+##'
+##' The `method` element controls which method is used to do this, and
+##'     this corresponds to the old `method.update.inits`
+##'     argument. Normally, the user should not need to deal with this
+##'     as the default `nmsim` method is very flexible and
+##'     powerful. If using the new `method=nmsim` you can specify
+##'     parameter values, fix/unfix them, and edit lower and upper
+##'     limits for estimation.  \itemize{
 ##'
 ##' \item{`method="nmsim"`} (default) A highly flexible internal
 ##'      method, allows for modification of the parameter values. All

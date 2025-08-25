@@ -248,7 +248,7 @@ data.sim <- NMcreateDoses(TIME=c(0,24),AMT=c(300,150),ADDL=c(0,5),II=c(0,24),CMT
 ##                                   package="NMsim"))
 ```
 
-## Control Parameter Values (`inits`)
+## Edit Model Parameters (`inits`)
 
 First, we collect an overview of the parameters in the model, their initial values as specified in the control stream, and the estimated values, as read from the `.ext` file. We are using functions from NMdata to get these. If you are interested in learning more about these functions, [This NMdata vignette]() is a good place to start.
 
@@ -324,8 +324,43 @@ my.file.diff(file.mod,modTab(simres.inits1)$path.sim,sections=c("THETA","OMEGA",
              x_arg="file.mod",y_arg="simulation")
 ```
 
+For simulation purposes, the initial value is probably going to be the only property of a parameter that needs to be controlled. For other purposes like estimation or optimal sampling, properties such as "FIX", lower and upper limits may also need to be modified. `inits` supports modification of any subset of these values. This would remove "FIX" and include bounds like `(0,0.54,10)`:
 
-# Example (`modify`): Change in formulation
+```{r,eval=FALSE}
+simres.inits1b <- NMsim(file.mod=file.mod,
+                       data=data.sim,
+                       inits=list("theta(1)"=list(init=0.54,lower=0,upper=10,FIX=0)),
+                       name.sim="inits1b")
+```
+
+
+The `inits` argument provides multiple interfaces to specification of parameter values. The one used above is simple and easy for a few parameter specifications. You can also maintain a `data.frame` of parameters using (any subset of) columns named `init`, `FIX`, `lower`, `upper`. This may be more convenient for programming. Pass this as 
+
+```{r,eval=FALSE}
+inits=lists(inits.tab=my.df)
+```
+
+Also, you can use a specific format table used to represent parameter values, as obtained by `NMdata::NMreadExt()`. Read the parameters, modify, apply (here, adding 30% to `THETA(1)`):
+
+```{r,eval=FALSE}
+myext <- NMreadExt(file.mod)
+myext[myext$parameter=="THETA(1)",value=value*1.3]
+
+simres.inits1c <- NMsim(file.mod=file.mod,
+                       data=data.sim,
+                       inits=list(ext=myext),
+                       name.sim="inits1c")
+
+```
+
+
+
+
+# Edit the Control Stream Text (`modify`)
+
+While `inits` modifies parameter values (and other parameter properties), `modify` edits the control stream text directly. This is a powerful alternative because it can allow for modifications independent of parameter numbering, and the model can be modified very freely. 
+
+## Example (`modify`): Change in formulation
 
 <!-- Philip comment:
 I wrote the following as I was going through the doc. After having read the DDI example too, I actually really like this. But maybe in the intro and/or the first line of the examples, we should add what this illustrates in terms of NMsim features. 
