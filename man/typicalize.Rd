@@ -4,7 +4,7 @@
 \alias{typicalize}
 \title{Set variability parameters to zero}
 \usage{
-typicalize(file.mod, lines, sections, newfile)
+typicalize(file.mod, lines, section, newfile)
 }
 \arguments{
 \item{file.mod}{path to control stream to edit}
@@ -12,7 +12,7 @@ typicalize(file.mod, lines, sections, newfile)
 \item{lines}{control stream as lines. Use either file.sim or
 lines.sim.}
 
-\item{sections}{The sections (parameter types) to edit. Default is
+\item{section}{The sections (parameter types) to edit. Default is
 `c("OMEGA", "OMEGAP", "OMEGAPD")`.}
 
 \item{newfile}{path and filename to new run. If missing or NULL,
