@@ -253,11 +253,34 @@ test_that("typical",{
                   execute=FALSE,
                   method.update.inits="nmsim")
 
+    
+    res1 <- readLines("testOutput/xgxr025_sd1/xgxr025_sd1.mod")
     ## ref <- readRDS(fileRef)
-    expect_equal_to_reference(sim1,fileRef)
+    expect_equal_to_reference(res1,fileRef)
 
 })
-## }
+
+test_that("typical omega and sigma",{
+
+    fileRef <- "testReference/NMsim_04b.rds"
+
+    file.mod <- "testData/nonmem/xgxr025.mod"
+    sim1 <- NMsim(file.mod=file.mod,
+                  data=dat.sim,
+                  dir.sims="testOutput",
+                  name.sim = "sd1",
+                  seed.nm=2342,
+                  typical=cc(omega,sigma),
+                  execute=FALSE,
+                  method.update.inits="nmsim")
+
+    res1 <- readLines("testOutput/xgxr025_sd1/xgxr025_sd1.mod")
+    expect_equal_to_reference(res1,fileRef)
+
+    ## ref <- readRDS(fileRef)
+
+})
+
 
 
 if(F){
