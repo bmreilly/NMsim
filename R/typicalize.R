@@ -6,6 +6,8 @@
 ##'     `c("OMEGA", "OMEGAP", "OMEGAPD")`.
 ##' @param newfile path and filename to new run. If missing or NULL,
 ##'     output is returned as a character vector rather than written.
+##' @import data.table
+##' @import NMdata
 ##' @keywords internal
 
 typicalize <- function(file.mod,lines,section,newfile){
@@ -26,13 +28,18 @@ typicalize <- function(file.mod,lines,section,newfile){
     if(is.null(section)){
         section <- c("OMEGA","OMEGAP","OMEGAPD")
     }
+    section <- NMdata:::cleanSpaces(section)
+    section <- toupper(section)
 
     inits <- NMreadInits(lines=lines,as.fun="data.table",section=section)
 
     valc.0 <- 1e-30
     
-    inits[par.type%in%section,init:=valc.0]
+    inits[par.type%in%section,init:=0]
     inits[par.type%in%section,FIX:=1]
+    if("blocksize"%in%colnames(inits)){
+        inits[par.type%in%section&blocksize>1,init:=valc.0]
+    }
 
     mod.new <- NMwriteInits(lines=lines,inits.tab=inits,update=FALSE)
 

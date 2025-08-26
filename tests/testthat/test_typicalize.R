@@ -35,9 +35,10 @@ test_that("Priors",{
     res <- secs[c("OMEGA","OMEGAP","OMEGAPD")]
     expect_equal_to_reference(res,fileRef)
 
-        if(F){
-            res
-        readRDS(fileRef)
+    if(F){
+        ref <- readRDS(fileRef)
+        res
+        ref
     }
 
     
@@ -45,3 +46,22 @@ test_that("Priors",{
 
 
 
+test_that("zero sigma",{
+
+    fileRef <- "testReference/typicalize_03.rds"
+
+    file.mod="testData/nonmem/xgxr011.mod"
+    lines.in <- readLines(file.mod,warn=FALSE)
+    ## res.all <- NMsim:::typicalize(lines=lines.in,file.mod=file.mod,return.text = TRUE)
+    res.all <- NMsim:::typicalize(lines=lines.in,section=c("omega","sigma"))
+    res.o <- NMreadSection(lines=res.all,section="OMEGA")
+    res.s <- NMreadSection(lines=res.all,section="SIGMA")
+    res <- c(res.o,res.s)
+    expect_equal_to_reference(res,fileRef)
+    if(F){
+        res
+        readRDS(fileRef)
+    }
+
+
+})

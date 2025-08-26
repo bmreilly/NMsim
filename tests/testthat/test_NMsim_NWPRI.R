@@ -38,20 +38,19 @@ NMdataConf(
 
 dt.amt <- data.table(DOSE=c(100,400))
 dt.amt[,AMT:=DOSE*1000]
-dt.amt
 doses.sd <- NMcreateDoses(TIME=0,AMT=dt.amt,as.fun="data.table")
 doses.sd[,dose:=paste(DOSE,"mg")]
 doses.sd[,regimen:="SD"]
 
 
-dat.sim.sd <- addEVID2(doses.sd,time.sim=0:24,CMT=2,as.fun="data.table")
+dat.sim.sd <- NMaddSamples(doses.sd,TIME=0:24,CMT=2,as.fun="data.table")
 dat.sim <- copy(dat.sim.sd)
 
 ## NMcheckData(dat.sim)
 
 dat.sim[,ROW:=.I]
 
-head(dat.sim)
+##head(dat.sim)
 
 dat.sim[,BBW:=75]
 
@@ -74,7 +73,7 @@ test_that("NMsim_NWPRI",{
     
 
     ## ref <- readRDS(fileRef)
-    if(packageVersion("NMdata")>="2.1.0"){
+    if(packageVersion("NMdata")>="0.2.1"){
         expect_equal_to_reference(mod$THETAPV,fnAppend(fileRef,"THETAPV"))
         expect_equal_to_reference(mod$OMEGAP,fnAppend(fileRef,"OMEGAP"))
         expect_equal_to_reference(mod,fileRef)
@@ -172,7 +171,6 @@ test_that("NMsim_NWPRI_Omega44",{
 
     }
     
-    
 })
 
 
@@ -197,7 +195,6 @@ test_that("block OMEGA 4x4 - typical",{
     
     mod <- NMreadSection("testOutput/predu_sd3_NWPRI/predu_sd3_NWPRI.mod")
     
-    mod
     ## ref <- readRDS(fileRef)
     ## expect_equal_to_reference(mod$THETAPV,fnAppend(fileRef,"THETAPV"))
     expect_equal_to_reference(mod$OMEGAP,fnAppend(fileRef,"OMEGAP"))
@@ -220,6 +217,9 @@ test_that("block OMEGA 4x4 - typical",{
         
         ref$OMEGAP
         mod$OMEGAP
+
+        ref$OMEGAPD
+        mod$OMEGAPD
         
         ref$THETAPV
         mod$THETAPV
