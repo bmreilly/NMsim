@@ -84,6 +84,10 @@ path.candidates <- c(## metworx
 
 (path.nonmem <- NMsim:::prioritizePaths(path.candidates))
 
+## if psn is not available
+## warning("running without psn - some tests will fail.")
+## NMdataConf(path.nonmem=path.nonmem)
+
 
 #### need a function to drop NMsimVersion and NMsimTime from table
 fix.time <- function(x,extra=NULL){
@@ -177,7 +181,7 @@ test_that("basic - sge - dont wait",{
                     dir.sims="testOutput",
                     name.sim="default_01"
                    ,sge=TRUE
-
+                   ## ,quiet=FALSE
                     ## ,path.nonmem=path.nonmem
                     ##,reuse.results=TRUE
                     ## ,file.res=simtab
@@ -427,8 +431,6 @@ test_that("basic - spaces in paths",{
 
 
 test_that("SAEM - default",{
-
-
 
     fileRef <- "testReference/NMsim_05.rds"
 
@@ -1283,7 +1285,7 @@ test_that("basic - nmsim update inits",{
 
 test_that("basic - nmsim update inits",{
     
-    ## fileRef <- "testReference/NMsim_15.rds"
+    fileRef <- "testReference/NMsim_15b.rds"
 
     file.mod <- "../../tests/testthat/testData/nonmem/xgxr021.mod"
 
@@ -1316,7 +1318,8 @@ test_that("basic - nmsim update inits",{
                      path.nonmem=path.nonmem
                      )
 
-
+    res <- rbind(simres2,simres3,simres4)
+    expect_equal_to_reference(res,fileRef)
     
     expect_error(NMsim(file.mod,
                        data=dt.sim,
@@ -1601,7 +1604,7 @@ test_that("BLOCK(2) FIX .1 .1 .1 rather than BLOCK(2) 0.1 FIX .1 .1",{
     fileRef <- "testReference/NMsim_22.rds"
 
     file.mod <- "testData/nonmem/xgxr059.mod"
-    load_all(export_all=FALSE)
+    ##load_all(export_all=FALSE)
 
     NMreadExt(file.mod,as.fun="data.table")[par.type=="OMEGA"&i%in%c(2,3)&j%in%c(2,3)]
     
@@ -1610,11 +1613,12 @@ test_that("BLOCK(2) FIX .1 .1 .1 rather than BLOCK(2) 0.1 FIX .1 .1",{
                     table.var="PRED IPRED Y ETAS(1:LAST)",
                     name.sim="covetas_02",
                     path.nonmem=path.nonmem,
+                    inits=list("omega(2,2)"=list(FIX=1)),
                     ## inits=list(method="none"),
                     seed.R=43
                     )
 
-    NMreadExt(file.mod)[par.type=="OMEGA" & i%in%c(2,3)&j%in%c(2,3)]
+    NMreadExt(file.mod,as.fun="data.table")[par.type=="OMEGA" & i%in%c(2,3)&j%in%c(2,3)]
     omega.sim <- NMreadSection("testOutput/simtmp/xgxr059_covetas_02/xgxr059_covetas_02.mod",section="OMEGA")
     
 ### a check that nonmem uses te right dist is unnecessary

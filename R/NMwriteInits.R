@@ -407,7 +407,8 @@ NMwriteInits <- function(file.mod,lines,update=TRUE,file.ext=NULL,ext,inits.tab,
     inits.w <- dcastSe(pars.l,
                        l=intersect(c("model","par.type","linenum","parnum","i","j","iblock","blocksize"),colnames(pars.l)),
                        r="type.elem",
-                       value.var=c("elemnum","value.elem"),funs.aggregate=min)
+                       value.var=c("elemnum","value.elem"),funs.aggregate=function(x)min(as.numeric(x),na.rm=TRUE))
+
 
 ### the rest of the code is dependent on all of init, lower, upper, and FIX being available.
     cols.miss <- setdiff(outer(c("value.elem","elemnum"),c("init","lower","upper","FIX"),FUN=paste,sep="_"),colnames(inits.w))
@@ -436,14 +437,14 @@ NMwriteInits <- function(file.mod,lines,update=TRUE,file.ext=NULL,ext,inits.tab,
     ## iblock.unique is unique across model and parameter type (iblock is not)
     inits.w[,iblock.unique:=.GRP,by=c(bymodel,"par.type","iblock")]
 
-    ### fixing everything if any element in block is fixed
-    ## inits.w[blocksize>1,value.elem_FIX:=ifelse(any(grepl("FIX",value.elem_FIX))," FIX",""),by=c(bymodel,"iblock.unique")]
 
 ### adding an element counter within blocks to know where to FIX
-### (first element). I'm not sure the use of is.na(value.elem_init) is
-### right. Maybe it can be avoided, or maybe it's to avoid BLOCK
-### elements. What would happen if only FIX is modified in a function
-### call?
+### (first element). is.na(value.elem_init) makes sure we insert FIX
+### after the first value element. Example where needed: a line is
+### only $OMEGA and values start in next line.
+
+    
+
     if("model"%in%colnames(inits.w)){
         inits.w <- rbindlist(lapply(split(inits.w,bymodel),FUN=function(ini){
             if(ini[blocksize>1&!is.na(value.elem_init),.N]==0) return(ini)
@@ -457,6 +458,13 @@ NMwriteInits <- function(file.mod,lines,update=TRUE,file.ext=NULL,ext,inits.tab,
                     row.within.block:=1:.N,
                     by=c(bymodel,"iblock.unique")]
     }
+
+    
+### fixing everything if any element in block is fixed
+    ## inits.w[blocksize>1,value.elem_FIX:=ifelse(any(grepl("FIX",value.elem_FIX))," FIX",""),by=c(bymodel,"iblock.unique")]
+### fixing all if first value element has fix
+    inits.w[blocksize>1,value.elem_FIX:=ifelse(any(grepl("FIX",value.elem_FIX)&i==min(i)&j==min(j))," FIX",""),by=c(bymodel,"iblock.unique")]
+
     
 ### if not first element, drop FIX
     if(!"row.within.block"%in%colnames(inits.w)) inits.w[,row.within.block:=1]
