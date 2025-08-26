@@ -113,7 +113,13 @@
 ##'     methods.
 ##' @param typical Run with all ETAs fixed to zero? Technically all
 ##'     ETAs=0 is obtained by replacing \code{$OMEGA} by a zero
-##'     matrix. Default is `FALSE`.
+##'     matrix. Default is `FALSE`. Instead of a logical `TRUE/FALSE`,
+##'     a character vector can be used to specify what parameter types
+##'     to set to zero and fix. Examples:
+##'     `typical=c("OMEGA","SIGMA")`,
+##'     `typical=c("THETAPV","OMEGA","OMEGAP","OMEGAPD")`. In fact, if
+##'     `typical=TRUE`, both `$OMEGA` itself and - if found - their
+##'     priors will be fixed at zero.
 ##' @param inits Control the parameter values. `inits` is a list and
 ##'     contains (any of) the `method` used to edit the parameters,
 ##'     and what modifications to do.
