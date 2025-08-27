@@ -112,6 +112,11 @@ Also, see recent [Publications](NMsim-publications.html).
 
 #### Philip Delff {.authors}
 
+ - Basic Simulation Data Sets
+ - Add Time After Previous Dose and Related Information
+ - Multiple Endpoints (e.g. parent and metabolite)
+ - Cohort-Dependent or Individual Sampling Schemes
+ 
 :::
 
 :::example
