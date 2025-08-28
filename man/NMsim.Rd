@@ -170,7 +170,8 @@ priors will be fixed at zero.}
 Using the defaul `method`, all other list elements are passed as
 arguments to `NMwriteInits()`. Please see `?NMwriteInits` and the
 examples on the NMsim website for how to edit the parameter
-values: https://nmautoverse.github.io/NMsim/vignettes/NMsim-modify-model.html
+values:
+\url{https://nmautoverse.github.io/NMsim/vignettes/NMsim-modify-model.html}
 
 The `method` element controls which method is used to do this, and
     this corresponds to the old `method.update.inits`
