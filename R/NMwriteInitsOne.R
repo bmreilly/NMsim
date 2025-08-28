@@ -10,6 +10,7 @@ NMwriteInitsOne <- function(lines,inits.w,inits.orig,pars.l){
     elemnum_upper <- NULL
     iblock <- NULL
     linenum <- NULL
+    linenum.unique <- NULL
     nchars.active <- NULL
     newtext <- NULL
     par.type <- NULL

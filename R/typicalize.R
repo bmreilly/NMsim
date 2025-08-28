@@ -12,6 +12,7 @@
 
 typicalize <- function(file.mod,lines,section,newfile){
     
+    blocksize <- NULL
     file.sim <- NULL
     FIX <- NULL
     init <- NULL

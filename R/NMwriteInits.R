@@ -78,6 +78,7 @@ NMwriteInits <- function(file.mod,lines,update=TRUE,file.ext=NULL,ext,inits.tab,
     elems.found <- NULL
     i <- NULL
     iblock <- NULL
+    iblock.unique <- NULL
     j <- NULL
     linenum <- NULL
     linenum.min <- NULL
@@ -86,6 +87,7 @@ NMwriteInits <- function(file.mod,lines,update=TRUE,file.ext=NULL,ext,inits.tab,
     parameter <- NULL
     parnum <- NULL
     par.type <- NULL
+    row.within.block <- NULL
     type.elem <- NULL
     value.elem_init <- NULL
     value.elem_init_update <- NULL
