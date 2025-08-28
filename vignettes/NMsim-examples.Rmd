@@ -111,8 +111,8 @@ Also, see recent [Publications](NMsim-publications.html).
 ## [**Data Set Creation with NMsim**](NMsim-DataCreate.html)
 
 #### Philip Delff {.authors}
-
- - Basic Simulation Data Sets
+ - Create Dosing Events
+ - Add Sampling Events
  - Add Time After Previous Dose and Related Information
  - Multiple Endpoints (e.g. parent and metabolite)
  - Cohort-Dependent or Individual Sampling Schemes
