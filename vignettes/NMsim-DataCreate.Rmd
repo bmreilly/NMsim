@@ -260,7 +260,7 @@ ggplot(dtplot,aes(TIME,factor(CMT),colour=factor(EVID)))+
 A brief overview of the number of events broken down by event type `EVID` and dose amount `AMT`:
 
 ```{r,echo=TRUE}
-NMexpandDoses(dat.sim)[,.(Nrows=.N),keyby=.(trt,CMT,EVID,AMT)] 
+NMexpandDoses(dat.sim)[,.(Nrows=.N),keyby=.(CMT,EVID,AMT)] 
 ```
 
 Showing the top five rows for understanding what the data now looks like. Notice that the following are _not_ issues:
