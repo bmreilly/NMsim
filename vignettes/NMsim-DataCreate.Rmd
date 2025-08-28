@@ -146,7 +146,7 @@ Notice how `ADDL` and `II` are by default only applied to the last dosing event 
 
 
 
-```{r gen-data,echo=TRUE}
+```{r gen-data2,echo=TRUE}
 doses2 <- NMcreateDoses(TIME=seq(0,by=24,length.out=7),
                         AMT=c(300,150),CMT=1)
 ## doses2$trt <- "300 mg then 150 mg QD"
@@ -204,7 +204,7 @@ NMaddSamples(dt.dos,TAPD=1:2,TIME=96,CMT=2)
 NMaddSamples(dt.dos,TAPD=1:2,CMT=data.frame(CMT=2:3,DVID=c("Parent","Metabolite")))
 ```
 Use the `by` argument to specify separate sampling times for different subsets of subjects.
-```{r,gen-data-extra2,eval=TRUE}
+```{r,gen-data-extra3,eval=TRUE}
 dt.dos2 <- NMcreateDoses(TIME=c(0,12,24),AMT=data.table(AMT=c(2,1,4,2),DOSE=c(1,1,2,2))) 
 NMaddSamples(dt.dos2,TIME=data.frame(TIME=c(1:2,1:4),DOSE=c(rep(1,2),rep(2,4))),CMT=2,by="DOSE")
 ```
