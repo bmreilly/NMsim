@@ -233,7 +233,7 @@ When providing a simulation data set, the default `NMsim()` behavior is to sampl
 file.mod <- system.file("examples/nonmem/xgxr021.mod",
                         package="NMsim")
 ## Easily create a muliple-dose simulation data set with a loading dose
-data.sim <- NMcreateDoses(TIME=c(0,24),AMT=c(300,150),ADDL=c(0,5),II=c(0,24),CMT=1)|>
+data.sim <- NMcreateDoses(TIME=c(0,24),AMT=c(300,150),ADDL=5,II=24,CMT=1)|>
     NMaddSamples(TIME=0:(24*7),CMT=2)
 ## Simulate
 simres <- NMsim(file.mod=file.mod,data=data.sim,table.vars=c("PRED","IPRED","Y"))
@@ -510,25 +510,34 @@ By the way, if you would like `NMsim()` to return `data.table` objects, just run
 
 - Simulate 1000 new subjects with covariate sampling
 
-<div class="fold s">
+<div class="fold s"> 
+The NMsim package provides a convenient funtion
+to sample covariates from an existing data set. We have a simulation
+data set with only one subject. We want to replicate that data set to
+create 1000 subjects with covariates sampled with replacement from the
+analysis data set. `sampleCovs()` does exactly that. Notice two
+important features of `sampleCovs()`:
+
+- It automatically makes sure to sample with equal probability from
+  all subjects, independently of how many data points they have in the
+  analysis set.
+
+- For a simulated subject, all covariates are sampled from the same
+  subject in the analysis set. This ensures preservaion of the
+  correlation of the covariates from the analysis set to the
+  simulation.
+
 ```{r,datarep,include=TRUE,echo=TRUE}
-## Replicating input data set allows for manual resampling of covariates.
-
-## NMdata::findCovs() extracts unique values of column that do not vary within `by`. Since `by` is here the subject ID, that means we are finding subject level and globally equal variables only.
-set.seed(2372)
-Nsubjs <- 1000
-dt.ids <- data.table(ID=1:Nsubjs)
-dt.covs <- NMscanData(file.mod,quiet=T,as.fun="data.table") |>
-    findCovs(by=c("ID"))
-dt.ids[,IDEST:=sample(dt.covs[,ID],size=.N,replace=T)]
-dt.ids <- mergeCheck(dt.ids,dt.covs[,.(IDEST=ID,WEIGHTB,trt=trtact)],by="IDEST")
-
-## This is data.table-style repeating `data.sim` without `ID` for each
-## row in dt.ids. This is an outer join, or a cartesian product. I
-## think in dplyr, one can use `crossing` to get this.
-data.sim.nsubjs <- dt.ids[,subset(data.sim,select=-ID),by=dt.ids]
-## see, we repeated one data set using the other
-## dims(data.sim,dt.ids,data.sim.nsubjs)
+## read the analysis data set from the model we are simulating from
+dt.covs <- NMscanData(file.mod,quiet=T)
+## replicate the simulation data set (one subject) to create 1000
+## subjects with covariates "WEIGHTB" and "trtact" sampled from the
+## analysis set.
+data.sim.nsubjs <- sampleCovs(data=data.sim,data.covs=dt.covs,
+                              covs=c("WEIGHTB","trtact"),
+                              Nsubjs=1000,seed.R=2372)
+## renaming trtact to shorter trt in this example
+setnames(data.sim.nsubjs,"trtact","trt")
 
 ## generate the population first, by simulating etas to use in the sim
 simPopEtas(file.mod=file.mod,N=1000,seed=1231,

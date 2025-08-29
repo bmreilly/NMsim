@@ -34,8 +34,8 @@ sampleCovs <- function(data,
                        Nsubjs,
                        col.id= "ID",
                        col.id.covs = "ID",
-                       data.covs ,
-                       covs ,
+                       data.covs,
+                       covs,
                        seed.R,
                        as.fun
                        ){
@@ -53,7 +53,8 @@ sampleCovs <- function(data,
 
     if(missing(covs)) covs <- NULL
     if(is.null(covs)) {
-        message("No covariates requested.")
+        message("No covariates requested. Nothing to do.")
+        return(data)
     }
 
     if(missing(Nsubjs)) Nsubjs <- NULL
@@ -77,10 +78,10 @@ sampleCovs <- function(data,
         stop("One or more of covs are already in `data`. These columns must be deleted before running `sampleCovs()`.")
     }
 
-    ## chekc if ther is only one subject in data.sim.1subj
+    ## check if ther is only one subject in data.sim.1subj
     if(!col.id%in%colnames(data)){
         stop("`col.id` must be the name of an exisiting column in `data`.")
-        }
+    }
     if(data[,uniqueN(get(col.id))!=1]){
         stop("There must be exactly one subject in `data`.")
     }
@@ -92,7 +93,7 @@ sampleCovs <- function(data,
     dt.ids <- data.table(ID=1:Nsubjs)
     setnames(dt.ids,"ID",col.id)
     dt.ids[,IDCOVS:=sample(dt.covs[,IDCOVS],size=.N,replace=TRUE)]
-    dt.ids <- mergeCheck(dt.ids,dt.covs,by="IDCOVS",as.fun="data.table")
+    dt.ids <- mergeCheck(dt.ids,dt.covs,by="IDCOVS",as.fun="data.table",quiet=TRUE)
 
     dt.sim.covs <- dt.ids[,
                           data[,setdiff(colnames(data),c(col.id,covs)),with=FALSE]
