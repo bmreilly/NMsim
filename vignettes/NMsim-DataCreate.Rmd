@@ -209,11 +209,16 @@ dt.dos2 <- NMcreateDoses(TIME=c(0,12,24),AMT=data.table(AMT=c(2,1,4,2),DOSE=c(1,
 NMaddSamples(dt.dos2,TIME=data.frame(TIME=c(1:2,1:4),DOSE=c(rep(1,2),rep(2,4))),CMT=2,by="DOSE")
 ```
 
+The doses can be replicated to multiple ID's using the `N`
+argument. Default is `N=1`. If `N=1` results in two distinct subjects,
+`N=100` will result i 200 distinct subjects. The ID column will
+automatically be recoded to contain distinct ID's.
+
 </details>
 
 
 
-## Adding Time Since Previous Dose
+# Adding Time Since Previous Dose
 
 While not necessary for `NMsim()` to run, it's worth mentioning
 `NMdata::addTAPD()` for adding time since previous dose and other
