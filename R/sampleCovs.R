@@ -53,8 +53,7 @@ sampleCovs <- function(data,
 
     if(missing(covs)) covs <- NULL
     if(is.null(covs)) {
-        message("No covariates requested. Nothing to do.")
-        return(data)
+        message("No covariates requested.")
     }
 
     if(missing(Nsubjs)) Nsubjs <- NULL

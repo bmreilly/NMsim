@@ -1,7 +1,7 @@
 # NMsim 0.2.5
 
 ## New features
-Method to run "typical subject" simulations has been improved and the
+* Method to run "typical subject" simulations has been improved and the
 code has been simplified. This is controlled using the `typical`
 argument in `NMsim()`. The basic use of this argument is
 `typical=FALSE` (default, not a typical subject simulation) or
@@ -13,11 +13,13 @@ oarameter types to fix at zero. E.g. to also drop residual
 variability, use `typical=c("omega","sigma")` (remember to add the
 prior parameter types if needed).
 
-A new `NMsim()` argument `dir.sim.sub` controls whether a subdirectory
+* A new `NMsim()` argument `dir.sim.sub` controls whether a subdirectory
 is created in `dir.sims` for Nonmem execution. When using `NMsim()`
 for estimation, it may be more convenient to use `dir.sim.sub=FALSE`
 to get all model executions in the same directory.
 
+* `NMcreateDoses()` has a new argument, `N`, allowing for creation of
+  multiple subjects.
 
 ## Bugfixes
 `NMsim_NWPRI()` in combination with `typical=TRUE` would fail in some
