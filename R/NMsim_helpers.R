@@ -81,7 +81,7 @@ cleanStrings <- function(x){
     ## x <- gsub("[ !?#:;<>/,[]\\{\\}\\|-=+&]", "", x)
 
 
-    x <- gsub("[ +!?#:;<>&/,\\{\\}\\|=]", "",x) 
+    x <- gsub("[ +!?#:;<>&/,\\{\\}\\|=\\(\\)]", "",x) 
     x <- gsub(pattern="-",replacement="",x=x,perl=TRUE) 
     x <- gsub(pattern="\n",replacement="",x=x)
     

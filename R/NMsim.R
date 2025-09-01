@@ -666,7 +666,6 @@ NMsim <- function(file.mod,data,
     if(missing(name.sim)) name.sim <- NULL
     name.sim <- simpleCharArg("name.sim",name.sim,"noname",accepted=NULL,lower=FALSE,clean=FALSE)
     name.sim.paths <- cleanStrings(name.sim)
-
     modelname <- NULL
     input.archive <- FALSE
 
