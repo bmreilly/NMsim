@@ -384,14 +384,14 @@ simres.varka <- NMsim(file.mod=file.mod # NONMEM control stream
 ```{r,echo=F,eval=T}
 simres.varka <- NMsim(file.mod=file.mod # NONMEM control stream
                      ,data=dat.sim.varka # simulation data file
-                     ## ,name.sim="varka"
                      ,name.sim="a. add()"
                      ,modify=list(PK=add("KA=KA/KASCALE"))
                      ,reuse.results = reuse.results
                       )
 ```
 
-(b) the specific line that defines `TVKA` is modified to include the effect of the scaling factor `KASCALE`
+(b) the specific line that defines `TVKA` is modified to include the effect of the scaling factor `KASCALE`. This is done for illustration of `overwrite`, see the `inits` argument for how to edit parameter values directly.
+
 ```{r,echo=T,eval=F}
 simres.varka2 <- NMsim(file.mod=file.mod
                       ,data=dat.sim.varka
@@ -416,6 +416,7 @@ simres.varka2 <- NMsim(file.mod=file.mod
                                         # x})
                       ,reuse.results = reuse.results)
 ```
+
 The code below returns the plot
 
 <!-- Philip comment:
@@ -425,15 +426,8 @@ I suggest
 It would be very good to include some diffr() snippets to show what happened to the PK sections. If the PK section is simple, NMreadSection(sim.mod,section="PK") may be sufficient. sim.mod should be the generated simulation control streams. You may be able to run it on all of the control streams (the estimated, and the two simulated) at once, put it into a data.table, and show the control stream lines side by side as a table. -->
 
 ```{r,varka-sim-plot,eval=TRUE,echo=TRUE,fig.cap="Concentration (`PRED`) profile as a function of time computed by `NMsim` modified models **a** (left) and **b** (right). The equivalence and robustness of the two modified models is supported by the matching results, corresponding to reduced `PRED` values for higher values of `KASCALE` (lower absorption rate)."}
-## simres.varka=as.data.table(simres.varka)
-## simres.varka2=as.data.table(simres.varka2)
-## simres.both <- rbind(simres.varka[,method:="a. add()"],
-##                      simres.varka2[,method:="b. custom/sub()"]
-##                      )
-
 simres.both <- rbind(simres.varka,
                      simres.varka2)
-
 
 ggplot(simres.both[EVID==2],aes(TIME,PRED,colour=factor(KASCALE)))+
     geom_line()+
@@ -441,12 +435,6 @@ ggplot(simres.both[EVID==2],aes(TIME,PRED,colour=factor(KASCALE)))+
     scale_x_continuous(breaks=seq(0,168,by=24))+
     facet_wrap(~name.sim)+
     scale_color_manual(values=c("orange", "blue", "darkgreen"))
-```
-NOTE: the NMsim `overwrite` function prior to version 0.1.6 has a bug that was fixed in the0.1.5.902 github release; it can be installed with
-
-```{r,echo=T,eval=F}
-library(remotes)
-install_github("NMautoverse/NMsim")
 ```
 
 # Drug-Drug Interaction (DDI)
