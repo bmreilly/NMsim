@@ -359,7 +359,7 @@ In the previous example `KA` was scaled by 4 by specicification in the `NMsim()`
 
 The effect on the concentration-time profile of a change in formulation that reduces absorption rate `KA` is explored with the use of a scaling factor `KASCALE` included to the NONMEM control stream via the `modify` argument. The values of `KASCALE` are provided through the `NMsim` simulation data `dat.sim.varka` containing dosing events. We simulate three distinct subjects, each with their own `KASCALE` value. `KASCALE` values 1, 4, and 10 are used, corresponding to an unchanged KA, a 4-fold, and a 10-fold larger KA. We will be looking at `PRED` (of concentrations) so this is effectively a typical subject analysis.
 
-First `KASCALE` is added to the simulation data
+First `KASCALE` is added to the simulation data by repeating the data set three for each value of `KASCALE`, and redefining `ID` to be distinct for each value of `KASCALE`. The code below uses `data.table` but any data manipulation tool (such as base R or dplyr) could be used.
 
 <!-- Philip comment: remove unused code -->
 
@@ -369,7 +369,7 @@ dat.sim.varka <- data.sim[,data.table(KASCALE=c(1,4,10)),by=data.sim]
 dat.sim.varka[,ID:=.GRP,by=.(KASCALE,ID)] # update patient IDs
 setorder(dat.sim.varka,ID,TIME,EVID) # order rows
 ```
-Then the `NMsim` function is used to run the simulation in which the `modify` argument is used to simulate a modified model with different absorption rates, scaled by the parameter `KASCALE`. Two different approaches are demonstrated:
+Then the `NMsim()` function is used to run the simulation in which the `modify` argument is used to simulate a modified model with different absorption rates, scaled by the parameter `KASCALE`. Two different approaches are demonstrated:
 
 (a) the effect of the scaling factor `KASCALE` is added at the end of the `PK` section in the NONMEM control stream.
 
@@ -377,14 +377,14 @@ Then the `NMsim` function is used to run the simulation in which the `modify` ar
 simres.varka <- NMsim(file.mod=file.mod # NONMEM control stream
                      ,data=dat.sim.varka # simulation data file
                      ## ,name.sim="varka"
-                     ,name.sim="a. add()"
+                     ,name.sim="add(): Append KA/KASCALE"
                      ,modify=list(PK=add("KA=KA/KASCALE")))
 ```
 
 ```{r,echo=F,eval=T}
 simres.varka <- NMsim(file.mod=file.mod # NONMEM control stream
                      ,data=dat.sim.varka # simulation data file
-                     ,name.sim="a. add()"
+                     ,name.sim="add(): Append KA/KASCALE"
                      ,modify=list(PK=add("KA=KA/KASCALE"))
                      ,reuse.results = reuse.results
                       )
@@ -396,7 +396,7 @@ simres.varka <- NMsim(file.mod=file.mod # NONMEM control stream
 simres.varka2 <- NMsim(file.mod=file.mod
                       ,data=dat.sim.varka
                        ##,name.sim="varka2"
-                      ,name.sim="b. custom/sub()"
+                      ,name.sim="overwrite(): Replace THETA(1) by THETA(1)/KASCALE"
                       ,modify=list(PK=overwrite("THETA(1)","THETA(1)/KASCALE"))
                        )
 ```
@@ -405,7 +405,7 @@ simres.varka2 <- NMsim(file.mod=file.mod
 simres.varka2 <- NMsim(file.mod=file.mod
                       ,data=dat.sim.varka
                       ## ,name.sim="varka2"
-                      ,name.sim="b. custom/sub()"
+                      ,name.sim="overwrite(): Replace THETA(1) by THETA(1)/KASCALE"
                       ,modify=list(PK=overwrite("THETA(1)","THETA(1)/KASCALE"))
                                         # ,modify=list(PK=function(x) {
                                         # ## identify line number if first definition of TVKA
@@ -437,7 +437,10 @@ ggplot(simres.both[EVID==2],aes(TIME,PRED,colour=factor(KASCALE)))+
     scale_color_manual(values=c("orange", "blue", "darkgreen"))
 ```
 
-# Drug-Drug Interaction (DDI)
+# Additional `modify` Examples
+<details>
+<summary>`modify` example: Drug-Drug Interaction (DDI)</summary>
+
 The effect of DDI on clearance (`CL`) and bioavailability (`F1`) is simulated for the following  scenarios
 ```{r, ddi-table, echo=F,eval=T}
 data.table(scenario=c("noDDI","DDI.1","DDI.2")
@@ -484,7 +487,9 @@ ggplot(simres.DDI[simres.DDI$EVID==2,],aes(TIME,PRED,colour=factor(lab)))+
     scale_x_continuous(breaks=seq(0,168,by=24))+
     scale_color_manual(values=c("orange", "blue", "darkgreen"))
 ```
-# Dose Delay
+
+<details>
+<summary>`modify` example: Conditional Dose Delay</summary>
 
 <!-- Philip comment: A little more intro would be useful. What are you simulating, and how are you doing that? The current wording aims at the ladder, but it is very technical - even I have to read it slowly to follow. -->
 
@@ -575,9 +580,10 @@ ggplot(sim.alag.AUC[DAY==3 & DELAYDOS%in%c(2,3)],aes(x=ALAG,y=AUC))+
     scale_x_continuous(breaks = seq(0, 24, by = 6))+
     facet_wrap(~DELAYDOS
               ,labeller = as_labeller(c("2"="Dose 2 delayed","3"="Dose 3 delayed")))
-```  
+```
 
-# AUC
+<details>
+<summary>`modify` example: Calculation of AUC</summary>
 
 <!-- Philip comment: A little more intro would be helpful. This is a more advanced example that modifies multiple sections. -->
 
@@ -675,3 +681,31 @@ ggplot(data=sres.final,aes(AUC.NMsim,AUC,colour=factor(time.step)))+
     xlab("AUC 0-24h by integration through $DES, on coarse grid")+
     geom_abline(slope=1, intercept=0)
 ```
+
+# Modify `$SIZES` using `sizes`
+For some NONMEM runs (simulations) it may be necessary to modify `$SIZES`. Remember that the simulation control stream is derived based on the estimation control stream, and so if `$SIZES` settings are found in the estimation control stream, those will by default also be in the simulation control stream generated by `NMsim()`. The `sizes` argument is hence only needed if the simulation `$SIZES` variables need to be different from those used during estimation. This will typically be the case due to properties of the simulation data. `NMsim()` by default calls NONMEM with options that should help guessing some of these options automatically, but here is how to do it if that fails.  
+
+`sizes` is very simple to use. As an example, this `NMsim()` call sets `$SIZES PD=100 LTV=70`
+
+```{r sizes,eval=FALSE}
+simres <- NMsim(file.mod=file.mod,
+                data=data.sim,
+                sizes=list(PD=100,LTV=70),
+                name.sim="sim-sizes")
+```
+
+`sizes` by default only overwrites matching `$SIZES` variables. If `$SIZES` already contained other variables than in this case `PD` and `LTV`, those would be left untouched. If you want to write the `$SIZES` section from scratch, add `wipe=TRUE`:
+
+```{r sizes2,eval=FALSE}
+simres <- NMsim(file.mod=file.mod,
+                data=data.sim,
+                sizes=list(PD=100,LTV=70,wipe=TRUE),
+                name.sim="sim-sizes")
+```
+
+
+# Modify `ACCEPT`/`IGNORE` Using `filters`
+
+The `filters` argument is an interface to control the `ACCEPT` and `IGNORE` (inclusion/exclusion) statements in NONMEM. This can be but is rarely used for simulation because the simulation data set is normally filtered for the simulation purpose. The common exception is for simlation of VPC. To avoid duplication of examples, please refer to 
+
+[VPC Simulations](NMsim-VPC.html#change-the-acceptignore-statements)

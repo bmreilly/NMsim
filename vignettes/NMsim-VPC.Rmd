@@ -147,7 +147,7 @@ This is easy, and you still get the benefit of not reading the data, with risk o
 - Read the input data set from the estimation model and subset manually  
 The manually subsetted data set is then passed to `NMsim()` in the `data` argument.
 
-### Change the ACCEPT/IGNORE statements
+### Change the ACCEPT/IGNORE Statements
 
 NMsim provides a simple interface to modify the data filters (`ACCEPT`/`IGNORE`). First we read them into a data.frame.
 ```{r,eval=FALSE}
@@ -198,7 +198,7 @@ plot(vpc1)
 ```
 
 
-### Manually subset data
+### Manually Subset Data
 All we have to do is to
 read the data you want and provide it in `NMsim`'s `data` argument.
 

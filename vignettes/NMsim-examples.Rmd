@@ -145,6 +145,24 @@ Also, see recent [Publications](NMsim-publications.html).
 
 
 :::example
+## [**Simulation with Modifications to Parameters and Model Code**](NMsim-modify-model.html)
+
+#### Philip Delff, Simone Cassani {.authors}
+
+- Control whether and how to update parameter values according to the final model parameter estimates using the `inits` argument.
+
+- Modify model parameter values (`$THETA`, `$OMEGA` and `SIGMA`) to specify values using the `inits` argument
+
+- Use the `modify` argument to do custom manipulations of any parts of the control stream before simulation. 
+
+- Modify data exclusions/inclusions (`$IGNORE/$ACCEPT`) using the `filters` argument.
+
+- Adjust `$SIZES` variables using the `sizes` argument. 
+
+:::
+
+
+:::example
 ## [**Requirements and Configuration**](NMsim-config.html)
 
 #### Philip Delff {.authors}
@@ -155,15 +173,6 @@ Also, see recent [Publications](NMsim-publications.html).
 :::
 
 ## Examples waiting for updates
-
-
-
-:::example
-## [**Simulation with Modifications to Parameters and Model Code**](NMsim-modify-model.html)
-
-#### Simone Cassani, Philip Delff {.authors}
-:::
-
 	
 
 :::example
