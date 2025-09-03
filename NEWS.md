@@ -26,6 +26,9 @@ to get all model executions in the same directory.
 cases. This has been fixed with the new implementation of the
 `typical` argument.
 
+## Other improvements
+`NMsim()` argument `name.sim` supports stings with parenthesis.
+
 # NMsim 0.2.4
 
 ## New features
