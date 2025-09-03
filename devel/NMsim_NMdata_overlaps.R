@@ -1,8 +1,44 @@
-dir.NMsim <- "/data/home/philipde/wdirs/NMsim/R"
-dir.NMData <- "/data/home/philipde/wdirs/NMsim/R"
+library(data.table)
+library(NMdata)
+library(diffr)
+## library(waldo)
+
+## firefox from snap can't read /tmp
+diffr_newdir <- function(file1, file2, parent_dir = tempdir(),
+                         open = TRUE, clean = FALSE, ...) {
+  ## 1. Ensure parent dir exists
+  if (!dir.exists(parent_dir)) {
+    stop("Parent directory does not exist: ", parent_dir)
+  }
+  
+  ## 2. Create a guaranteed fresh subdirectory
+  tmpdir <- file.path(parent_dir, paste0("diffr_", format(Sys.time(), "%Y%m%d_%H%M%S_"),sprintf("%04d",sample(1:1e4-1,size=1))))
+  dir.create(tmpdir, recursive = TRUE)
+  
+  ## 3. Run diffr and save output
+  diff_widget <- diffr::diffr(file1, file2, ...)
+  out_file <- file.path(tmpdir, "index.html")
+  htmlwidgets::saveWidget(diff_widget, out_file, selfcontained = TRUE)
+  
+  ## 4. Optionally open in browser
+  if (open) {
+    utils::browseURL(out_file)
+  }
+  
+  ## 5. Optionally clean up afterwards
+  if (clean) {
+    unlink(tmpdir, recursive = TRUE, force = TRUE)
+  }
+  
+  invisible(out_file)
+}
+
+
+dir.NMsim <- "~/wdirs/NMsim/R"
+dir.NMData <- "~/wdirs/NMsim/R"
 
 dt.pkgs <- data.table(pkg=cc(NMsim,NMdata))[
-   ,dir:=sprintf("/data/home/philipde/wdirs/%s/R",pkg)][]
+   ,dir:=sprintf("~/wdirs/%s/R",pkg)][]
 
 dt.files <- dt.pkgs[,.(file=list.files(dir)),by=pkg]
 dt.files <- dt.files[file!="zzz.R"]
@@ -16,9 +52,20 @@ dtf.w <- dt.files[N>1] |>
 
 dtf.w
 
+path.expand("~/tmp")
+
 res.list <- lapply(1:nrow(dtf.w),function(row){
-    diffr(dtf.w[row,NMsim],dtf.w[row,NMdata])
+    ## diffr(dtf.w[row,NMsim],dtf.w[row,NMdata])
+    diffr_newdir(dtf.w[row,NMsim],dtf.w[row,NMdata],parent_dir=path.expand("~/tmp"))
+
+    ## waldo::compare(readLines(dtf.w[row,NMsim]),
+    ##                readLines(dtf.w[row,NMdata]),
+    ##                x_arg=paste(dtf.w[row,file],"NMsim"),
+    ##                y_arg=paste(dtf.w[row,file],"NMdata")
+    ##                )
+    
 })
+
 
 ## Maybe NMwriteSection belongs better in NMsim?
 
@@ -27,15 +74,15 @@ res.list <- lapply(1:nrow(dtf.w),function(row){
 ## NMwriteInits. Belongs in NMsim (internal). Dropped in NMdata 0.2.1.
 ## NMwriteInitsOne. Belongs in NMsim (internal). Dropped in NMdata 0.2.1.
 ## addBlocks. Belongs in NMdata (internal). Requires NMdata 0.2.1.
-## addParType+addParameter. Belongs in NMdata (internal). Requires NMdata 0.2.1.
+## addParType+addParameter. Belongs in NMdata (internal). Requires NMdata 0.2.2.
 ## dcastSe. Belongs in NMdata (internal). Requires NMdata 0.2.1.
 ## message_dt. Belongs in NMdata (internal). Requires NMdata 0.2.1.
 ## fnAppend. Belongs in NMdata (internal). Requires NMdata 0.2.1. (collapse arg)
-## NMreadSection. Belongs in NMdata. NMdata 0.2.1 required.
+## NMreadSection. Belongs in NMdata. NMdata 0.2.2 required.
 ## NMextractText. Belongs in NMdata. NMdata 0.2.1 required.
 ## NMreadSizes. Belongs in NMdata. NMdata 0.2.1 required. NMreadSizes uses NMreadSection.
-## NMwriteSectionOne. Belongs in NMdata. NMdata 0.2.1 required. 
-## dtapply?
+## NMwriteSectionOne. Belongs in NMdata. NMdata 0.2.2 required. 
+## dtapply and lapplydt belong in NMdata
 
 res.list[[1]]
 res.list[[2]]

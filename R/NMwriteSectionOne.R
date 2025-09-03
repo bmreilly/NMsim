@@ -14,9 +14,6 @@ NMwriteSectionOne <- function(file0,lines,section,location=c("replace","before",
 
     location <- match.arg(location)
 
-    sec <- substr(toupper(sub(" *\\$* *","",section)),1,3)
-
-    
     
     if(missing(file0)) file0 <- NULL
     
@@ -102,12 +99,10 @@ NMwriteSectionOne <- function(file0,lines,section,location=c("replace","before",
                 all.lines <- c(lines[1:(min.dl-1)],newlines)
             } else {
                 all.lines <- c(
-                    lines[1:(min.dl-1)]
-                              ,
-                               newlines
-                              ,
-                               lines[(max.dl+1):nlines]
-                               )
+                    lines[1:(min.dl-1)],
+                    newlines,
+                    lines[(max.dl+1):nlines]
+                )
             }
         }
         if(location=="before"){

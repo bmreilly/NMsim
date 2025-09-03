@@ -57,15 +57,6 @@ addParType <- function(pars,suffix,add.idx,overwrite=FALSE){
     pars[,parameter:=toupper(parameter)]
     pars[,parameter:=sub("THETA\\(([0-9]+)\\)","THETA\\1",parameter)]
 
-
-    ## if(overwrite || !col.par.type%in%colnames(pars)){
-    ##     ## col.par.type
-    ##     pars[,(col.par.type):=NA_character_]
-    ##     str.allpars <- paste0("^(",paste(allpars,collapse="|"),")")
-    ##     pars[grepl(str.allpars,get(col.parameter)),(col.par.type):=sub("^([A-Z]+).*","\\1",get(col.parameter))]
-    ##     pars[get(col.parameter)%in%cc("OBJ","SAEMOBJ"),(col.par.type):="OBJ"]
-    ## }
-
     if(overwrite || !col.par.type%in%colnames(pars)){
         ## col.par.type
         pars[,(col.par.type):=NA_character_]
@@ -104,21 +95,6 @@ addParType <- function(pars,suffix,add.idx,overwrite=FALSE){
         if(overwrite || !"j"%in%colnames(pars) ){
             if(any(pars[,get(col.par.type)%in%allpars.mat])){
                 
-                ## pars[get(col.par.type)%in%allpars.mat,
-                ##      .(par=get(col.parameter),
-                ##        sub1=sub(
-                ##            pattern=sprintf("%s\\(([0-9]+).*",get(col.par.type)),
-                ##            replace="\\1",
-                ##            x=get(col.parameter)
-                ##        ),
-                ##        pattern=sprintf("%s\\(([0-9]+)\\,([0-9]+)\\)",get(col.par.type)),
-                ##        sub=sub(
-                ##            pattern=sprintf("%s\\(([0-9]+)\\,([0-9]+)\\)",get(col.par.type)),
-                ##            replace="\\1 \\2",
-                ##            x=get(col.parameter)
-                ##        ))
-                ##      ]
-
                 pars[,row:=.I]
                 pars[get(col.par.type)%in%allpars.mat,
                      j:=as.integer(sub(

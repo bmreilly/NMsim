@@ -255,26 +255,23 @@ NMreadInits <- function(file,lines,section,return="pars",as.fun) {
     type.elem <- NULL
     value.elem <- NULL
 
-    
-    
     if(missing(lines)) lines <- NULL
     if(missing(file)) file <- NULL
+
 ### this is assuming there is only one file, or that lines contains only one control stream.
     lines <- getLines(file=file,lines=lines)
-    
-    
+
     if(missing(section)) section <- NULL
     if(is.null(section)) {
         section <- cc("theta","omega","sigma")
     }
-
     
     return <- match.arg(return,choices=c("pars","all"))
 
     if(missing(as.fun)) as.fun <- NULL
     as.fun <- NMdataDecideOption("as.fun",as.fun)
 
-    section <- sub("\\$","",section)
+    section <- sub(" *\\$","",section)
     section <- cleanSpaces(section)
     section <- toupper(section)
     section <- unique(section)
@@ -461,19 +458,10 @@ initsToExt <- function(elements){
     pars[is.na(FIX),FIX:=0L]
 
     if(!"lower"%in% colnames(pars)) pars[,lower:=NA_real_]
-    
     if(!"upper"%in% colnames(pars)) pars[,upper:=NA_real_]
     
-    ## pars[par.type=="THETA",parameter:=paste0(par.type,i)]
-    ## pars[par.type%in%c("OMEGA","SIGMA"),parameter:=sprintf("%s(%d,%d)",par.type,i,j)]
-    ## pars[,par.name:=parameter]
-    ## pars[par.type=="THETA",par.name:=sprintf("%s(%d)",par.type,i)]
-
-
-
     pars <- pars[,.(par.type,parameter,par.name,i,j,iblock,blocksize,init,lower,upper,FIX)]
-    ##pars <- pars[order(match(par.type,c("THETA","OMEGA","SIGMA")),i,j)]
-    ## all.sections <- c("THETA","OMEGA","SIGMA","THETAP","OMEGAP","OMEGAPD","SIGMAP","SIGMAPD") 
+
     pars <- pars[
         order(match(par.type,
                     c("THETA","OMEGA","SIGMA","THETAP","OMEGAP","OMEGAPD","SIGMAP","SIGMAPD")) ,i,j)]
