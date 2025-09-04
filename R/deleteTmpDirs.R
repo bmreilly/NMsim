@@ -11,6 +11,7 @@
 ##'     for recursively.
 ##' @param delete Delete the found matches? If not, the matches are
 ##'     just reported, but nothing deleted.
+##' @return data.table with identified items for deletion
 ##' @import data.table
 ##' @import NMdata
 ##' @export
@@ -26,7 +27,6 @@ deleteTmpDirs <- function(dir,methods,recursive=FALSE,delete=TRUE){
         
         dirsToDelete <- list.files(path=dir,pattern=pattern,full.names=TRUE,recursive=recursive,include.dirs=T)
         dirsToDelete
-        ##unlink(dirsToDelete,recursive=TRUE)
     }
 
 
@@ -44,8 +44,8 @@ deleteTmpDirs <- function(dir,methods,recursive=FALSE,delete=TRUE){
                              )
     if(missing(methods)||is.null(methods)) methods <- dt.methods[,method]
     ## if(missing(methods)) methods <- c("psn","nmsim")
-    methods <- NMdata:::cleanSpaces(methods) |>
-        tolower()
+    methods <- NMdata:::cleanSpaces(methods) 
+    methods <- tolower(methods)
 
     
     dt.methods <- dt.methods[method%in%methods][
@@ -62,13 +62,6 @@ deleteTmpDirs <- function(dir,methods,recursive=FALSE,delete=TRUE){
 
     dt.sum.finds <- dt.finds[,.N,by=.(method,pattern)]
     
-    ## if(delete){
-    ##     invisible(dt.finds)
-        
-    ## } else {
-    ##     dt.finds[]
-    ## }
-
     dt.sum.finds
     
 }

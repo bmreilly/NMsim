@@ -22,6 +22,9 @@ for recursively.}
 \item{delete}{Delete the found matches? If not, the matches are
 just reported, but nothing deleted.}
 }
+\value{
+data.table with identified items for deletion
+}
 \description{
 clean up temporary directories left by PSN and NMsim.
 }
