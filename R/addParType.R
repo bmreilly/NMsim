@@ -26,7 +26,7 @@
 ##' THETA(1) (the par.name format). These will however be overwritten
 ##' with the described format above.
 
- 
+
 ##' @keywords internal
 addParType <- function(pars,suffix,add.idx,overwrite=FALSE){
 
@@ -75,10 +75,6 @@ addParType <- function(pars,suffix,add.idx,overwrite=FALSE){
     if(add.idx){
         if(overwrite || !"i"%in%colnames(pars)){
             pars[get(col.par.type)=="THETA",i:=as.integer(sub("THETA([0-9][0-9]*)","\\1",get(col.parameter)))]
-            ## pars[get(col.par.type)=="OMEGA",i:=as.integer(sub("OMEGA\\(([0-9]+)\\,([0-9]+)\\)","\\1",get(col.parameter)))]
-            ## pars[get(col.par.type)=="SIGMA",i:=as.integer(sub("SIGMA\\(([0-9]+)\\,([0-9]+)\\)","\\1",get(col.parameter)))]
-            ## pars[get(col.par.type)=="OMEGA",j:=as.integer(sub("OMEGA\\(([0-9]+)\\,([0-9]+)\\)","\\2",get(col.parameter)))]
-            ## pars[get(col.par.type)=="SIGMA",j:=as.integer(sub("SIGMA\\(([0-9]+)\\,([0-9]+)\\)","\\2",get(col.parameter)))]
 
             pars[,row:=.I]
             pars[get(col.par.type)%in%allpars.mat,
@@ -88,6 +84,7 @@ addParType <- function(pars,suffix,add.idx,overwrite=FALSE){
                      x=get(col.parameter))),
                  by=row
                  ]
+            pars[,row:=NULL]
         }
 
         
@@ -102,6 +99,7 @@ addParType <- function(pars,suffix,add.idx,overwrite=FALSE){
                          replacement="\\2",
                          x=get(col.parameter)
                      )),by=row]
+                pars[,row:=NULL]
             }
         }
         
@@ -159,10 +157,8 @@ addParameter <- function(pars,overwrite=FALSE){
         pars[,par.name:=NA_character_]
     }
 
-    pars[is.na(par.name),par.name:=get(col.parameter)]
     pars[is.na(par.name)&get(col.par.type)=="THETA",par.name:=sprintf("THETA(%s)",i)]
-
+    pars[is.na(par.name),par.name:=get(col.parameter)]
 
     pars
-
 }
