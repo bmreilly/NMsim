@@ -22,7 +22,7 @@ diffr_newdir <- function(file1, file2, parent_dir = tempdir(),
   
   ## 4. Optionally open in browser
   if (open) {
-    utils::browseURL(out_file)
+      utils::browseURL(out_file)
   }
   
   ## 5. Optionally clean up afterwards
@@ -56,7 +56,8 @@ path.expand("~/tmp")
 
 res.list <- lapply(1:nrow(dtf.w),function(row){
     ## diffr(dtf.w[row,NMsim],dtf.w[row,NMdata])
-    diffr_newdir(dtf.w[row,NMsim],dtf.w[row,NMdata],parent_dir=path.expand("~/tmp"))
+    diffr_newdir(dtf.w[row,NMsim],dtf.w[row,NMdata],parent_dir=path.expand("~/tmp"),
+                 open=FALSE)
 
     ## waldo::compare(readLines(dtf.w[row,NMsim]),
     ##                readLines(dtf.w[row,NMdata]),
@@ -77,35 +78,40 @@ res.list <- lapply(1:nrow(dtf.w),function(row){
 ## addParType+addParameter. Belongs in NMdata (internal). Requires NMdata 0.2.2.
 ## dcastSe. Belongs in NMdata (internal). Requires NMdata 0.2.1.
 ## message_dt. Belongs in NMdata (internal). Requires NMdata 0.2.1.
-## fnAppend. Belongs in NMdata (internal). Requires NMdata 0.2.1. (collapse arg)
+## fnAppend. Belongs in NMdata (internal). Requires NMdata 0.2.2. (collapse arg)
 ## NMreadSection. Belongs in NMdata. NMdata 0.2.2 required.
-## NMextractText. Belongs in NMdata. NMdata 0.2.1 required.
+## NMextractText. Belongs in NMdata. NMdata 0.2.2 required.
 ## NMreadSizes. Belongs in NMdata. NMdata 0.2.1 required. NMreadSizes uses NMreadSection.
 ## NMwriteSectionOne. Belongs in NMdata. NMdata 0.2.2 required. 
 ## dtapply and lapplydt belong in NMdata
 
-res.list[[1]]
+length(res.list)
+utils::browseURL(res.list[[1]],browser="firefox")
+utils::browseURL(res.list[[2]],browser="firefox")
 res.list[[2]]
 res.list[[3]]
 res.list[[4]]
 res.list[[5]]
 res.list[[6]]
 res.list[[7]]
-
-for(I
-    res <- dtf.w[,list(diffr(NMdata,NMsim)),by="file"]
+lapply(res.list,utils::browseURL,browser="firefox")
 
 
-
-    dt.overlap <- dt.files[,.N,by=.(file)][N>1]
-
-    library(tools)
-    dt.overlap[,md5sum()]
+## for(I
+##     res <- dtf.w[,list(diffr(NMdata,NMsim)),by="file"]
 
 
 
-    |>
-    dcast(V1~pkg)
+##     dt.overlap <- dt.files[,.N,by=.(file)][N>1]
 
-    dir=
-        list.
+##     library(tools)
+##     dt.overlap[,md5sum()]
+
+
+
+##     |>
+##     dcast(V1~pkg)
+
+##     dir=
+##         list.
+## )
