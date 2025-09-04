@@ -181,7 +181,7 @@ test_that("basic - sge - dont wait",{
                     dir.sims="testOutput",
                     name.sim="default_01"
                    ,sge=TRUE
-                   ## ,quiet=FALSE
+                    ## ,quiet=FALSE
                     ## ,path.nonmem=path.nonmem
                     ##,reuse.results=TRUE
                     ## ,file.res=simtab
@@ -665,10 +665,17 @@ test_that("space in file name",{
         simres3[,N:=3],
         simres4[,N:=4]),by="N"
         )  
+
+    fix.time(tab.covs)
     
     expect_equal_to_reference(tab.covs,fileRef)
     if(F){
-        readRDS(fileRef)
+        ref <- readRDS(fileRef)
+        tab.covs
+
+        expect_equal(modTab(ref),
+                     modTab(tab.covs)
+                     )
     }
     
     expect_equal(unique(
@@ -945,13 +952,13 @@ test_that("basic - a model that fails on NMTRAN",{
 
     file.mod <- "../../tests/testthat/testData/nonmem/xgxr021.mod"
 
-    dt.dos <- NMcreateDoses(AMT=300,TIME=0)
-    dt.sim <- addEVID2(data=dt.dos,TIME=c(1,6,12),CMT=2)
+    dt.dos2 <- NMcreateDoses(AMT=300,TIME=0)
+    dt.sim2 <- addEVID2(data=dt.dos,TIME=c(1,6,12),CMT=2)
 
     set.seed(43)
 
     simres <- NMsim(file.mod,
-                    data=dt.sim,
+                    data=dt.sim2,
                     ## table.var="PRED IPRED",
                     ## dir.sims="testOutput",
                     name.sim="nmtranfail"
@@ -993,12 +1000,12 @@ test_that("Two models on one rds",{
     file.mod.1 <- "../../tests/testthat/testData/nonmem/xgxr021.mod"
     file.mod.2 <- "testData/nonmem/xgxr032.mod"
 
-    dt.dos <- NMcreateDoses(AMT=300,TIME=0)
-    dt.sim <- addEVID2(data=dt.dos,TIME=c(1,6,12),CMT=2)
+    dt.dos2 <- NMcreateDoses(AMT=300,TIME=0)
+    dt.sim2 <- addEVID2(data=dt.dos,TIME=c(1,6,12),CMT=2)
 
     set.seed(43)
     simres <- NMsim(c("m1"=file.mod.1,"m2"=file.mod.2),
-                    data=dt.sim,
+                    data=dt.sim2,
                     ## table.var="PRED IPRED",
                     dir.sims="testOutput",
                     name.sim="twomodels_01"
@@ -1025,12 +1032,12 @@ test_that("Two named models on one rds",{
     files.mod <- c(model1="../../tests/testthat/testData/nonmem/xgxr021.mod",
                    model2="testData/nonmem/xgxr032.mod")
 
-    dt.dos <- NMcreateDoses(AMT=300,TIME=0)
-    dt.sim <- addEVID2(data=dt.dos,TIME=c(1,6,12),CMT=2)
+    dt.dos2 <- NMcreateDoses(AMT=300,TIME=0)
+    dt.sim2 <- addEVID2(data=dt.dos,TIME=c(1,6,12),CMT=2)
 
     set.seed(43)
     simres <- NMsim(file.mod=files.mod,
-                    data=dt.sim,
+                    data=dt.sim2,
                     ## table.var="PRED IPRED",
                     dir.sims="testOutput",
                     name.sim="twomodels_01"
@@ -1136,13 +1143,13 @@ test_that("Non-numeric DATE and TIME",{
     file.mod <- "testData/nonmem/xgxr022.mod"
 
     dt.dos <- NMcreateDoses(AMT=300,TIME=0)
-    dt.sim <- addEVID2(data=dt.dos,TIME=c(1,6,12),CMT=2)
-    dt.sim[,BBW:=40][,ROW:=.I]
+    dt.sim2 <- addEVID2(data=dt.dos,TIME=c(1,6,12),CMT=2)
+    dt.sim2[,BBW:=40][,ROW:=.I]
 
     dt.sim.known <- egdt(dt.sim[,!("ID")],data.table(ID=101:105))
     setorder(dt.sim.known,ID,TIME,EVID,CMT)
 
-    dt.sim.char <- copy(dt.sim)
+    dt.sim.char <- copy(dt.sim2)
 
     dt.sim.char[,time.tz:=as.POSIXct("2000/01/01")+TIME*3600]
     ## dt.sim.char[,DATE:=as.character(as.Date(time.tz),format="%y/%m/%d")]
@@ -1222,14 +1229,14 @@ test_that("as.fun=data.table in function call",{
     ## 025 doesn't seem stable. Got Q~1e7 and Nonmem didn't run
     file.mod <- "../../tests/testthat/testData/nonmem/xgxr021.mod"
 
-    dt.dos <- NMcreateDoses(AMT=300,TIME=0,as.fun="data.table")
-    dt.sim <- addEVID2(data=dt.dos,TIME=c(1,6,12),CMT=2,as.fun="data.table")
-    dt.sim[,BBW:=40][,ROW:=.I]
+    dt.dos2 <- NMcreateDoses(AMT=300,TIME=0,as.fun="data.table")
+    dt.sim2 <- addEVID2(data=dt.dos,TIME=c(1,6,12),CMT=2,as.fun="data.table")
+    dt.sim2[,BBW:=40][,ROW:=.I]
 
     
     set.seed(43)
     simres <- NMsim(file.mod,
-                    data=dt.sim,
+                    data=dt.sim2,
                     table.var="PRED IPRED",
                     dir.sims="testOutput",
                     name.sim="gjerkjng",
@@ -1308,7 +1315,6 @@ test_that("basic - nmsim update inits",{
                      path.nonmem=path.nonmem
                      )
 
-
     simres4 <- NMsim(file.mod,
                      data=dt.sim,
                      table.var="PRED IPRED",
@@ -1319,7 +1325,15 @@ test_that("basic - nmsim update inits",{
                      )
 
     res <- rbind(simres2,simres3,simres4)
+    fix.time(res)
     expect_equal_to_reference(res,fileRef)
+
+    if(F){
+        ref <- readRDS(fileRef)
+        fix.time(ref)
+        expect_equal(ref,res)
+        res
+    }
     
     expect_error(NMsim(file.mod,
                        data=dt.sim,
@@ -1599,7 +1613,7 @@ test_that("PRED model with subproblems table.vars",{
 })
 
 
-test_that("BLOCK(2) FIX .1 .1 .1 rather than BLOCK(2) 0.1 FIX .1 .1",{
+test_that("BLOCK(2) 0.1 FIX .1 .1",{
     
     fileRef <- "testReference/NMsim_22.rds"
 
@@ -1668,26 +1682,27 @@ test_that("basic - default - nmfe74",{
                  unNMsimRes(simres.75)[,!(c("model.sim","name.sim"))]
                  )
     
-    expect_error(
-        simres.73a <- NMsim(file.mod,
-                            data=dt.sim,
-              table.var="PRED IPRED",
-              name.sim="default_01.73",
-              path.nonmem="/opt/NONMEM/nm73gf/run/nmfe73"
-              ## path.nonmem="/opt/NONMEM/nm74gf_nmfe/run/nmfe74"
-              )
-    )
+
+### ONEHEADERALL not working with nmfe73
+    simres.73a <- NMsim(file.mod,
+                        data=dt.sim,
+                        table.var="PRED IPRED",
+                        name.sim="default_01.73",
+                        path.nonmem="/opt/NONMEM/nm73gf/run/nmfe73"
+                        ## path.nonmem="/opt/NONMEM/nm74gf_nmfe/run/nmfe74"
+                        )
+    expect_equal(nrow(simres.73a),0)
 
     ## this is not using fast tables so precision is different
     simres.73 <- NMsim(file.mod,
-                     data=dt.sim,
-                     ## table.var="PRED IPRED",
-                     seed.nm=1,
-                     name.sim="default_01.73b",
-                     path.nonmem="/opt/NONMEM/nm73gf/run/nmfe73",
-                     wait=TRUE
-                     ## path.nonmem="/opt/NONMEM/nm74gf_nmfe/run/nmfe74"
-                     )
+                       data=dt.sim,
+                       ## table.var="PRED IPRED",
+                       seed.nm=1,
+                       name.sim="default_01.73b",
+                       path.nonmem="/opt/NONMEM/nm73gf/run/nmfe73",
+                       wait=TRUE
+                       ## path.nonmem="/opt/NONMEM/nm74gf_nmfe/run/nmfe74"
+                       )
     
 
     if(F){
