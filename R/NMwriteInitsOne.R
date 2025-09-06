@@ -79,6 +79,9 @@ NMwriteInitsOne <- function(lines,inits.w,inits.orig,pars.l){
                                            FIX=value.elem_FIX,
                                            BLOCK=value.elem_BLOCK),by=row]
     inits.w[,elemnum:=min(elemnum_lower,elemnum_init,elemnum_upper,elemnum_BLOCK,na.rm=TRUE),by=row]
+    ## the elemnum may become character if some are missing. That will
+    ## lead to wrong ordering as 11 is sorted before 8.
+    inits.w[,elemnum:=as.numeric(elemnum)]
 
     cnames.common <- intersect(colnames(pars.l),colnames(inits.w))
     elems.all <- rbind(
@@ -93,11 +96,11 @@ NMwriteInitsOne <- function(lines,inits.w,inits.orig,pars.l){
     idx.update <- elems.all[, row[1], by = .(par.type,iblock)][,V1]
     ## putting $SECTION in front of every new line
     elems.all[,linenum.unique:=.GRP,by=.(par.type,linenum)]
-## elems.all[idx.update, string.elem := paste(paste0("$",par.type),string.elem)]
+    ## elems.all[idx.update, string.elem := paste(paste0("$",par.type),string.elem)]
     elems.all[!duplicated(linenum.unique)&row%in%idx.update, string.elem := paste(paste0("$",par.type),string.elem)]
 
     ## lines.all should also include empty lines and before and after text
-
+    setorder(elems.all,par.type,linenum,elemnum)
     lines.all <- elems.all[,.(text=paste(string.elem,collapse=" ")),keyby=.(par.type,linenum)]
 
     mod.lines <- inits.orig$lines

@@ -128,7 +128,7 @@
 ##' arguments to `NMwriteInits()`. Please see `?NMwriteInits` and the
 ##' examples on the NMsim website for how to edit the parameter
 ##' values:
-##' \url{https://nmautoverse.github.io/NMsim/vignettes/NMsim-modify-model.html}
+##' \url{https://nmautoverse.github.io/NMsim/articles/NMsim-modify-model.html}
 ##'
 ##' The `method` element controls which method is used to do this, and
 ##'     this corresponds to the old `method.update.inits`

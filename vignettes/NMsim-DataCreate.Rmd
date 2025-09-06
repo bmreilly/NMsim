@@ -227,9 +227,11 @@ dose amount, cumulative number of doses, cumulative number of doses,
 and culative dose amount. These are often useful to add to a
 simulation dataset:
 
-```{r}
+```{r addTAPD1}
 dat.sim <- addTAPD(dat.sim)
 ```
+
+
 
 
 # Finalizing and Checking the Simulation Data
