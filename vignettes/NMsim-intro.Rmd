@@ -345,7 +345,7 @@ modtab <- modTab(simres)
 
 ## opt <- options(width=300)
 my.file.diff(modtab$file.mod,
-             modtab$path.mod.exec,
+             modtab$path.sim,
              max_diffs=50,
              sections=c("INPUT","DATA","THETA","OMEGA","TABLE","ESTIMATION","SIMULATION"),
             x_arg="file.mod",y_arg="simulation")
