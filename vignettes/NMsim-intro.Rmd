@@ -282,7 +282,7 @@ model is needed except for the control stream file path. The
 simulation is based on evaluation of `PRED`, `IPRED`, and optionally
 `Y`. Options exist for building more advanced simulation models. The
 models shown here are based on data available in the
-[`xgxr`](https://cran.r-project.org/package=xgxr).
+[`xgxr`](https://cran.r-project.org/package=xgxr) package.
 
 Here is a conceptual diagram of the NMsim() workflow. 
 
@@ -344,7 +344,8 @@ simres <- NMreadSim("simres-intro/xgxr021_noname_MetaData.rds")
 modtab <- modTab(simres)
 
 ## opt <- options(width=300)
-my.file.diff(modtab$file.mod,
+my.file.diff(file.mod <- system.file("examples/nonmem/xgxr021.mod",
+                        package="NMsim"),
              modtab$path.sim,
              max_diffs=50,
              sections=c("INPUT","DATA","THETA","OMEGA","TABLE","ESTIMATION","SIMULATION"),

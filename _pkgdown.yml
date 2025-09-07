@@ -13,7 +13,7 @@ template:
 mode: release
 navbar:
   structure:
-    left: [home, examples, reference, news, pub, github]
+    left: [home, examples, reference, news, pub]
   components:
    home:
     title: Simulation of Nonmem models from R
