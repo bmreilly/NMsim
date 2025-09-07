@@ -33,8 +33,8 @@ knitr::opts_chunk$set(echo = TRUE,
 ## options(knitr.table.format = "html") 
 
 ## From github
-                                        #library(remotes)
-                                        #install_github("NMautoverse/NMsim")
+##library(remotes)
+##install_github("NMautoverse/NMsim")
 library(data.table)
 library(knitr)
 library(kableExtra)
