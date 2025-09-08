@@ -53,7 +53,7 @@ This vignette shows how to generate simulations for generation of VPC
 plots. While `NMsim` does not include any functionality for summarizing quantiles or plotting, it provides a powerful and simple interface to obtain the simulations. We shall see how the `tidyvpc` package easily creates VPC plots based on the simulation results.
 
 
-## Default option: reuse estimation data for simulation
+## Default Option: Reuse Estimation Data for Simulation
 Normally, the two main arguments to `NMsim()` are the path to the input
 control stream (`file.mod`) and the simulation input data set
 (`data`). But if we leave out the the `data` argument, NMsim will
