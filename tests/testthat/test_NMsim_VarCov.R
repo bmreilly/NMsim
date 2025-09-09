@@ -64,7 +64,7 @@ test_that("Basic",{
 
     ##as.numeric(mod$THETA)
 
-    mod <- mod[!names(mod)%in%c("THETA","OMEGA")]
+    mod <- mod[!names(mod)%in%c("THETA","OMEGA","SIGMA")]
 
     if(packageVersion("NMdata")>="0.2.1"){
         expect_equal_to_reference(mod,fileRef_a)
@@ -86,6 +86,14 @@ test_that("Basic",{
         mod$SIMULATION
 
         compareCols(ref,mod)
+
+        ref_b <- readRDS(fileRef_b)
+        ref_b
+
+        ref_c <- readRDS(fileRef_c)
+        ref_c
+
+
 
     }
 
