@@ -66,7 +66,7 @@ test_that("Basic",{
 
     mod <- mod[!names(mod)%in%c("THETA","OMEGA")]
 
-    if(packageVersion("NMdata")>="2.1.0"){
+    if(packageVersion("NMdata")>="0.2.1"){
         expect_equal_to_reference(mod,fileRef_a)
         
         expect_equal_to_reference(is.na(suppressWarnings(as.numeric(theta))),fileRef_b)
