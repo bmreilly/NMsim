@@ -37,7 +37,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">NMsim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3.936</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,6 @@
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">News</a></li>
 <li class="nav-item"><a class="nav-link" href="../articles/NMsim-publications.html">Publications</a></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/nmautoverse/NMsim/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -185,6 +184,13 @@ NMsim</strong></a><a class="anchor" aria-label="anchor" href="#data-set-creation
 <div class="section level4 authors">
 <h4 class="authors" id="philip-delff-1">Philip Delff<a class="anchor" aria-label="anchor" href="#philip-delff-1"></a>
 </h4>
+<ul>
+<li>Create Dosing Events</li>
+<li>Add Sampling Events</li>
+<li>Add Time After Previous Dose and Related Information</li>
+<li>Multiple Endpoints (e.g. parent and metabolite)</li>
+<li>Cohort-Dependent or Individual Sampling Schemes</li>
+</ul>
 </div>
 </div>
 <div class="section level2 example">
@@ -204,6 +210,14 @@ Emperical Bayes Estimates (Etas)</strong></a><a class="anchor" aria-label="ancho
 <div class="section level4 authors">
 <h4 class="authors" id="philip-delff-3">Philip Delff<a class="anchor" aria-label="anchor" href="#philip-delff-3"></a>
 </h4>
+<ul>
+<li>Reuse Estimation Data for Simulation</li>
+<li>Plotting using <code>tidyvpc</code>
+</li>
+<li>Use a different input data set: Change the ACCEPT/IGNORE
+Statements</li>
+<li>Use a different input data set: Manually Subset Data</li>
+</ul>
 </div>
 </div>
 <div class="section level2 example">
@@ -214,6 +228,15 @@ with NMsim</strong></a><a class="anchor" aria-label="anchor" href="#simulation-b
 <div class="section level4 authors">
 <h4 class="authors" id="philip-delff-boris-grinshpun">Philip Delff, Boris Grinshpun<a class="anchor" aria-label="anchor" href="#philip-delff-boris-grinshpun"></a>
 </h4>
+<ul>
+<li>Generation of Simulation Input Data</li>
+<li>Define Covariates to Analyze</li>
+<li>Simulation With Parameter Uncertainty</li>
+<li>Post processing</li>
+<li>Plotting</li>
+<li>Comparison of Different Simulation Methods</li>
+<li>Post-Processing Step-By-Step</li>
+</ul>
 </div>
 </div>
 <div class="section level2 example">
@@ -224,6 +247,30 @@ Parameter Uncertainty</strong></a><a class="anchor" aria-label="anchor" href="#s
 <div class="section level4 authors">
 <h4 class="authors" id="philip-delff-4">Philip Delff<a class="anchor" aria-label="anchor" href="#philip-delff-4"></a>
 </h4>
+</div>
+</div>
+<div class="section level2 example">
+<h2 id="simulation-with-modifications-to-parameters-and-model-code">
+<a href="NMsim-modify-model.html"><strong>Simulation with
+Modifications to Parameters and Model Code</strong></a><a class="anchor" aria-label="anchor" href="#simulation-with-modifications-to-parameters-and-model-code"></a>
+</h2>
+<div class="section level4 authors">
+<h4 class="authors" id="philip-delff-simone-cassani">Philip Delff, Simone Cassani<a class="anchor" aria-label="anchor" href="#philip-delff-simone-cassani"></a>
+</h4>
+<ul>
+<li>Control whether and how to update parameter values according to the
+final model parameter estimates using the <code>inits</code>
+argument.</li>
+<li>Modify model parameter values (<code>$THETA</code>,
+<code>$OMEGA</code> and <code>SIGMA</code>) to specify values using the
+<code>inits</code> argument</li>
+<li>Use the <code>modify</code> argument to do custom manipulations of
+any parts of the control stream before simulation.</li>
+<li>Modify data exclusions/inclusions (<code>$IGNORE/$ACCEPT</code>)
+using the <code>filters</code> argument.</li>
+<li>Adjust <code>$SIZES</code> variables using the <code>sizes</code>
+argument.</li>
+</ul>
 </div>
 </div>
 <div class="section level2 example">
@@ -246,16 +293,6 @@ directories.</li>
 <div class="section level2">
 <h2 id="examples-waiting-for-updates">Examples waiting for updates<a class="anchor" aria-label="anchor" href="#examples-waiting-for-updates"></a>
 </h2>
-</div>
-<div class="section level2 example">
-<h2 id="simulation-with-modifications-to-parameters-and-model-code">
-<a href="NMsim-modify-model.html"><strong>Simulation with
-Modifications to Parameters and Model Code</strong></a><a class="anchor" aria-label="anchor" href="#simulation-with-modifications-to-parameters-and-model-code"></a>
-</h2>
-<div class="section level4 authors">
-<h4 class="authors" id="simone-cassani-philip-delff">Simone Cassani, Philip Delff<a class="anchor" aria-label="anchor" href="#simone-cassani-philip-delff"></a>
-</h4>
-</div>
 </div>
 <div class="section level2 example">
 <h2 id="simulation-of-residual-variability">
