@@ -104,10 +104,12 @@ file.psn <- function(dir.psn,file.psn){
 ##' @return Simplified paths as strings
 ##' @keywords internal
 simplePath <- function(path){
+    
     path <- NMdata:::cleanSpaces(path,double=FALSE)
     parts.list <- strsplit(path,"/")
 
-    sapply(parts.list,function(parts){
+    newpath <- sapply(parts.list,function(parts){
+        
         simple <- character(0)
         is.abs <- parts[1]==""
         for(p in parts){
@@ -122,4 +124,6 @@ simplePath <- function(path){
         if(is.abs) res <- paste0("/",res)
         res
     })
+    
+    return(newpath)
 }
