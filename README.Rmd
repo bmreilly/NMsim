@@ -93,7 +93,9 @@ ggplot(datl,aes(TIME,value,colour=variable))+
 ```
 
 
-This example was a simulation of a multiple dose regimen with a loading dose using a model estimated on single dose data. It is from the first vignette [`NMsim-intro.html`](https://Nmautoverse.github.io/NMsim/articles/NMsim-intro.html). Go there next to get started with `NMsim`.
+This example was a simulation of a multiple dose regimen with a loading dose using a model estimated on single dose data. It is from the first vignette [`NMsim-intro.html`](https://NMautoverse.github.io/NMsim/articles/NMsim-intro.html). Go there next to get started with `NMsim`. The [`Examples`](https://NMautoverse.github.io/NMsim/articles/NMsim-examples.html) provides an overview of various tasks NMsim can help automating.
+
+
 
 ## Motivation
 

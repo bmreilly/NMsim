@@ -129,17 +129,14 @@ For EM-based estimation methods such as SAEM or IMP, NMsim cannot use the `.phi`
 table files for the method to work. It does not matter where in the
 table files they are, they just all need to be there. You can write
 all of them like it is done in the example model provided with `NMsim`
-called `xgxr032.mod`.
-
-If using EM algorithms such as SAEM or IMP, remember to explicitly write ETAs to an output table in the Nonmem control stream:
+called `xgxr032.mod`:
 ```
 $TABLE ETAS(1:LAST) NOAPPEND NOPRINT FILE=xgxr032_etas.txt
 ```
 
-So a "subject" essentially means a set of ETAs. Covariates must still
-be provided in the input data set and can be modified if
-wanted. Notice, `NMsim_EBE` does nothing to restore covariates - you
-must define covariates in input data as needed.
+So a "subject" essentially means a set of ETAs. Notice, `NMsim_EBE`
+does nothing to restore covariates - you must define covariates in
+input data as needed.
 
 
 ## Simulate known subjects on a new dosing regimen and new sample schedule
