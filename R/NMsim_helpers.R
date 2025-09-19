@@ -113,9 +113,10 @@ simplePath <- function(path){
         simple <- character(0)
         is.abs <- parts[1]==""
         for(p in parts){
+            
             if(p==""||p==".") next
-            if(p==".."){
-                if(length(simple)) simple <- head(simple,-1)
+            if(p==".." && length(simple)){
+                simple <- head(simple,-1)
             } else {
                 simple <- c(simple,p)
             }

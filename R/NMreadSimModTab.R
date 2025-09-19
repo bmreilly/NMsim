@@ -80,8 +80,11 @@ NMreadSimModTab <- function(x,check.time=FALSE,dir.sims,wait=FALSE,skip.missing=
 ###this does not work when dirSims is not a direct subfolder to getwd()
                       ## relative_path(path.sim.lst,dirSims)
                       
-                      relative_path(file.path(dirSims,"..",path.sim.lst),
-                                    dir=dirSims)
+                      relative_path(
+                          simplePath(file.path(dirSims,"..",path.sim.lst))
+                         ,
+                          dir=simplePath(dirSims)
+                      )
                       )
         )
     },
