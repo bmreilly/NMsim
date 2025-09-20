@@ -59,19 +59,34 @@ NMreadSimModTab <- function(x,check.time=FALSE,dir.sims,wait=FALSE,skip.missing=
         }
         tab.paths
     }
-    
+
     res.list <- lapply(x,unwrapRDS)
     modtab <- rbindlist(res.list,fill=TRUE)
     
     ## add in usable path to sim results
     modtab[,ROWTMP:=.I]
     modtab[,path.lst.read:={
+        
         if(is.null(dir.sims)){
             dirSims <- file.path(dirname(path.rds.read),pathSimsFromRes)
         } else {
             dirSims <- dir.sims           
         }
-        simplePath(file.path(dirSims,relative_path(path.sim.lst,dirSims)))
+        
+        
+        simplePath(
+            file.path(dirSims,
+#### issue: path.sim.lst contains the simtmp dir name first. dirSims also ends in that name. This fix goes one level up between the two, but this may fail if file.path(dirSims,"..") does not exist.
+###this does not work when dirSims is not a direct subfolder to getwd()
+                      ## relative_path(path.sim.lst,dirSims)
+                      
+                      relative_path(
+                          simplePath(file.path(dirSims,"..",path.sim.lst))
+                         ,
+                          dir=simplePath(dirSims)
+                      )
+                      )
+        )
     },
     ## by=.(ROWMODEL2)
     by=.(ROWTMP)

@@ -1,3 +1,11 @@
+# NMsim 0.2.6
+
+## Bugfixes
+* `name.sim=string..` accepted
+
+* `dir.sims` and `dir.res` relative paths starting with `../` now
+  work. Example: `dir.sims="../simtmp"` would fail. Fixed.
+
 # NMsim 0.2.5
 
 ## New features

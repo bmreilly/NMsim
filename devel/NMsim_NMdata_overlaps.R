@@ -70,6 +70,7 @@ res.list <- lapply(1:nrow(dtf.w),function(row){
 
 ## Maybe NMwriteSection belongs better in NMsim?
 
+## NMreadFilters. Belongs in NMdata. NMdata 0.2.2 required.
 ## NMreadInits. Belongs in NMdata. NMdata 0.2.2 required.
 ## NMwriteFilters. Belongs in NMsim (internal). Dropped in NMdata 0.2.1.
 ## NMwriteInits. Belongs in NMsim (internal). Dropped in NMdata 0.2.1.
