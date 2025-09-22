@@ -152,7 +152,7 @@ file.mod <- system.file("examples/nonmem/xgxr134.mod",package="NMsim")
 We generate a simulation data set with a loading dose (300 mg) followed by 6 doses (150 mg) every 24 hours. For smoothness plotted curves we use hourly sampling.
 
 ```{r,datacreate}
-doses <- NMcreateDoses(TIME=c(0,24),AMT=c(300,150),ADDL=5,II=24,CMT=1,col.id=NA)
+doses <- NMcreateDoses(TIME=c(0,24),AMT=c(300,150),ADDL=5,II=24,CMT=1)
 ## Now we add the sample records using `NMaddSamples()`. 
 dat.sim <- NMaddSamples(doses,TIME=0:(24*7),CMT=2)
 ```
@@ -169,12 +169,15 @@ ids <- unique(res.mod[,c("ID","WEIGHTB","AGE","MALEN")])
 
 ## we will merge with all the observed subjects in stead of the single
 ## ID in the original data set.
-
-
 dat.sim$ID <- NULL
+## the data.table way, repeating the data set for all the subjects
+dat.sim.known <- as.data.table(dat.sim)[,ids,by=dat.sim]
+## or, an outer join using NMdata::egdt
 dat.sim.known <- egdt(ids,
                       dat.sim
                       )
+## or an outer join using dplyr (code missing)
+## order data set
 setorder(dat.sim.known,ID,TIME,EVID)
 ## check data
 NMcheckData(dat.sim.known,type.data="sim")
