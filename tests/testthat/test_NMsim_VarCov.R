@@ -59,7 +59,7 @@ test_that("Basic",{
     ## gsub("(\\d)","round()",mod$THETA)
     ## stringr::gsub("\\d+\\.\\d+",function(x)round(as.numeric(x)),mod$THETA)
     ## 
-    theta <- stringr::str_replace_all(mod$THETA,"\\d+\\.\\d+",function(x)round(as.numeric(x),digits=3))
+    theta <- stringr::str_replace_all(mod$THETA,"\\d+\\.\\d+",function(x) as.character(round(as.numeric(x),digits=3)))
     ## omega <- stringr::str_replace_all(mod$OMEGA,"\\d+(\\.\\d+)*",function(x)round(as.numeric(x),digits=3))
 
     ##as.numeric(mod$THETA)
