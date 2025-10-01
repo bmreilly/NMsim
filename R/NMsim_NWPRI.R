@@ -8,22 +8,32 @@
 ##' this method, see `NMsim()`. See examples.
 ##'
 ##' 
-##' @param file.sim The path to the control stream to be edited. This function overwrites the contents of the file pointed to by file.sim.
-##' @param file.mod Path to the path to the original input control stream provided as `file.mod` to `NMsim()`.
-##' @param data.sim Included for compatibility with `NMsim()`. Not used.
-##' @param PLEV Used in \code{$PRIOR NWPRI PLEV=0.999}. This is a 
-##'     NONMEM argument to the NWPRI subroutine. When PLEV < 1, a 
-##'     value of THETA will actually be obtained using a truncated 
-##'     multivariate normal distribution, i.e. from an ellipsoidal 
-##'     region R1 over which  only  a fraction of mass of the 
-##'     normal occurs. This fraction is given by PLEV.
+##' @param file.sim The path to the control stream to be edited. This
+##'     function overwrites the contents of the file pointed to by
+##'     file.sim.
+##' @param file.mod Path to the path to the original input control
+##'     stream provided as `file.mod` to `NMsim()`.
+##' @param data.sim Included for compatibility with `NMsim()`. Not
+##'     used.
+##' @param PLEV Used in \code{$PRIOR NWPRI PLEV=0.999}. This is a
+##'     NONMEM argument to the NWPRI subroutine. When PLEV < 1, a
+##'     value of THETA will actually be obtained using a truncated
+##'     multivariate normal distribution, i.e. from an ellipsoidal
+##'     region R1 over which only a fraction of mass of the normal
+##'     occurs. This fraction is given by PLEV.
+##' @param add.diag A umeric value to add to the diagonal of the
+##'     covariance matrix. This can be used in case of negative
+##'     eigenvaluen in variance-covariance matrix.
 ##' @param ... Additional arguments passed to `NMsim_default()`.
 ##' @details Simulate with parameter uncertainty. THETA parameters are
 ##'     sampled from a multivariate normal distribution while OMEGA
 ##'     and SIGMA are simulated from the inverse-Wishart
 ##'     distribution. Correlations of OMEGA and SIGMA parameters will
 ##'     only be applied within modeled "blocks".
-##' @references \href{https://ascpt.onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1002\%2Fpsp4.12422&file=psp412422-sup-0001-Supinfo1.pdf}{inverse-Wishart degrees of freedom calculation for OMEGA and SIGMA: NONMEM tutorial part II, supplement 1, part C.}
+##' @references
+##'     \href{https://ascpt.onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1002\%2Fpsp4.12422&file=psp412422-sup-0001-Supinfo1.pdf}{inverse-Wishart
+##'     degrees of freedom calculation for OMEGA and SIGMA: NONMEM
+##'     tutorial part II, supplement 1, part C.}
 
 ##' @seealso NMsim_VarCov
 ##' @import NMdata
@@ -36,7 +46,7 @@
 ##' }
 ##' @export
 
-NMsim_NWPRI <- function(file.sim,file.mod,data.sim,PLEV=0.999,...){
+NMsim_NWPRI <- function(file.sim,file.mod,data.sim,PLEV=0.999,add.diag,...){
 
     NMdata:::messageWrap("NMsim_NWPRI: Simulation with variability on OMEGA and SIGMA are only reliable starting from Nonmem 7.60. Prior to Nonmem 7.60, NMsim_NWPRI reliably samples THETAs only. To explicitly skip sampling OMEGAs, run NMsim with `typical=TRUE`",fun.msg=message)
     
@@ -69,7 +79,7 @@ NMsim_NWPRI <- function(file.sim,file.mod,data.sim,PLEV=0.999,...){
     files.needed.def <- NMsim_default(file.sim=file.sim,file.mod,data.sim,...)
     lines.sim <- readLines(file.sim,warn=FALSE)
 
-    cov <- NMreadCov(fnExtension(file.mod,".cov"))
+    cov <- NMreadCov(fnExtension(file.mod,".cov"))    
     pars <- NMreadExt(file.mod,return="pars",as.fun="data.table")[,value:=est]
 
     if(!"se"%in%colnames(pars)){
@@ -95,9 +105,20 @@ NMsim_NWPRI <- function(file.sim,file.mod,data.sim,PLEV=0.999,...){
     cov.l <- addParType(cov.l,suffix="i")
     cov.l <- addParType(cov.l,suffix="j")
     
-                                        # Identify fixed thetas and set their diagonal in the $THETAPV cov matrix to be 1.0 for compatibility with nm7.60
+    ## Identify fixed thetas and set their diagonal in the $THETAPV cov matrix to be 1.0 for compatibility with nm7.60
     cov.l = merge.data.table(x = cov.l, y = pars[par.type=="THETA",.(i, parameter.i=parameter,FIX)], by = c("i", "parameter.i"))
+
     cov.l[i==j&FIX==1, value := 1.0]    
+
+    if(!missing(add.diag)&& !is.null(add.diag) && add.diag!=0){
+        message("Adding to cov diagonal")        
+        ## cov.dt <- mat2dt(cov,as.fun="data.table")
+        ## cov.dt[i==j,value:=value+add.diag]
+        ## cov <- dt2mat(cov.dt)
+        cov.l[i==j,value:=value+add.diag]
+    }
+
+    
     
     lines.thetapv <-
         NMcreateMatLines(
@@ -105,7 +126,7 @@ NMsim_NWPRI <- function(file.sim,file.mod,data.sim,PLEV=0.999,...){
           , type="THETAPV",as.one.block=TRUE,fix=TRUE)
     
     ## $OMEGAP
-                                        # note: NMcreateMatLines sets 0 FIXED sigmas/omegas to 1e-30 to avoid non-semi-positive definite matrices error
+    ## note: NMcreateMatLines sets 0 FIXED sigmas/omegas to 1e-30 to avoid non-semi-positive definite matrices error
     lines.omegap <- NMcreateMatLines(
         pars[par.type=="OMEGA"]
        ,type="OMEGAP",as.one.block = FALSE)
