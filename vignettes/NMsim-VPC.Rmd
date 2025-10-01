@@ -77,11 +77,11 @@ NMdataConf(path.nonmem=path.nonmem)
 
 
 ```{r,eval=FALSE}
-set.seed(43)
 ## notice the data argument is not used.
 simres.vpc <- NMsim(file.mod,
                     table.vars=c("PRED","IPRED", "Y"),
                     name.sim="vpc_01",
+                    seed.R=43,
                     subproblems=500
                     )
 ```

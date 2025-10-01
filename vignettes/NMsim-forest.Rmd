@@ -495,7 +495,7 @@ exts.bs <- list.files(dir.bs,pattern=".+\\.ext$",recursive=T,full.names = TRUE)
 ext.boot <- NMreadExt(exts.bs,as.fun="data.table")
 
 simres.forest.boot <- NMsim(file.mod # path to NONMEM model
-                           ,data=dt.sim.covs, # simulation dataset
+                           ,data=dt.sim.covs # simulation dataset
                            ,name.sim="boot_forest" # output name suffix
                            ,method.sim=NMsim_VarCov # sampling with mvrnorm
                            ,ext=ext.boot
