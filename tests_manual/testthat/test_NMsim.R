@@ -1687,18 +1687,18 @@ test_that("basic - default - nmfe74",{
     simres.73a <- NMsim(file.mod,
                         data=dt.sim,
                         table.var="PRED IPRED",
-                        name.sim="default_01.73",
+                        name.sim="default_01_73",
                         path.nonmem="/opt/NONMEM/nm73gf/run/nmfe73"
                         ## path.nonmem="/opt/NONMEM/nm74gf_nmfe/run/nmfe74"
                         )
     expect_equal(nrow(simres.73a),0)
 
-    ## this is not using fast tables so precision is different
+    ## this is not using fast tables so precision is different. But works with nonmem 7.3
     simres.73 <- NMsim(file.mod,
                        data=dt.sim,
                        ## table.var="PRED IPRED",
                        seed.nm=1,
-                       name.sim="default_01.73b",
+                       name.sim="default_01_73b",
                        path.nonmem="/opt/NONMEM/nm73gf/run/nmfe73",
                        wait=TRUE
                        ## path.nonmem="/opt/NONMEM/nm74gf_nmfe/run/nmfe74"

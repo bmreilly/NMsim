@@ -12,6 +12,7 @@ NMsim_VarCov(
   method.sample = "mvrnorm",
   ext,
   write.ext = NULL,
+  fast = FALSE,
   ...
 )
 }
@@ -38,6 +39,10 @@ sampled, using `samplePars()`. `method` must be either
 
 \item{write.ext}{If supplied, a path to an rds file where the
 parameter values used for simulation will be saved.}
+
+\item{fast}{Temporary. Use `fast=TRUE` to use an experimental,
+faster implementation. Argument will go away when the faster
+approach has been sufficiently tested and made default.}
 
 \item{...}{Additional arguments passed to `NMsim_default()`.}
 }
