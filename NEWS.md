@@ -5,6 +5,9 @@
 
 * `dir.sims` and `dir.res` relative paths starting with `../` now
   work. Example: `dir.sims="../simtmp"` would fail. Fixed.
+  
+* `sampleCovs` would fail if input data set did not include an `EVID`
+  column. Fixed.
 
 # NMsim 0.2.5
 
