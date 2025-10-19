@@ -1723,3 +1723,35 @@ test_that("basic - default - nmfe74",{
 
 })
 
+if(FALSE){
+### absolute paths, no dir.sims
+library(NMdata)
+library(NMsim)
+library(data.table)
+
+NMdataConf(reset=TRUE)
+NMdataConf(as.fun="data.table")
+
+path.candidates <- c(## metworx
+    "/opt/NONMEM/nm75/run/nmfe75"
+    ## custom linux
+   ,"/opt/nonmem/nm751/run/nmfe75"
+    ## a win path
+   ,"c:/nm75g64/run/nmfe75.bat"
+)
+
+(path.nonmem <- NMsim:::prioritizePaths(path.candidates))
+
+
+## file.mod <- "/home/philip/wdirs/NMsim/tests_manual/testthat/testData/nonmem/xgxr022.mod"
+file.mod <- "~/wdirs/NMsim/tests_manual/testthat/testData/nonmem/xgxr022.mod"
+dt.dos <- NMcreateDoses(AMT=300,TIME=0)
+dt.sim <- NMaddSamples(data=dt.dos,TIME=c(1,6,12),CMT=2)
+dt.sim[,BBW:=40][,ROW:=.I]
+
+
+sres <- NMsim(file.mod,data=dt.sim,name.sim="nodirs",
+              path.nonmem=path.nonmem)
+
+modTab(sres)
+}
