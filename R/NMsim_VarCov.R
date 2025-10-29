@@ -168,7 +168,7 @@ NMsim_VarCov <- function(file.sim,file.mod,data.sim,nsims,method.sample="mvrnorm
     }
     
     if(fast){
-        warning("fast=TRUE is experimental.")
+        message("fast=TRUE is experimental.")
         message("NMsim_VarCov: Inits and output tables")
         ## writing files once instead of twice
 ### create control streams one by one
