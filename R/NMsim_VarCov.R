@@ -27,9 +27,6 @@
 ##'     `mvrnorm` or `simpar`. Only used when `ext` is not provided.
 ##' @param write.ext If supplied, a path to an rds file where the
 ##'     parameter values used for simulation will be saved.
-##' @param fast Temporary. Use `fast=TRUE` to use an experimental,
-##'     faster implementation. Argument will go away when the faster
-##'     approach has been sufficiently tested and made default.
 ##' @param ... Additional arguments passed to `NMsim_default()`.
 ##' @import NMdata
 ##' @import data.table
