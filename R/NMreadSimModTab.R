@@ -122,7 +122,7 @@ NMreadSimModTab <- function(x,check.time=FALSE,dir.sims,wait=FALSE,skip.missing=
 ##' Read simulation results from an rds or a NMsimModTab object
 ##' @inheritParams NMreadSim
 ##' @keywords internal
-##' @import utilsN
+##' @import utils
 NMreadSimModTabOne <- function(modtab,check.time=FALSE,dir.sims,wait=FALSE,quiet=FALSE,skip.missing=FALSE,progress,read.fst=NULL,fast.tables=NULL,carry.out=NULL,as.fun){
     
     . <- NULL

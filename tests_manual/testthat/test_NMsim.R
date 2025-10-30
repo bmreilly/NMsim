@@ -110,7 +110,7 @@ fix.time <- function(x,extra=NULL){
 
 context("NMsim")
 test_that("basic - default",{
-    
+
     fileRef <- "testReference/NMsim_01.rds"
     fileRef.noMeta <- fnAppend(fileRef,"noMeta")
 

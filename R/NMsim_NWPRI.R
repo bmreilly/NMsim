@@ -230,12 +230,12 @@ NMsim_NWPRI <- function(file.sim,file.mod,data.sim,PLEV=0.999,add.diag,...){
     lines.sim <- NMwriteSectionOne(lines=lines.sim, section="SIMULATION", location="after", newlines="TRUE=PRIOR", backup=FALSE, quiet=TRUE)
 
 ### update $SIZES LTH and LVR to reflect the parameters in NWPRI (not resized automatically like other subroutines)
-                                        # add 10 to both numbers per Bob Bauer (doesn't hurt to have slightly more memory/size)
-                                        # LTH = number of thetas = $THETA + $THETAP + $OMEGAPD + $SIGMAPD
-                                        # LVR = number of diagonal omegas + sigmas = $OMEGA + $OMEGAP + $SIGMA + $SIGMAP + $THETAPV
-    lth = 2*nrow(pars.ext[par.type=="THETA"]) + nrow(nwpri_df) + 10 
-    lvr = 2*nrow(pars.ext[(par.type=="OMEGA"|par.type=="SIGMA")&i==j]) + nrow(pars.ext[par.type=="THETA"]) + 10
-    
+    ## add 10 to both numbers per Bob Bauer (doesn't hurt to have slightly more memory/size)
+    ## LTH = number of thetas = $THETA + $THETAP + $OMEGAPD + $SIGMAPD
+    ## LVR = number of diagonal omegas + sigmas = $OMEGA + $OMEGAP + $SIGMA + $SIGMAP + $THETAPV
+    lth = 2*nrow(pars[par.type=="THETA"]) + nrow(nwpri_df) + 10 
+    lvr = 2*nrow(pars[(par.type=="OMEGA"|par.type=="SIGMA")&i==j]) + nrow(pars[par.type=="THETA"]) + 10
+
     lines.sim = NMwriteSizes(file.mod=NULL, newfile=NULL,lines = lines.sim, LTH = lth, LVR = lvr)
     
 ### update the simulation control stream
