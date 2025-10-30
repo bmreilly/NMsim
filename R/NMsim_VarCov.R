@@ -38,7 +38,7 @@
 ##' @export
 
 NMsim_VarCov <- function(file.sim,file.mod,data.sim,nsims,method.sample="mvrnorm",ext,write.ext=NULL,
-                         fast=FALSE,...){
+                         ...){
 
 #### Section start: Dummy variables, only not to get NOTE's in package checks ####
 
@@ -144,6 +144,7 @@ NMsim_VarCov <- function(file.sim,file.mod,data.sim,nsims,method.sample="mvrnorm
     
 ### create control streams one by one
 
+    fast <- TRUE
     if(!fast){
         ## message("NMsim_VarCov: Inits")
         res <- newpars[,
