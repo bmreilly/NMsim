@@ -77,10 +77,58 @@ NMsim_NWPRI <- function(file.sim,file.mod,data.sim,PLEV=0.999,add.diag,...){
 ### NMsim_default() is run because it inserts $SIMULATION instead of
 ### $ESTIMATION and a few other things that are always needed.
     files.needed.def <- NMsim_default(file.sim=file.sim,file.mod,data.sim,...)
+    
     lines.sim <- readLines(file.sim,warn=FALSE)
 
     cov <- NMreadCov(fnExtension(file.mod,".cov"))    
-    pars <- NMreadExt(file.mod,return="pars",as.fun="data.table")[,value:=est]
+    pars.ext <- NMreadExt(file.mod,return="pars",as.fun="data.table")[,value:=est]
+    ## use inits to identify IOV OMEGA terms that share a single distribution via the SAME column and remove them.
+    inits <- NMreadInits(file.mod, as.fun="data.table")
+    # create a variable in inits to keep track of SAME blocks
+    # i.e. parameters that are part of a single distribution
+    
+    
+    addSameBlocks = function(inits) {
+        inits = copy(as.data.table(inits))
+        inits[,startSameBlock := ifelse(SAME==0 & data.table::shift(SAME,type="lead") == 1, 1, 0)]
+        inits[,endSameBlock := ifelse(SAME==1 & data.table::shift(SAME,type="lead") == 0, 1, 0)]
+        df = inits
+        start <- as.integer(replace(df$startSameBlock, is.na(df$startSameBlock), 0))
+        end   <- as.integer(replace(df$endSameBlock,   is.na(df$endSameBlock),   0))
+        
+        # allocate result and walk rows
+        df$sameblock <- 0L
+        block <- 0L
+        in_block <- FALSE
+        
+        for (i in seq_len(nrow(df))) {
+            if (start[i] == 1L) {
+                block <- block + 1L    # new block begins
+                in_block <- TRUE
+            }
+            
+            if (in_block) {
+                df$sameblock[i] <- block
+            } else {
+                df$sameblock[i] <- 0L  # or NA if you prefer
+            }
+            
+            if (end[i] == 1L) {
+                # end the current block after assigning this row
+                in_block <- FALSE
+            }
+        }
+        
+        # add N of same group
+        df[, Nsameblock := ifelse(any(sameblock!=0), .N-1, 0), by=sameblock]
+        
+        return(df)
+    }
+    
+    inits = addSameBlocks(inits = inits)
+    
+    pars = merge.data.table( pars.ext, inits[,.(parameter,SAME, sameblock, Nsameblock)],by = cc(parameter), all.x = TRUE)[,par.type:=factor(par.type, levels = c("THETA", "OMEGA", "SIGMA"))][order(par.type,i,j)]
+    #pars = pars.ext
 
     if(!"se"%in%colnames(pars)){
         stop("ext file does not contain standard errors. A succussfull COVARIANCE step is needed for NMSIM_NWPRI to run.")
@@ -88,14 +136,15 @@ NMsim_NWPRI <- function(file.sim,file.mod,data.sim,PLEV=0.999,add.diag,...){
     
 
 ### Add degrees of freedom for inverse-wishart distribution for OMEGA/SIGMA
-    nwpri_df <- NWPRI_df(pars)
+    # remove parameters coming from SAME distribution (SAME==1) as another parameter since they are only a single parameter which is captured by the parameter with SAME==0
+    nwpri_df <- NWPRI_df(pars[SAME!=1])
     nwpri_df[,line := paste0("$", par.type,"PD ", DF2, " FIX")]
-
+    
     ## derive the different sets of new lines needed
     ## $THETAP section
     thetas <- pars[par.type=="THETA"][order(i)]
     lines.thetap <- c("$THETAP", paste(thetas[,est], "FIX"))
-    
+
     ## $THETAPV
     if(packageVersion("NMdata")>'0.1.8.3') {
         cov.l <- mat2dt(cov,as.fun="data.table",triangle = "lower")
@@ -107,7 +156,6 @@ NMsim_NWPRI <- function(file.sim,file.mod,data.sim,PLEV=0.999,add.diag,...){
     
     ## Identify fixed thetas and set their diagonal in the $THETAPV cov matrix to be 1.0 for compatibility with nm7.60
     cov.l = merge.data.table(x = cov.l, y = pars[par.type=="THETA",.(i, parameter.i=parameter,FIX)], by = c("i", "parameter.i"))
-
     cov.l[i==j&FIX==1, value := 1.0]    
 
     if(!missing(add.diag)&& !is.null(add.diag) && add.diag!=0){
@@ -117,8 +165,6 @@ NMsim_NWPRI <- function(file.sim,file.mod,data.sim,PLEV=0.999,add.diag,...){
         ## cov <- dt2mat(cov.dt)
         cov.l[i==j,value:=value+add.diag]
     }
-
-    
     
     lines.thetapv <-
         NMcreateMatLines(
@@ -126,18 +172,41 @@ NMsim_NWPRI <- function(file.sim,file.mod,data.sim,PLEV=0.999,add.diag,...){
           , type="THETAPV",as.one.block=TRUE,fix=TRUE)
     
     ## $OMEGAP
-    ## note: NMcreateMatLines sets 0 FIXED sigmas/omegas to 1e-30 to avoid non-semi-positive definite matrices error
+    ## note: NMcreateMatLines sets 0 FIXED sigmas/omegas to 1e-30 (if blocksize >1) to avoid non-semi-positive definite matrices error 
+    ##    
+    pars.random = pars[par.type %in% c("OMEGA","SIGMA")][
+        # IF diagonal is fixed to zero, set to a nonzero value.
+        , .(par.type,i,j,iblock,FIX,blocksize,SAME,sameblock,Nsameblock, value=ifelse(i==j&FIX==1&value==0,1.0,value))][
+            # if SAME, FIX should be 0 because it needs to be left off of 
+            #    OMEGAP BLOCK(1) SAME; i.e. can't have :"OMEGAP BLOCK(1) SAME FIX"
+            , FIX := ifelse(SAME==1,0,FIX)][
+                # if SAME, hack to add "BLOCK(1)" and "BLOCK(1) <value> SAME"
+                !is.na(iblock)]
+    # for SAME parameters, combine them into one line as "$OMEGAP BLOCK(1) SAME(NN)"
+    # if there are 5 occasions then it would look like below:
+    #    $OMEGAP BLOCK(1) 0.1 FIX
+    #    $OMEGAP BLOCK(1) SAME(4)
+    pars.random.same = copy(pars.random)[SAME==1][,head(.SD,n=1),by=sameblock][,value := paste0("BLOCK(1) SAME(",Nsameblock,")")] 
+    
+    # for parameters that are the first occasion within a SAME distribution make sure they are written as "$OMEGAP BLOCK(1) <value> FIX"
+    # for parameters that are not part of a SAME distribution they will be written as "$OMEGAP <value> FIX"
+    # NOTE: the "$OMEGAP"  and "FIX" are added by NMcreateMatLines
+    pars.random.notsame = copy(pars.random)[SAME==0][, value := ifelse(sameblock==0,value, paste0("BLOCK(1) ", value))]
+    
+    # Combine random effects after processing SAME/not SAME parameters
+    pars.random = rbind(pars.random.same, pars.random.notsame)[order(par.type,i,j)]
+    
     lines.omegap <- NMcreateMatLines(
-        pars[par.type=="OMEGA"]
+        pars.random[par.type=="OMEGA"]
        ,type="OMEGAP",as.one.block = FALSE)
     
     ## $OMEGAPD
-                                        # see nwpri_df() for calculations of degrees of freedom for inverse-wishart prior
+    # see nwpri_df() for calculations of degrees of freedom for inverse-wishart prior
     lines.omegapd = nwpri_df[par.type=="OMEGA",line]
     
     ## $SIGMAP
     lines.sigmap <- NMcreateMatLines(
-        pars[par.type=="SIGMA"]
+        pars.random[par.type=="SIGMA"]
        ,type="SIGMAP")
     
     ## $SIGMAPD
@@ -164,8 +233,8 @@ NMsim_NWPRI <- function(file.sim,file.mod,data.sim,PLEV=0.999,add.diag,...){
                                         # add 10 to both numbers per Bob Bauer (doesn't hurt to have slightly more memory/size)
                                         # LTH = number of thetas = $THETA + $THETAP + $OMEGAPD + $SIGMAPD
                                         # LVR = number of diagonal omegas + sigmas = $OMEGA + $OMEGAP + $SIGMA + $SIGMAP + $THETAPV
-    lth = 2*nrow(pars[par.type=="THETA"]) + nrow(nwpri_df) + 10 
-    lvr = 2*nrow(pars[(par.type=="OMEGA"|par.type=="SIGMA")&i==j]) + nrow(pars[par.type=="THETA"]) + 10
+    lth = 2*nrow(pars.ext[par.type=="THETA"]) + nrow(nwpri_df) + 10 
+    lvr = 2*nrow(pars.ext[(par.type=="OMEGA"|par.type=="SIGMA")&i==j]) + nrow(pars.ext[par.type=="THETA"]) + 10
     
     lines.sim = NMwriteSizes(file.mod=NULL, newfile=NULL,lines = lines.sim, LTH = lth, LVR = lvr)
     
