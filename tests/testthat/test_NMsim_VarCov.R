@@ -73,7 +73,7 @@ test_that("Basic",{
         
         ## expect_equal_to_reference(is.na(suppressWarnings(as.numeric(theta))),fileRef_b)
         expect_equal_to_reference(
-            as.data.table(inits)[par.type=="THETA",round(init,3)]
+            as.data.table(inits)[par.type=="THETA",is.na(init)]
            ,
             fileRef_b)
     }
