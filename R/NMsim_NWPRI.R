@@ -84,46 +84,6 @@ NMsim_NWPRI <- function(file.sim,file.mod,data.sim,PLEV=0.999,add.diag,...){
     pars.ext <- NMreadExt(file.mod,return="pars",as.fun="data.table")[,value:=est]
     ## use inits to identify IOV OMEGA terms that share a single distribution via the SAME column and remove them.
     inits <- NMreadInits(file.mod, as.fun="data.table")
-    # create a variable in inits to keep track of SAME blocks
-    # i.e. parameters that are part of a single distribution
-    
-    
-    addSameBlocks = function(inits) {
-        inits = copy(as.data.table(inits))
-        inits[,startSameBlock := ifelse(SAME==0 & data.table::shift(SAME,type="lead") == 1, 1, 0)]
-        inits[,endSameBlock := ifelse(SAME==1 & data.table::shift(SAME,type="lead") == 0, 1, 0)]
-        df = inits
-        start <- as.integer(replace(df$startSameBlock, is.na(df$startSameBlock), 0))
-        end   <- as.integer(replace(df$endSameBlock,   is.na(df$endSameBlock),   0))
-        
-        # allocate result and walk rows
-        df$sameblock <- 0L
-        block <- 0L
-        in_block <- FALSE
-        
-        for (i in seq_len(nrow(df))) {
-            if (start[i] == 1L) {
-                block <- block + 1L    # new block begins
-                in_block <- TRUE
-            }
-            
-            if (in_block) {
-                df$sameblock[i] <- block
-            } else {
-                df$sameblock[i] <- 0L  # or NA if you prefer
-            }
-            
-            if (end[i] == 1L) {
-                # end the current block after assigning this row
-                in_block <- FALSE
-            }
-        }
-        
-        # add N of same group
-        df[, Nsameblock := ifelse(any(sameblock!=0), .N-1, 0), by=sameblock]
-        
-        return(df)
-    }
     
     inits = addSameBlocks(inits = inits)
     
@@ -186,7 +146,7 @@ NMsim_NWPRI <- function(file.sim,file.mod,data.sim,PLEV=0.999,add.diag,...){
     # if there are 5 occasions then it would look like below:
     #    $OMEGAP BLOCK(1) 0.1 FIX
     #    $OMEGAP BLOCK(1) SAME(4)
-    pars.random.same = copy(pars.random)[SAME==1][,head(.SD,n=1),by=sameblock][,value := paste0("BLOCK(1) SAME(",Nsameblock,")")] 
+    pars.random.same = copy(pars.random)[SAME==1][,head(.SD,n=1),by=sameblock][,value := paste0("BLOCK(1) SAME(",Nsameblock ,")")] 
     
     # for parameters that are the first occasion within a SAME distribution make sure they are written as "$OMEGAP BLOCK(1) <value> FIX"
     # for parameters that are not part of a SAME distribution they will be written as "$OMEGAP <value> FIX"

@@ -14,7 +14,7 @@ Roxygen: list(roclets=c("collate", "namespace", "rd", "vignette"))
 Depends: R (>= 3.5.0)
 Imports:
   data.table,
-  NMdata (>= 0.2.0),
+  NMdata (>= 0.2.1),
   R.utils,
   MASS,
   fst,

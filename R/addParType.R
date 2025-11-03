@@ -160,5 +160,5 @@ addParameter <- function(pars,overwrite=FALSE){
     pars[is.na(par.name)&get(col.par.type)=="THETA",par.name:=sprintf("THETA(%s)",i)]
     pars[is.na(par.name),par.name:=get(col.parameter)]
 
-    pars
+    pars[]
 }

@@ -101,6 +101,7 @@ NMwriteInits <- function(file.mod,lines,update=TRUE,file.ext=NULL,ext,inits.tab,
     V1 <- NULL
 
     cleanSpaces <- NMdata:::cleanSpaces
+    dcastSe <- NMdata:::dcastSe
 
     if(missing(file.mod)) file.mod <- NULL
     if(missing(lines)) lines <- NULL

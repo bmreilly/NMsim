@@ -130,7 +130,7 @@ NMsim_VarCov <- function(file.sim,file.mod,data.sim,nsims,method.sample="mvrnorm
 
 
     if(!all(c("iblock","blocksize")%in%newpars)){
-        newpars <- addBlocks(newpars,col.model="submodel")
+        newpars <- NMdata:::addBlocks(newpars,col.model="submodel")
     }
 
     
