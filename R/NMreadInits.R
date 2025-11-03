@@ -241,6 +241,7 @@ NMreadInits <- function(file,lines,section,return="pars",as.fun) {
     elem <- NULL
     elemnum <- NULL
     inblock <- NULL
+    isame <- NULL
     j <- NULL
     lastblockmax <- NULL
     linenum <- NULL
@@ -385,7 +386,7 @@ NMreadInits <- function(file,lines,section,return="pars",as.fun) {
         res[inblock==TRUE,blocksize:=nafill(blocksize,type="locf")]
         res[inblock==FALSE,blocksize:=1]
         res[inblock==TRUE,parblock:=nafill(parblock,type="locf")]
-
+        
 ### If SAME and blocksize>1, element must be repeated for all block elements
         res.sameblocks <- lapply(
             split(res[value.elem=="SAME"&blocksize>1],by="elemnum")
@@ -499,8 +500,8 @@ initsToExt <- function(elements){
 }
 
 
-##' create a variable in inits to keep track of SAME blocks
-##' i.e. parameters that are part of a single distribution
+##' Create a variable in inital value table to keep track of SAME
+##' blocks i.e. parameters that are part of a single distribution
 ##'
 ##' @param inits Table of initial values as created by NMreadInits().
 ##'
@@ -518,6 +519,17 @@ initsToExt <- function(elements){
 ##' @keywords internal
 
 addSameBlocks <- function(inits) {
+
+#### Section start: Dummy variables, only not to get NOTE's in pacakge checks ####
+
+    startSameBlock <- NULL
+    SAME <- NULL
+    endSameBlock <- NULL
+    Nsameblock <- NULL
+    sameblock <- NULL
+
+### Section end: Dummy variables, only not to get NOTE's in pacakge checks ####
+
     inits = copy(as.data.table(inits))
     inits[,startSameBlock := ifelse(SAME==0 & data.table::shift(SAME,type="lead") == 1, 1, 0)]
     inits[,endSameBlock := ifelse(SAME==1 & data.table::shift(SAME,type="lead") == 0, 1, 0)]

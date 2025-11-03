@@ -70,6 +70,9 @@ NMsim_NWPRI <- function(file.sim,file.mod,data.sim,PLEV=0.999,add.diag,...){
     parameter.i <- NULL
     parameter.j <- NULL
     return.text <- NULL
+    SAME <- NULL
+    sameblock <- NULL
+    Nsameblock <- NULL
     se <- NULL
     value <- NULL
 

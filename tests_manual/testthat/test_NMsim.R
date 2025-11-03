@@ -128,6 +128,7 @@ test_that("basic - default",{
                     dir.sims="testOutput",
                     name.sim="default_01"
                     )
+
     
     ##modTab(simres)
     simres.nometa <- copy(simres)
