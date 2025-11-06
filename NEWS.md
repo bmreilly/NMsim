@@ -8,6 +8,14 @@
   negative values.
 
 ## Bugfixes
+* `NMsim_NWPRI` would fail on models with `$OMEGA BLOCK(N) SAME`
+  structures. This is often used for between-occasion
+  variability. This has been fixed, even though only single omega
+  parameters can be used with `SAME` at this point. Also, each SAME
+  block must be written out, as the `SAME(N)` notation for repeating
+  `SAME` blocks is still not supported by NMsim. Thanks to Brian
+  Reilly for working on this.
+
 * `NMsim_EBE` now works when no data set is supplied. This can be used
   to get individual `PRED` and `IPRED`, especially if these are
   evaluated differently in the estimation control stream (e.g. using
@@ -21,6 +29,10 @@
   
 * `sampleCovs()` would fail if input data set did not include an `EVID`
   column. Fixed.
+
+## Other Improvements
+* `NMsim_VarCov` has become faster, reducing the time spent setting up
+  simulations by around 1/3, depending on the simulation problem.
 
 # NMsim 0.2.5
 
